@@ -318,7 +318,8 @@ for pid, tab, subt, pno in PAGE_DEFS:
         head, body = table_page1()
         pghead = (f'<div class="pghead"><b>總覽 · 爆發潛力排名</b>'
                   f'<span>4 個時間框 top 50 合共 <b>{len(O["page1"])}</b> 隻不重複股票</span>'
-                  f'<span>排序 = 0.4×VCP + 0.4×確定性 + 0.2×覆蓋度</span></div>')
+                  f'<span>排序 = 0.4×VCP + 0.4×確定性 + 0.2×覆蓋度</span>'
+                  f'<span>覆蓋度 = 通過該時間框 MA 條件嘅頁數（亮起嘅時間框 = 入咗該頁 top 50）</span></div>')
         chips = sector_chips(O["page1"])
         extra = mkt_html
     else:
