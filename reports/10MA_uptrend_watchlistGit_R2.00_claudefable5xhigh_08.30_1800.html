@@ -52,8 +52,8 @@ th.srt{cursor:pointer;-webkit-user-select:none;user-select:none}
 th.srt:hover{color:var(--ink)}
 th.srt.sd::after{content:" ▼";color:var(--seq);font-size:9px}
 th.srt.sa::after{content:" ▲";color:var(--seq);font-size:9px}
-.rz{position:absolute;top:0;right:-4px;width:9px;height:100%;cursor:col-resize;z-index:2}
-.rz:hover{background:linear-gradient(to right,transparent 3px,var(--seq) 3px,var(--seq) 5px,transparent 5px)}
+.rz{position:absolute;top:0;right:0;width:8px;height:100%;cursor:col-resize;z-index:2}
+.rz:hover{background:linear-gradient(to right,transparent 4px,var(--seq) 4px,var(--seq) 6px,transparent 6px)}
 .thn{display:block;font-weight:400;font-size:10px}
 td{padding:8px 8px;border-bottom:1px solid var(--grid);vertical-align:middle;overflow:hidden}
 tr:last-child td{border-bottom:0}
@@ -175,7 +175,7 @@ section[hidden]{display:none}
 ② 數據重建：GitHub 每日 Nasdaq 快照鏡像（zyhe16/top-us-stock-tickers）逐 commit 重建每日收盤序列，共 169 個交易日（2025-12-26 → 2026-08-28）；4 日無快照以前值填補；08-27 收盤以官方 net-change 校正。重建序列與 20MA R3 報告交叉核對：74/74 上榜股現價完全一致；對 20MA R1 報告抽樣 20MA 平均偏差 0.18%。<br>
 ③ 類別：Nasdaq 分類＋GICS（S&amp;P 500，klaywang24/market-chronicle）；交易所：irachex/open-stock-data。<br>
 ④ 確定性 7 項、VCP、排名均經獨立代理人對抗性驗證（獨立重算合資格集完全吻合、200 行 VCP 最大偏差 0.05、底部序列 200/200 一致）；原因欄由 AI 代理透過 <a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a> 新聞索引及公開網頁逐隻搜尋、核實再濃縮 —— 內容係新聞摘要，可能有錯漏，請以原始公告為準。<br>
-⑤ <b>數據終點 2026-08-28，建置時間 2026-08-30 17:51 HKT</b>（週末，08-28 五係最後交易日）· 快照只有收盤/成交量，VCP 及確定性以收盤序列計算 · 本表只係篩選工具，唔係投資建議。<br>
+⑤ <b>數據終點 2026-08-28，建置時間 2026-08-30 18:00 HKT</b>（週末，08-28 五係最後交易日）· 快照只有收盤/成交量，VCP 及確定性以收盤序列計算 · 本表只係篩選工具，唔係投資建議。<br>
 ⑥ 連結格式：Ticker 點擊開 TradingView chart（https://www.tradingview.com/chart/Q1c5VWwD/?symbol=交易所%3Aticker）。
 </div>
 </div>

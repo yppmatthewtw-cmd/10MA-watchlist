@@ -289,8 +289,8 @@ th.srt{cursor:pointer;-webkit-user-select:none;user-select:none}
 th.srt:hover{color:var(--ink)}
 th.srt.sd::after{content:" ▼";color:var(--seq);font-size:9px}
 th.srt.sa::after{content:" ▲";color:var(--seq);font-size:9px}
-.rz{position:absolute;top:0;right:-4px;width:9px;height:100%;cursor:col-resize;z-index:2}
-.rz:hover{background:linear-gradient(to right,transparent 3px,var(--seq) 3px,var(--seq) 5px,transparent 5px)}
+.rz{position:absolute;top:0;right:0;width:8px;height:100%;cursor:col-resize;z-index:2}
+.rz:hover{background:linear-gradient(to right,transparent 4px,var(--seq) 4px,var(--seq) 6px,transparent 6px)}
 .thn{display:block;font-weight:400;font-size:10px}
 td{padding:8px 8px;border-bottom:1px solid var(--grid);vertical-align:middle;overflow:hidden}
 tr:last-child td{border-bottom:0}
