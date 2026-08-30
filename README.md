@@ -1,0 +1,58 @@
+# 10MA Uptrend Watchlist
+
+美股 **10MA** 上升趨勢觀察名單 —— 全美上市普通股掃描，篩選「MA 仍在向上 + 一底高於一底」的股票，
+並以 **VCP 收縮指數 × 底部確定性** 綜合排序。承接
+[20MAwarchlist](https://github.com/yppmatthewtw-cmd/20MAwarchlist) R3 管線
+（session `01W6xAAkt7gTzMnKbpnuQ9Fg`），把各頁 MA 由 20 天改為 10 天（PAGE 2 用 5 天）。
+
+## 報告（`reports/`）
+
+| 版本 | 內容 |
+|------|------|
+| R1.00 | 全美掃描 · 5 頁：總覽（爆發潛力分數）＋ 1星期(5MA)/2星期/1個月/2個月(10MA) 四個時間框，各頁按綜合分數（0.5×VCP＋0.5×確定性）取 top 50；含底部確定性 7 項量化、下跌→回升原因欄（[Bigdata.com](https://bigdata.com) 新聞索引＋公開網頁）、2026年6–8月市場背景卡；Ticker 連結開 TradingView chart layout |
+
+報告為獨立 HTML，直接用瀏覽器開啟；頁面切換、light/dark 主題內建。
+
+## 篩選規則（10MA R1）
+
+1. **Universe**：全美上市普通股（Nasdaq/NYSE/AMEX），存續至數據終點、歷史 ≥90 交易日、
+   價格 ≥$2、20 日中位成交額 ≥$1M。
+2. **MA 上升（本版重點）**：各頁以自己的時間框比較 —— PAGE 2：**5 天 MA** 較 5 個交易日前高；
+   PAGE 3/4/5：**10 天 MA** 分別較 10 / 21 / 42 個交易日前高；且 MA 最後 3 日逐日上升、期內 ≥70% 日子上升。
+3. **「底」**（用戶原話：「大約跌了三天，然後見底回升了大約三天」）：某日收盤係 ±3 日內最低，
+   且 3 日前收盤高過佢、3 日後收盤高過佢；相鄰 ≤3 日重複底去重。
+4. **一底高於一底**：最後 45 個交易日內 ≥2 個底且逐個遞升；最近一個底喺 25 個交易日內。
+5. **VCP 指數（0–100）**：10日波幅/前30日波幅（35%）＋近10日高低區間佔價（25%）＋
+   近10日成交量/前30日成交量（20%）＋近15日區間/前30–45日區間（20%），四項以全體合資格股票百分位合成。
+6. **確定性分數（0–100，7 項）**：1.1 突破中間高位（25%）· 1.2 回補幅度（10%）· 1.3 守底時間（15%）·
+   2.1 下試量縮（15%）· 2.2 回撤遞減（10%）· 2.3 相對強度（10%）· 2.4 均線位置（價>20MA＋20MA>50MA＋50MA向上，15%）；
+   定義與 20MA R3 完全一致。
+7. **排名（PAGE 2–5）= 綜合分數 = 0.5×VCP + 0.5×確定性**；**爆發潛力分數（PAGE 1）**
+   = 0.4×VCP + 0.4×確定性 + 0.2×覆蓋度。
+
+## 數據來源與重建
+
+環境內可達的數據源為 GitHub 每日鏡像，逐 git commit 重建每日收盤/成交量序列（169 個交易日，
+2025-12-26 → 2026-08-28）：
+
+- 價格/成交量：[zyhe16/top-us-stock-tickers](https://github.com/zyhe16/top-us-stock-tickers)
+  每日 Nasdaq 快照（`tickers/all.csv` + `tickers/sp500.csv`），依 commit 時間映射至美股交易日；
+  無快照的交易日以前值填補；尾日收盤以官方 net-change 校正。
+- GICS 類別（S&P 500）：[klaywang24/market-chronicle](https://github.com/klaywang24/market-chronicle)
+- 交易所歸屬：[irachex/open-stock-data](https://github.com/irachex/open-stock-data)
+
+驗證：重建序列與 20MA R3 報告交叉核對，74/74 上榜股現價完全一致；另經獨立代理人對抗性驗證
+（spec 合規 / 獨立重算合資格集 / VCP·評分數學 / 底部結構）。
+
+限制：快照只有收盤價與成交量（無日內高低價），VCP 以收盤/成交量計算；價格未除息調整；
+外國註冊而非 S&P 500 的美國上市股票（部分 ADR）缺完整歷史，未納入掃描。
+
+## 重新產生報告
+
+```bash
+# 先 clone 三個數據 repo（路徑可用環境變數覆蓋：TICKERS_REPO / CHRONICLE_REPO / OPENSTOCK_REPO）
+export WORK_DIR=./data
+python3 scripts/extract_series.py    # 由 git 歷史重建序列 -> data/series2.pkl
+python3 scripts/screener10.py        # 全美掃描 -> data/screen_results10.json
+python3 scripts/build_report10.py    # 產生 HTML 報告 -> data/10MA_uptrend_watchlistGit_R1.00_*.html
+```
