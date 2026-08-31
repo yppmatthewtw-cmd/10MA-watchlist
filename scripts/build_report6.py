@@ -127,7 +127,7 @@ def why_recovery(sym):
             out = out.replace(eh, f'<mark class="hot">{eh}</mark>', 1)
     conf = e.get("confidence", "低")
     src = e.get("sources") or []
-    tip = (" · ".join(src[:3])) if src else "未有個股新聞來源，只反映大市背景"
+    tip = (" · ".join(src)) if src else "未有個股新聞來源，只反映大市背景"
     return (f'<div class="why">{out} '
             f'<span class="conf c{conf}" title="來源：{esc(tip)}">信心{esc(conf)}</span></div>')
 
@@ -255,17 +255,17 @@ def table_page1():
 
 c = M["counts"]
 cc = M["cap_counts"]
-UNIVERSE_LINE = (f'Universe：全美上市普通股掃描 — 快照涵蓋 {c["total"]:,} 隻 · 存續至 08-28 有報價 {c["current"]:,} 隻 · '
+UNIVERSE_LINE = (f'Universe：全美上市普通股掃描 — 快照涵蓋 {c["total"]:,} 隻 · 存續至 {M["last_date"][5:]} 有報價 {c["current"]:,} 隻 · '
                  f'歷史 ≥90 交易日 {c["hist"]:,} 隻 · 價格 ≥$2 {c["price"]:,} 隻 · '
                  f'流動性達標（20日中位成交額 ≥$1M）{c["liq"]:,} 隻合資格'
                  f'（大型 {cc["a"]:,} · 中型 {cc["b"]:,} · 小型 {cc["c"]:,} · 無市值資料 {cc["x"]:,}）')
 
 css = """
-:root{color-scheme:light;--pg:#f9f9f7;--sf:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--mut:#726f6a;
+:root{color-scheme:light;--pg:#f9f9f7;--sf:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--mut:#6b6964;
  --grid:#e1e0d9;--axis:#c3c2b7;--ring:rgba(11,11,11,.10);--seq:#2a78d6;--link:#1c5cab;--good:#006300;
  --warn:#8a5a00;--bad:#9c2121;--hl:#eef3fa;--meter:#dfe7f2;--okbg:#eaf3ea;--nobg:#f3ecec;
  --hotbg:#fdeac2;--hotink:#6b4300;--hotbd:#c98f14;--capbg:#eef0ee}
-/* --mut carries small secondary text, so it is set for 4.5:1 on --sf in each theme */
+/* --mut carries small secondary text; set for >=4.5:1 on --sf AND on the --hl row hover */
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
  --pg:#0d0d0d;--sf:#1a1a19;--ink:#fff;--ink2:#c3c2b7;--mut:#898781;--grid:#2c2c2a;--axis:#383835;
  --ring:rgba(255,255,255,.10);--seq:#3987e5;--link:#6da7ec;--good:#0ca30c;--warn:#d99a2b;--bad:#e06c6c;
@@ -462,7 +462,7 @@ foot = f"""
 <div class="card foot">
 <h2>備註 · 數據 lineage</h2>
 ① 覆蓋範圍：可達數據源覆蓋美國上市普通股 {c["total"]:,} 隻（含 S&amp;P 500 全部 503 隻）；外國註冊而非 S&amp;P 500 嘅美國上市股（部分 ADR）未有完整歷史，未納入掃描。價格未除息調整。<br>
-② 數據重建：GitHub 每日 Nasdaq 快照鏡像（zyhe16/top-us-stock-tickers）逐 commit 重建每日收盤序列，共 {M["n_days"]} 個交易日（{M["cal_first"]} → {M["cal_last"]}）；4 日無快照以前值填補；08-27 收盤以官方 net-change 校正。<br>②b <b>最新交易日（08-31）</b>：鏡像今日未出快照（其更新排程當日改版），本研究環境嘅網絡政策亦封鎖所有行情網站，故改由本 repo 嘅 GitHub Actions runner 直接抓取同一個 Nasdaq screener 來源並回傳（7,144 隻有報價）。接駁檢查：以 08-31 收盤減官方 net-change 反推嘅前收，與序列中 08-28 收盤比較，5,127 隻中位偏差 <b>0.000%</b>、p99 0.000%；8 隻因合股／拆股（如 NXL 0.25→7.50）歷史股數基準已變，整隻剔除而非硬駁上去。<br>
+② 數據重建：GitHub 每日 Nasdaq 快照鏡像（zyhe16/top-us-stock-tickers）逐 commit 重建每日收盤序列，共 {M["n_days"]} 個交易日（{M["cal_first"]} → {M["cal_last"]}）；4 日無快照以前值填補；08-27 收盤以官方 net-change 校正。<br>②b <b>最新交易日（08-31）</b>：鏡像今日未出快照（其更新排程當日改版），本研究環境嘅網絡政策亦封鎖所有行情網站，故改由本 repo 嘅 GitHub Actions runner 直接抓取同一個 Nasdaq screener 來源並回傳（7,144 隻有報價）。接駁檢查：以 08-31 收盤減官方 net-change 反推嘅前收，與序列中 08-28 收盤比較，5,127 隻中位偏差 <b>0.000%</b>、p99 0.000%；8 隻因合股／拆股（如 NXL 0.25→7.50）歷史股數基準已變，整隻剔除而非硬駁上去；另有 10 隻當日無報價，保留舊值後即失去「存續至最新交易日」資格，唔會出現喺任何頁。<br>
 ③ 市值：Nasdaq 快照 market cap（{M["cap_cuts_b"][0]:.0f}／{M["cap_cuts_b"][1]:.0f} 十億美元為界）；類別：Nasdaq 分類＋GICS（S&amp;P 500，klaywang24/market-chronicle）；交易所：irachex/open-stock-data。<br>
 ④ 確定性 7 項、VCP、排名經獨立代理人對抗性驗證；原因欄及催化劑由 AI 代理透過 <a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a> 新聞索引及公開網頁逐隻搜尋、核實再濃縮 —— 內容係新聞摘要，可能有錯漏，請以原始公告為準。<br>
 ⑤ <b>數據終點 {M["last_date"]}，建置時間 {BUILD_TS}</b> · 快照只有收盤/成交量，VCP 及確定性以收盤序列計算 · 本表只係篩選工具，唔係投資建議。<br>
@@ -535,7 +535,8 @@ js = """
       th.dataset.dir = dir;
       sortRows(tbl, th.dataset.k, dir);
       markHead(tbl, th.dataset.k, dir);
-      sortOf[secIdOf(tbl)] = (dir === 'desc') ? th.dataset.k : '';
+      // nav buttons mean "descending by key"; an ascending sort matches none of them
+      sortOf[secIdOf(tbl)] = (dir === 'desc') ? th.dataset.k : 'asc:' + th.dataset.k;
       syncSortBtns();
     });
   });
