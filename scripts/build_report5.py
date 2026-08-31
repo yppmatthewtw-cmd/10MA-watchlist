@@ -28,7 +28,7 @@ OUTNAME = f"10MA_uptrend_watchlistGit_R5.00_claudeopus5xhigh_{STAMP}.html"
 TF = [("2", "1星期", "5MA · 5個交易日"), ("3", "2星期", "10MA · 10個交易日"),
       ("4", "1個月", "10MA · 21個交易日"), ("5", "2個月", "10MA · 42個交易日")]
 CAPS = [("a", "大型股", "Big cap ≥$10B"), ("b", "中型股", "Mid cap $2–10B"),
-        ("c", "小型股", "Small cap <$2B")]
+        ("c", "小型股", "Small cap &lt;$2B")]
 CAP_SHORT = {"a": "大型", "b": "中型", "c": "小型", "x": "未分類"}
 SUBS = [f"{t}{c}" for t, _, _ in TF for c, _, _ in CAPS]
 
@@ -124,7 +124,10 @@ def why_recovery(sym):
         if eh and eh in out:
             out = out.replace(eh, f'<mark class="hot">{eh}</mark>', 1)
     conf = e.get("confidence", "低")
-    return f'<div class="why">{out} <span class="conf c{conf}">信心{esc(conf)}</span></div>'
+    src = e.get("sources") or []
+    tip = (" · ".join(src[:3])) if src else "未有個股新聞來源，只反映大市背景"
+    return (f'<div class="why">{out} '
+            f'<span class="conf c{conf}" title="來源：{esc(tip)}">信心{esc(conf)}</span></div>')
 
 def sector_cell(r):
     sub = r["gsub"] if (r["sp500"] and r.get("gsub")) else r["industry"]
@@ -147,9 +150,11 @@ def tick_cell(r, L=None):
     sp = '<span class="badge">S&amp;P500</span>' if r["sp500"] else ""
     warn = ' <span class="warn">⚠低於MA</span>' if r["below_ma"] else ""
     ml = f'MA{L}' if L else "MA"
-    cap = f'<span class="capb cap{r["cap"]}">{CAP_SHORT[r["cap"]]} {mcap_txt(r["mcap"])}</span>'
+    cap = f'<span class="capb">{CAP_SHORT[r["cap"]]} {mcap_txt(r["mcap"])}</span>'
+    nm = r["name"]
     return (f'<div class="tk"><a href="{tv_url(r)}" target="_blank" rel="noopener">{esc(r["sym"])}</a>'
-            f'<span class="ex">{esc(r["exch"])}</span>{sp}<em>{esc(r["name"][:34])}</em>'
+            f'<span class="ex">{esc(r["exch"])}</span>{sp}'
+            f'<em title="{esc(nm)}">{esc(nm if len(nm) <= 34 else nm[:33] + "…")}</em>'
             f'<span class="pxl nums">{r["close"]:g} <span class="mut">/ {ml} {r["ma"]:g}</span>{warn}</span>'
             f'{cap}</div>')
 
@@ -254,10 +259,11 @@ UNIVERSE_LINE = (f'Universe：全美上市普通股掃描 — 快照涵蓋 {c["t
                  f'（大型 {cc["a"]:,} · 中型 {cc["b"]:,} · 小型 {cc["c"]:,} · 無市值資料 {cc["x"]:,}）')
 
 css = """
-:root{color-scheme:light;--pg:#f9f9f7;--sf:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--mut:#898781;
+:root{color-scheme:light;--pg:#f9f9f7;--sf:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--mut:#726f6a;
  --grid:#e1e0d9;--axis:#c3c2b7;--ring:rgba(11,11,11,.10);--seq:#2a78d6;--link:#1c5cab;--good:#006300;
  --warn:#8a5a00;--bad:#9c2121;--hl:#eef3fa;--meter:#dfe7f2;--okbg:#eaf3ea;--nobg:#f3ecec;
  --hotbg:#fdeac2;--hotink:#6b4300;--hotbd:#c98f14;--capbg:#eef0ee}
+/* --mut carries small secondary text, so it is set for 4.5:1 on --sf in each theme */
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
  --pg:#0d0d0d;--sf:#1a1a19;--ink:#fff;--ink2:#c3c2b7;--mut:#898781;--grid:#2c2c2a;--axis:#383835;
  --ring:rgba(255,255,255,.10);--seq:#3987e5;--link:#6da7ec;--good:#0ca30c;--warn:#d99a2b;--bad:#e06c6c;
@@ -309,7 +315,8 @@ h2{font-size:13px;margin:0 0 8px;color:var(--ink2);font-weight:600}
 table{border-collapse:collapse;width:100%;min-width:2320px;font-size:12.5px}
 th{position:sticky;top:0;text-align:left;font-size:11px;color:var(--mut);font-weight:600;
  padding:9px 8px;border-bottom:1px solid var(--grid);background:var(--sf);white-space:nowrap;z-index:1}
-th.srt{cursor:pointer;-webkit-user-select:none;user-select:none}
+th{-webkit-user-select:none;user-select:none}
+th.srt{cursor:pointer}
 th.srt:hover{color:var(--ink)}
 th.srt.sd::after{content:" ▼";color:var(--seq);font-size:9px}
 th.srt.sa::after{content:" ▲";color:var(--seq);font-size:9px}
@@ -467,14 +474,21 @@ js = """
   var sbtns = document.querySelectorAll('.nav button[data-sort]');
   var caprow = document.getElementById('caprow');
   var state = { t: '1', c: 'a' };
+  // each table keeps whatever sort the user left on it, so the nav buttons are
+  // re-highlighted from that table's own state rather than blanked on every switch
+  var sortOf = {};
   function pid() { return state.t === '1' ? '1' : state.t + state.c; }
+  function syncSortBtns() {
+    var cur = sortOf['p' + pid()] || 'rk';
+    sbtns.forEach(function(b) { b.classList.toggle('on', b.dataset.sort === cur); });
+  }
   function show() {
     var id = 'p' + pid();
     document.querySelectorAll('section[id^="p"]').forEach(function(s) { s.hidden = (s.id !== id); });
     tfb.forEach(function(b) { b.classList.toggle('on', b.dataset.t === state.t); });
     cpb.forEach(function(b) { b.classList.toggle('on', b.dataset.c === state.c); });
     caprow.hidden = (state.t === '1');
-    sbtns.forEach(function(b) { b.classList.remove('on'); });
+    syncSortBtns();
     try { localStorage.setItem('ma10r5', JSON.stringify(state)); } catch (e) {}
   }
   tfb.forEach(function(b) { b.addEventListener('click', function() { state.t = b.dataset.t; show(); }); });
@@ -508,6 +522,10 @@ js = """
       if (!key || t.dataset.k !== key) delete t.dataset.dir;
     });
   }
+  function secIdOf(tbl) {
+    var s = tbl.closest('section');
+    return s ? s.id : '';
+  }
   document.querySelectorAll('th.srt').forEach(function(th) {
     th.addEventListener('click', function() {
       var tbl = th.closest('table');
@@ -515,7 +533,8 @@ js = """
       th.dataset.dir = dir;
       sortRows(tbl, th.dataset.k, dir);
       markHead(tbl, th.dataset.k, dir);
-      sbtns.forEach(function(b) { b.classList.remove('on'); });
+      sortOf[secIdOf(tbl)] = (dir === 'desc') ? th.dataset.k : '';
+      syncSortBtns();
     });
   });
   sbtns.forEach(function(b) {
@@ -525,7 +544,8 @@ js = """
       var k = b.dataset.sort;
       if (k === 'rk') { sortRows(tbl, 'rk', 'asc'); markHead(tbl, null); }
       else { sortRows(tbl, k, 'desc'); markHead(tbl, k, 'desc'); }
-      sbtns.forEach(function(x) { x.classList.toggle('on', x === b); });
+      sortOf[secIdOf(tbl)] = k;
+      syncSortBtns();
     });
   });
 
