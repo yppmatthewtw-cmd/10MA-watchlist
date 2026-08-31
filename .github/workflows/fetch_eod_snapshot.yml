@@ -1,0 +1,71 @@
+name: Fetch EOD snapshot
+
+# The research container's egress proxy blocks every market-data host, so the
+# end-of-day snapshot is fetched here (runners have open internet) and committed
+# back for the screener to pick up. Same source and fields as the mirror the
+# historical series is built from, so the new day splices in cleanly.
+on:
+  workflow_dispatch:
+    inputs:
+      trade_date:
+        description: Trading day the snapshot belongs to (YYYY-MM-DD, US Eastern)
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Nasdaq screener snapshot
+        env:
+          TRADE_DATE: ${{ inputs.trade_date }}
+        run: |
+          python3 - <<'PY'
+          import csv, json, os, urllib.request
+
+          date = os.environ["TRADE_DATE"]
+          url = ("https://api.nasdaq.com/api/screener/stocks"
+                 "?tableonly=true&limit=25000&download=true")
+          req = urllib.request.Request(url, headers={
+              "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                            "(KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+              "Accept": "application/json, text/plain, */*",
+              "Accept-Language": "en-US,en;q=0.9",
+          })
+          with urllib.request.urlopen(req, timeout=120) as r:
+              payload = json.load(r)
+
+          rows = payload["data"]["rows"]
+          print(f"rows: {len(rows)}")
+          os.makedirs("data/snapshots", exist_ok=True)
+          out = f"data/snapshots/{date}.csv"
+          cols = ["symbol", "name", "lastsale", "netchange", "pctchange",
+                  "volume", "marketCap", "country", "ipoyear", "industry", "sector"]
+          with open(out, "w", newline="", encoding="utf-8") as f:
+              w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
+              w.writeheader()
+              for row in rows:
+                  w.writerow(row)
+          print("wrote", out)
+
+          # a snapshot with no prices means the fetch silently degraded
+          priced = sum(1 for r in rows if str(r.get("lastsale", "")).strip("$ "))
+          print(f"rows with a last sale: {priced}")
+          if priced < 3000:
+              raise SystemExit(f"only {priced} priced rows; refusing to commit")
+          PY
+
+      - name: Commit snapshot
+        env:
+          TRADE_DATE: ${{ inputs.trade_date }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/snapshots
+          git commit -m "data: Nasdaq screener snapshot for $TRADE_DATE" || {
+            echo "nothing to commit"; exit 0; }
+          git push
