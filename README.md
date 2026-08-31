@@ -10,6 +10,7 @@
 | 版本 | 內容 |
 |------|------|
 | R1.00 | 全美掃描 · 5 頁：總覽（爆發潛力分數）＋ 1星期(5MA)/2星期/1個月/2個月(10MA) 四個時間框，各頁按綜合分數（0.5×VCP＋0.5×確定性）取 top 50；含底部確定性 7 項量化、下跌→回升原因欄（[Bigdata.com](https://bigdata.com) 新聞索引＋公開網頁）、2026年6–8月市場背景卡；Ticker 連結開 TradingView chart layout |
+| R5.00 | 每個時間框再拆**大型（≥$100億）／中型（$20–100億）／小型（&lt;$20億）**三個子頁，共 12 個子頁＋總表（178 隻不重複）；新增**主要催化劑欄**（醒目 badge，標明業績／併購／臨床／監管／回購／指引／大單／AI／重組），Ticker 欄加市值；沿用 R2 的分欄排序、欄寬拖曳、原因分欄與熱炒 highlight |
 | R2.00 | R1 基礎上改為**分欄排序版**：VCP／確定性分開兩欄（綜合分數只留 PAGE 1）、確定性 7 項證據分 7 欄，全部欄標題可點擊排序（先降後升），頂欄加「按VCP排列／按確定性排列／預設排名」；下跌／回升原因分兩欄濃縮，市場熱炒 news-driven 催化劑以 highlight 標示；所有欄寬可拖曳調整 |
 
 報告為獨立 HTML，直接用瀏覽器開啟；頁面切換、light/dark 主題內建。
@@ -54,6 +55,17 @@
 # 先 clone 三個數據 repo（路徑可用環境變數覆蓋：TICKERS_REPO / CHRONICLE_REPO / OPENSTOCK_REPO）
 export WORK_DIR=./data
 python3 scripts/extract_series.py    # 由 git 歷史重建序列 -> data/series2.pkl
-python3 scripts/screener10.py        # 全美掃描 -> data/screen_results10.json
-python3 scripts/build_report10.py    # 產生 HTML 報告 -> data/10MA_uptrend_watchlistGit_R1.00_*.html
+
+# R1 / R2（4 個時間框單頁）
+python3 scripts/screener10.py        # -> data/screen_results10.json
+python3 scripts/build_report10.py    # -> data/10MA_uptrend_watchlistGit_R2.00_*.html
+
+# R5（12 個時間框 × 市值子頁）
+python3 scripts/screener5.py         # -> data/screen_results5.json
+python3 scripts/merge_news5.py       # 合併新聞研究＋催化劑標籤 -> data/news5.json
+python3 scripts/build_report5.py     # -> data/10MA_uptrend_watchlistGit_R5.00_*.html
 ```
+
+新聞研究由 AI 代理透過 Bigdata.com 新聞索引及公開網頁搜尋產生，結果暫存於 session scratchpad
+（`r5_res_*.json` / `r5_redo_*.json` / `r5_cat_*.json`），由 `merge_news5.py` 合併入 `data/news5.json`。
+本輪 Bigdata.com 額度耗盡，改以 WebSearch 完成；13 隻首輪因搜尋額度用盡而未覆蓋的股票已用新代理補做。

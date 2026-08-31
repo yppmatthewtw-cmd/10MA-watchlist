@@ -160,7 +160,8 @@ def spark_cell(r):
 def bottoms_chain(hl):
     parts = [f'<span class="bot">{d[5:]}<i>@{p:g}</i></span>' for d, p in hl[-4:]]
     pre = '<span class="arr">…→</span>' if len(hl) > 4 else ""
-    return f'<div class="botwrap">{pre}{"<span class=\"arr\">→</span>".join(parts)}</div>'
+    chain = '<span class="arr">→</span>'.join(parts)
+    return f'<div class="botwrap">{pre}{chain}</div>'
 
 def sector_chips(rows):
     cnt = {}
@@ -230,8 +231,9 @@ def table_page1():
                 frames.append(f'<span class="fr on">{labels[t]}<i>#{r["ranks"][pid]}</i></span>')
             else:
                 frames.append(f'<span class="fr">{labels[t]}</span>')
+        attrs = row_attrs(r, ' data-score="{}"'.format(r["score"]))
         rows.append(
-            f'<tr data-rk="{i}" {row_attrs(r, " data-score=\"{}\"".format(r["score"]))}>'
+            f'<tr data-rk="{i}" {attrs}>'
             f'<td class="rk">{i}</td><td>{tick_cell(r, r["L"])}</td>'
             f'<td class="catc">{cat_cell(r["sym"])}</td>'
             f'<td>{score_cell(r)}</td>'
@@ -438,7 +440,8 @@ for t, tlab, tsub in TF:
 tf_btns = '<button data-t="1" class="on">PAGE 1 · 總表<span class="s">爆發潛力排名</span></button>' + "".join(
     f'<button data-t="{t}">PAGE {t} · {lab}<span class="s">{sub}</span></button>' for t, lab, sub in TF)
 cap_btns = "".join(
-    f'<button data-c="{cb}"{" class=\"on\"" if cb == "a" else ""}>{clab}<span class="s">{csub}</span></button>'
+    '<button data-c="{}"{}>{}<span class="s">{}</span></button>'.format(
+        cb, ' class="on"' if cb == "a" else "", clab, csub)
     for cb, clab, csub in CAPS)
 sort_btns = ('<span class="sep"></span><span class="slab">排序：</span>'
              '<button class="sbtn" data-sort="vcp">按 VCP 排列</button>'

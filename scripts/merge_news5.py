@@ -50,8 +50,12 @@ def batch_no(p):
 
 # redo files come last on purpose: they re-researched tickers whose first pass
 # ran out of search budget, so their entries supersede the empty ones.
-res_files = (sorted(glob.glob(f"{AGENT_DIR}/r5_res_*.json"), key=batch_no)
-             + sorted(glob.glob(f"{AGENT_DIR}/r5_redo_*.json"), key=batch_no))
+def numbered(pattern):
+    # the agents' input files sit beside their outputs; keep only r5_x_<n>.json
+    return sorted((p for p in glob.glob(pattern)
+                   if p.rsplit("_", 1)[1].split(".")[0].isdigit()), key=batch_no)
+
+res_files = numbered(f"{AGENT_DIR}/r5_res_*.json") + numbered(f"{AGENT_DIR}/r5_redo_*.json")
 redone = []
 for f in res_files:
     is_redo = "r5_redo_" in f
