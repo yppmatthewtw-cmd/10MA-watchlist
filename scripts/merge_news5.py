@@ -45,14 +45,24 @@ for sym, c in cond.items():
     if sym not in cats:
         problems.append(f"{sym}: no catalyst label")
 
-res_files = sorted(glob.glob(f"{AGENT_DIR}/r5_res_*.json"),
-                   key=lambda p: int(p.rsplit("_", 1)[1].split(".")[0]))
+def batch_no(p):
+    return int(p.rsplit("_", 1)[1].split(".")[0])
+
+# redo files come last on purpose: they re-researched tickers whose first pass
+# ran out of search budget, so their entries supersede the empty ones.
+res_files = (sorted(glob.glob(f"{AGENT_DIR}/r5_res_*.json"), key=batch_no)
+             + sorted(glob.glob(f"{AGENT_DIR}/r5_redo_*.json"), key=batch_no))
+redone = []
 for f in res_files:
+    is_redo = "r5_redo_" in f
     for e in json.load(open(f)):
         sym = e["sym"]
         if sym in out:
-            problems.append(f"{sym}: duplicate entry in {os.path.basename(f)}")
-            continue
+            if is_redo:
+                redone.append(sym)
+            else:
+                problems.append(f"{sym}: duplicate entry in {os.path.basename(f)}")
+                continue
         out[sym] = {
             "decline_short": e["decline_short"],
             "recovery_short": e["recovery_short"],
@@ -75,8 +85,11 @@ for sym, e in out.items():
 
 missing = [s for s in need if s not in out]
 extra = [s for s in out if s not in need]
+unsourced = [s for s in need if s in out and not out[s]["sources"]]
 print(f"page1 tickers {len(need)} · merged entries {len(out)} · "
       f"missing {len(missing)} · extra {len(extra)}")
+if redone: print(f"re-researched (redo pass superseded first pass): {sorted(set(redone))}")
+if unsourced: print(f"still no company-specific sources ({len(unsourced)}): {unsourced}")
 if missing: print("MISSING:", missing)
 if extra: print("extra (not listed, kept):", extra[:20])
 kinds = {}
