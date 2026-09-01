@@ -17,15 +17,16 @@ over from R2 unchanged.
 import json, datetime, html, os
 
 SCRATCH = os.environ.get("WORK_DIR", "./data")
-O = json.load(open(f"{SCRATCH}/screen_results6.json"))
-N = json.load(open(f"{SCRATCH}/news6.json"))
+O = json.load(open(f"{SCRATCH}/{os.environ.get('SCREEN_JSON', 'screen_results6.json')}"))
+N = json.load(open(f"{SCRATCH}/{os.environ.get('NEWS_JSON', 'news6.json')}"))
 MKT = json.load(open(f"{SCRATCH}/market.json")) if os.path.exists(f"{SCRATCH}/market.json") else None
 M = O["meta"]
 
 now_hkt = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=8)
 STAMP = now_hkt.strftime("%m.%d_%H%M")
 BUILD_TS = now_hkt.strftime("%Y-%m-%d %H:%M HKT")
-OUTNAME = f"10MA_uptrend_watchlistGit_R6.01_claudeopus5xhigh_{STAMP}.html"
+REV = os.environ.get("REV", "R6.01")
+OUTNAME = f"10MA_uptrend_watchlistGit_{REV}_claudeopus5xhigh_{STAMP}.html"
 
 TF = [("2", "1星期", "5MA · 5個交易日"), ("3", "2星期", "10MA · 10個交易日"),
       ("4", "1個月", "10MA · 21個交易日"), ("5", "2個月", "10MA · 42個交易日")]
@@ -390,7 +391,7 @@ section[hidden]{display:none}
 
 rules_html = f"""
 <div class="card rules">
-<h2>篩選規則（10MA R6 · 數據更新至 8月31日收盤；每個時間框再分大／中／小型股，共 12 個子頁）</h2>
+<h2>篩選規則（10MA {REV.split(".")[0]} · 數據更新至 {M["last_date"][5:7]}月{M["last_date"][8:]}日收盤；每個時間框再分大／中／小型股，共 12 個子頁）</h2>
 ① <b>{esc(UNIVERSE_LINE)}</b>。<br>
 ② <b>市值分頁（R5 新增）</b>：<b>a = 大型股 ≥$100億</b>、<b>b = 中型股 $20–100億</b>、<b>c = 小型股 &lt;$20億</b>；每個時間框各自取三組嘅 top 50（每組合資格數不足 50 就全部列出）。市值取自 Nasdaq 快照；無市值資料嘅（主要係封閉式基金）唔會硬塞入任何一組，改為喺各頁標示數目。<br>
 ③ <b>MA 上升</b>：PAGE 2a/b/c：<b>5 天 MA</b> 較 <b>5 個交易日</b>前高；PAGE 3/4/5（a/b/c）：<b>10 天 MA</b> 分別較 <b>10 / 21 / 42 個交易日</b>前高；且 MA 最後 3 日逐日上升、期內 ≥70% 日子上升。<br>
@@ -459,7 +460,7 @@ foot = f"""
 <div class="card foot">
 <h2>備註 · 數據 lineage</h2>
 ① 覆蓋範圍：可達數據源覆蓋美國上市普通股 {c["total"]:,} 隻（含 S&amp;P 500 全部 503 隻）；外國註冊而非 S&amp;P 500 嘅美國上市股（部分 ADR）未有完整歷史，未納入掃描。價格未除息調整。<br>
-② 數據重建：GitHub 每日 Nasdaq 快照鏡像（zyhe16/top-us-stock-tickers）逐 commit 重建每日收盤序列，共 {M["n_days"]} 個交易日（{M["cal_first"]} → {M["cal_last"]}）；4 日無快照以前值填補；08-27 收盤以官方 net-change 校正。<br>②b <b>最新交易日（08-31）</b>：鏡像今日未出快照（其更新排程當日改版），本研究環境嘅網絡政策亦封鎖所有行情網站，故改由本 repo 嘅 GitHub Actions runner 直接抓取同一個 Nasdaq screener 來源並回傳（7,144 隻有報價）。接駁檢查：以 08-31 收盤減官方 net-change 反推嘅前收，與序列中 08-28 收盤比較，5,127 隻中位偏差 <b>0.000%</b>、p99 0.000%；8 隻因合股／拆股（如 NXL 0.25→7.50）歷史股數基準已變，整隻剔除而非硬駁上去；另有 10 隻當日無報價，保留舊值後即失去「存續至最新交易日」資格，唔會出現喺任何頁。<br>
+② 數據重建：GitHub 每日 Nasdaq 快照鏡像（zyhe16/top-us-stock-tickers）逐 commit 重建每日收盤序列，共 {M["n_days"]} 個交易日（{M["cal_first"]} → {M["cal_last"]}）；4 日無快照以前值填補；08-27 收盤以官方 net-change 校正。<br>②b <b>最新交易日</b>：鏡像未出當日快照（其更新排程於 08-31 改版），本研究環境嘅網絡政策亦封鎖所有行情網站，故改由本 repo 嘅 GitHub Actions runner 直接抓取同一個 Nasdaq screener 來源並回傳，逐日接駁上序列。接駁檢查：以當日收盤減官方 net-change 反推嘅前收，同序列中前一日收盤對賬 —— 08-31 一步 5,127 隻、09-01 一步 5,121 隻，兩步中位偏差都係 <b>0.000%</b>。偏差 >20% 者為公司行動：比例乾淨嘅拆股／合股（08-31 有 7 隻，如 NXL 1拆30；09-01 有 3 隻，如 RUSHA 3:2）按比例重算歷史股數基準（價格乘比例、成交量除比例，成交額不變）而保留；唔似拆股嘅（COCHW，$0.04 認股權證真實波動）則整隻剔除。當日無報價嘅（09-01 有 5 隻）保留舊值後即失去「存續至最新交易日」資格，唔會出現喺任何頁。<br>
 ③ 市值：Nasdaq 快照 market cap（{M["cap_cuts_b"][0]:.0f}／{M["cap_cuts_b"][1]:.0f} 十億美元為界）；類別：Nasdaq 分類＋GICS（S&amp;P 500，klaywang24/market-chronicle）；交易所：irachex/open-stock-data。<br>
 ④ 確定性 7 項、VCP、排名經獨立代理人對抗性驗證；原因欄及催化劑由 AI 代理透過 <a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a> 新聞索引及公開網頁逐隻搜尋、核實再濃縮 —— 內容係新聞摘要，可能有錯漏，請以原始公告為準。<br>
 ⑤ <b>數據終點 {M["last_date"]}，建置時間 {BUILD_TS}</b> · 快照只有收盤/成交量，VCP 及確定性以收盤序列計算 · 本表只係篩選工具，唔係投資建議。<br>
@@ -587,10 +588,10 @@ js = """
 })();
 """
 
-html_doc = f"""<title>10MA Uptrend Watchlist R6</title>
+html_doc = f"""<title>10MA Uptrend Watchlist {REV.split(".")[0]}</title>
 <style>{css}</style>
 <div class="wrap">
-<h1>10MA Uptrend Watchlist R6（一底高於一底 × VCP × 底部確定性 · 大中小型股分頁）</h1>
+<h1>10MA Uptrend Watchlist {REV.split(".")[0]}（一底高於一底 × VCP × 底部確定性 · 大中小型股分頁）</h1>
 <div class="sub">數據至 <b>{M["last_date"]}</b> 收盤 · 全美掃描 {c["liq"]:,} 隻合資格 · 13 頁：總表＋4 個時間框 × 大／中／小型股 · 每頁列出主要熱炒催化劑 · VCP／確定性／7項證據可排序 · 欄寬可拖曳</div>
 {rules_html}
 <nav class="nav">

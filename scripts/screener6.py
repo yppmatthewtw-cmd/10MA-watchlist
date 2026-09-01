@@ -382,6 +382,7 @@ for r in p1:
 out["page1"] = p1
 by_cap = {b: sum(1 for r in p1 if r["cap"] == b) for b in ("a", "b", "c")}
 print(f"P1 summary: {len(p1)} distinct tickers (大型 {by_cap['a']} · 中型 {by_cap['b']} · 小型 {by_cap['c']})")
-json.dump(out, open(f"{SCRATCH}/screen_results6.json", "w"), ensure_ascii=False)
+OUT_JSON = os.environ.get("OUT_JSON", "screen_results6.json")
+json.dump(out, open(f"{SCRATCH}/{OUT_JSON}", "w"), ensure_ascii=False)
 print("counts:", stats_counts, "eligible:", len(syms), "with structure:", len(struct),
       "| eligible cap split:", cap_counts)
