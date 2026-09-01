@@ -460,7 +460,7 @@ foot = f"""
 <div class="card foot">
 <h2>備註 · 數據 lineage</h2>
 ① 覆蓋範圍：可達數據源覆蓋美國上市普通股 {c["total"]:,} 隻（含 S&amp;P 500 全部 503 隻）；外國註冊而非 S&amp;P 500 嘅美國上市股（部分 ADR）未有完整歷史，未納入掃描。價格未除息調整。<br>
-② 數據重建：GitHub 每日 Nasdaq 快照鏡像（zyhe16/top-us-stock-tickers）逐 commit 重建每日收盤序列，共 {M["n_days"]} 個交易日（{M["cal_first"]} → {M["cal_last"]}）；4 日無快照以前值填補；08-27 收盤以官方 net-change 校正。<br>②b <b>最新交易日</b>：鏡像未出當日快照（其更新排程於 08-31 改版），本研究環境嘅網絡政策亦封鎖所有行情網站，故改由本 repo 嘅 GitHub Actions runner 直接抓取同一個 Nasdaq screener 來源並回傳，逐日接駁上序列。接駁檢查：以當日收盤減官方 net-change 反推嘅前收，同序列中前一日收盤對賬 —— 08-31 一步 5,127 隻、09-01 一步 5,121 隻，兩步中位偏差都係 <b>0.000%</b>。偏差 >20% 者為公司行動：比例乾淨嘅拆股／合股（08-31 有 7 隻，如 NXL 1拆30；09-01 有 3 隻，如 RUSHA 3:2）按比例重算歷史股數基準（價格乘比例、成交量除比例，成交額不變）而保留；唔似拆股嘅（COCHW，$0.04 認股權證真實波動）則整隻剔除。當日無報價嘅（09-01 有 5 隻）保留舊值後即失去「存續至最新交易日」資格，唔會出現喺任何頁。<br>
+② 數據重建：GitHub 每日 Nasdaq 快照鏡像（zyhe16/top-us-stock-tickers）逐 commit 重建每日收盤序列，共 {M["n_days"]} 個交易日（{M["cal_first"]} → {M["cal_last"]}）；4 日無快照以前值填補；08-27 收盤以官方 net-change 校正。<br>②b <b>最新交易日</b>：鏡像未出當日快照（其更新排程於 08-31 改版），本研究環境嘅網絡政策亦封鎖所有行情網站，故改由本 repo 嘅 GitHub Actions runner 直接抓取同一個 Nasdaq screener 來源並回傳，逐日接駁上序列。接駁檢查：以當日收盤減官方 net-change 反推嘅前收，同序列中前一日收盤對賬 —— 08-31 一步 5,127 隻、09-01 一步 5,121 隻，兩步中位偏差都係 <b>0.000%</b>。偏差 >20% 者為公司行動：比例乾淨嘅拆股／合股（08-31 有 7 隻，如 NXL 30合1；09-01 有 3 隻，如 RUSHA 3拆2）按比例重算歷史股數基準（價格乘比例、成交量除比例，成交額不變）而保留；唔似拆股嘅（COCHW，$0.04 認股權證真實波動）則整隻剔除。當日無報價嘅（09-01 有 5 隻）保留舊值後即失去「存續至最新交易日」資格，唔會出現喺任何頁。<br>
 ③ 市值：Nasdaq 快照 market cap（{M["cap_cuts_b"][0]:.0f}／{M["cap_cuts_b"][1]:.0f} 十億美元為界）；類別：Nasdaq 分類＋GICS（S&amp;P 500，klaywang24/market-chronicle）；交易所：irachex/open-stock-data。<br>
 ④ 確定性 7 項、VCP、排名經獨立代理人對抗性驗證；原因欄及催化劑由 AI 代理透過 <a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a> 新聞索引及公開網頁逐隻搜尋、核實再濃縮 —— 內容係新聞摘要，可能有錯漏，請以原始公告為準。<br>
 ⑤ <b>數據終點 {M["last_date"]}，建置時間 {BUILD_TS}</b> · 快照只有收盤/成交量，VCP 及確定性以收盤序列計算 · 本表只係篩選工具，唔係投資建議。<br>
@@ -473,6 +473,7 @@ js = """
   var cpb = document.querySelectorAll('.nav button[data-c]');
   var sbtns = document.querySelectorAll('.nav button[data-sort]');
   var caprow = document.getElementById('caprow');
+  var NAVKEY = 'ma10nav-' + (document.title.match(/R\\d+/) || ['x'])[0];
   var state = { t: '1', c: 'a' };
   // each table keeps whatever sort the user left on it, so the nav buttons are
   // re-highlighted from that table's own state rather than blanked on every switch
@@ -489,12 +490,12 @@ js = """
     cpb.forEach(function(b) { b.classList.toggle('on', b.dataset.c === state.c); });
     caprow.hidden = (state.t === '1');
     syncSortBtns();
-    try { localStorage.setItem('ma10r6', JSON.stringify(state)); } catch (e) {}
+    try { localStorage.setItem(NAVKEY, JSON.stringify(state)); } catch (e) {}
   }
   tfb.forEach(function(b) { b.addEventListener('click', function() { state.t = b.dataset.t; show(); }); });
   cpb.forEach(function(b) { b.addEventListener('click', function() { state.c = b.dataset.c; show(); }); });
   try {
-    var sv = JSON.parse(localStorage.getItem('ma10r6') || 'null');
+    var sv = JSON.parse(localStorage.getItem(NAVKEY) || 'null');
     if (sv && sv.t && sv.c && document.getElementById('p' + (sv.t === '1' ? '1' : sv.t + sv.c))) state = sv;
   } catch (e) {}
   show();

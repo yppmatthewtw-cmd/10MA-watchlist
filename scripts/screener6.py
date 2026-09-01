@@ -34,7 +34,7 @@ unrounded value) within its own cap bucket.
 Page 1 = union of the 12 lists, ranked by
 爆發潛力 = 0.4 x VCP + 0.4 x 確定性 + 0.2 x (qualifying frames / 4 x 100).
 """
-import csv, io, json, os, pickle, statistics, subprocess
+import csv, io, json, math, os, pickle, statistics, subprocess
 
 SCRATCH = os.environ.get("WORK_DIR", "./data")
 ZREPO = os.environ.get("TICKERS_REPO", "/home/user/zyhe16/top-us-stock-tickers")
@@ -81,12 +81,13 @@ ZH_SECTOR = {
 }
 
 def sma_series(cs, L):
+    # summed per window with fsum rather than carried as a running total: the
+    # running total drifts by an ULP or two, which is enough to make a flat MA
+    # compare as rising and let a stock through the "MA rose each of the last
+    # 3 days" rule it does not meet
     out = [None] * len(cs)
-    run = 0.0
-    for i, c in enumerate(cs):
-        run += c
-        if i >= L: run -= cs[i - L]
-        if i >= L - 1: out[i] = run / L
+    for i in range(L - 1, len(cs)):
+        out[i] = math.fsum(cs[i - L + 1:i + 1]) / L
     return out
 
 def find_bottoms(cs):
