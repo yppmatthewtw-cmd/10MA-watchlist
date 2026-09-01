@@ -391,7 +391,7 @@ section[hidden]{display:none}
 
 rules_html = f"""
 <div class="card rules">
-<h2>篩選規則（10MA {REV.split(".")[0]} · 數據更新至 {M["last_date"][5:7]}月{M["last_date"][8:]}日收盤；每個時間框再分大／中／小型股，共 12 個子頁）</h2>
+<h2>篩選規則（10MA {REV.split(".")[0]} · 數據更新至 {int(M["last_date"][5:7])}月{int(M["last_date"][8:])}日收盤；每個時間框再分大／中／小型股，共 12 個子頁）</h2>
 ① <b>{esc(UNIVERSE_LINE)}</b>。<br>
 ② <b>市值分頁（R5 新增）</b>：<b>a = 大型股 ≥$100億</b>、<b>b = 中型股 $20–100億</b>、<b>c = 小型股 &lt;$20億</b>；每個時間框各自取三組嘅 top 50（每組合資格數不足 50 就全部列出）。市值取自 Nasdaq 快照；無市值資料嘅（主要係封閉式基金）唔會硬塞入任何一組，改為喺各頁標示數目。<br>
 ③ <b>MA 上升</b>：PAGE 2a/b/c：<b>5 天 MA</b> 較 <b>5 個交易日</b>前高；PAGE 3/4/5（a/b/c）：<b>10 天 MA</b> 分別較 <b>10 / 21 / 42 個交易日</b>前高；且 MA 最後 3 日逐日上升、期內 ≥70% 日子上升。<br>

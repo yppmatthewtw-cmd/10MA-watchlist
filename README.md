@@ -9,6 +9,7 @@
 
 | 版本 | 內容 |
 |------|------|
+| R7.00 | 數據更新至 **2026-09-01 收盤**（星期二，171 個交易日）：總表 171 隻（23 隻新上榜、30 隻跌出），ITGR 因 KKR $127 全現金收購（溢價 51.8%）躍上前列；`extend_series.py` 改為**按比例重算拆股歷史**而非整隻剔除（兩日共保留 10 隻真拆股，如 RUSHA 3:2、NXL 1拆30），只有唔似拆股嘅 COCHW 剔除；市場背景卡加入 09-01 一節（荷莫茲油輪遇襲、標普跌 0.71%、市寬 70.2% 下跌）|
 | R6.01 | **純深色主題**：調色盤只定義喺 bare `:root`，移除 media query 同 `[data-theme]` 覆蓋，無論瀏覽器／系統設定都保持深色；順手修好 `.slope` 被 `.subsc` 同 specificity 蓋過、斜率一直顯示灰色而非綠色嘅串接衝突 |
 | R6.00 | 數據更新至 **2026-08-31 收盤**（星期一）：容器網絡封鎖所有行情站、鏡像當日未出快照，改由本 repo 的 GitHub Actions runner 抓同源 Nasdaq screener 快照回傳，`extend_series.py` 接駁上序列（5,127 隻反推前收與 08-28 中位偏差 0.000%，8 隻合股股票剔除）；12 子頁＋總表全部重掃，24 隻新上榜逐隻研究，市場背景卡加入 08-31 一節 |
 | R5.00 | 每個時間框再拆**大型（≥$100億）／中型（$20–100億）／小型（&lt;$20億）**三個子頁，共 12 個子頁＋總表（178 隻不重複）；新增**主要催化劑欄**（醒目 badge，標明業績／併購／臨床／監管／回購／指引／大單／AI／重組），Ticker 欄加市值；沿用 R2 的分欄排序、欄寬拖曳、原因分欄與熱炒 highlight |
@@ -36,8 +37,8 @@
 
 ## 數據來源與重建
 
-環境內可達的數據源為 GitHub 每日鏡像，逐 git commit 重建每日收盤/成交量序列（170 個交易日，
-2025-12-26 → 2026-08-31）：
+環境內可達的數據源為 GitHub 每日鏡像，逐 git commit 重建每日收盤/成交量序列（171 個交易日，
+2025-12-26 → 2026-09-01）：
 
 - 價格/成交量：[zyhe16/top-us-stock-tickers](https://github.com/zyhe16/top-us-stock-tickers)
   每日 Nasdaq 快照（`tickers/all.csv` + `tickers/sp500.csv`），依 commit 時間映射至美股交易日；
@@ -47,8 +48,9 @@
 - **最新交易日**：鏡像未出當日快照時（其更新排程於 08-31 改版），由本 repo 的
   `.github/workflows/fetch_eod_snapshot.yml` 在 GitHub Actions runner 上抓同一個 Nasdaq screener
   來源並 commit 回來；容器的網絡政策封鎖所有行情網站，runner 則無此限制。
-  `scripts/extend_series.py` 以「當日收盤 − 官方 net-change」反推前收，與序列既有的前一日收盤對賬後才接駁，
-  偏差 >20% 者（合股／拆股）整隻剔除。
+  `scripts/extend_series.py` 以「當日收盤 − 官方 net-change」反推前收，與序列既有的前一日收盤對賬後才接駁。
+  偏差 >20% 者為公司行動：比例乾淨（吻合度 0.5% 內、細數一邊 ≤5）者按比例重算歷史股數基準
+  （價格乘比例、成交量除比例，成交額不變）而保留；其餘整隻剔除。
 
 驗證：重建序列與 20MA R3 報告交叉核對，74/74 上榜股現價完全一致；另經獨立代理人對抗性驗證
 （spec 合規 / 獨立重算合資格集 / VCP·評分數學 / 底部結構）。
@@ -72,16 +74,21 @@ python3 scripts/screener5.py         # -> data/screen_results5.json
 python3 scripts/merge_news5.py       # 合併新聞研究＋催化劑標籤 -> data/news5.json
 python3 scripts/build_report5.py     # -> data/10MA_uptrend_watchlistGit_R5.00_*.html
 
-# R6（更新至最新收盤）
+# 每日更新（R6 起，腳本以環境變數串接，唔使再複製）
 #   先在 GitHub 觸發 fetch_eod_snapshot workflow 取當日快照，pull 返嚟之後：
-TRADE_DATE=2026-08-31 python3 scripts/extend_series.py   # series2 + 當日 -> data/series3.pkl
-python3 scripts/screener6.py         # -> data/screen_results6.json
-python3 scripts/merge_news6.py       # 沿用 news5 + 新上榜研究 -> data/news6.json
-python3 scripts/build_report6.py      # -> data/10MA_uptrend_watchlistGit_R6.00_*.html（跟隨系統主題）
-python3 scripts/build_report6_dark.py # -> data/10MA_uptrend_watchlistGit_R6.01_*.html（純深色）
+TRADE_DATE=2026-09-01 IN_SERIES=series3.pkl OUT_SERIES=series4.pkl \
+  python3 scripts/extend_series.py                       # 接駁當日 -> data/series4.pkl
+SERIES=series4.pkl OUT_JSON=screen_results7.json \
+  python3 scripts/screener6.py                           # -> data/screen_results7.json
+python3 scripts/merge_news7.py                           # 沿用 news6 + 新上榜研究 -> data/news7.json
+SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
+  python3 scripts/build_report6_dark.py                  # -> data/10MA_uptrend_watchlistGit_R7.00_*.html
+
+#   （R6.00 為跟隨系統主題的版本：python3 scripts/build_report6.py）
 ```
 
 新聞研究由 AI 代理透過 Bigdata.com 新聞索引及公開網頁搜尋產生，結果暫存於 session scratchpad
-（`r5_res_*.json` / `r5_redo_*.json` / `r5_cat_*.json` / `r6_res_*.json`），由 `merge_news5.py`、
-`merge_news6.py` 合併入 `data/news5.json`、`data/news6.json`。Bigdata.com 額度已耗盡，改以 WebSearch 完成；
-R5 有 13 隻因搜尋額度用盡而未覆蓋的股票已用新代理補做，R6 的 24 隻新上榜全部搵到個股消息。
+（`r5_*.json` / `r6_res_*.json` / `r7_res_*.json`），由 `merge_news5.py`／`merge_news6.py`／`merge_news7.py`
+逐版合併入 `data/news5.json`／`news6.json`／`news7.json` —— 每版只研究「新上榜」的股票，其餘沿用上一版。
+Bigdata.com 額度已耗盡，改以 WebSearch 完成；R5 有 13 隻因搜尋額度用盡而未覆蓋的股票已用新代理補做，
+R6 的 24 隻及 R7 的 21 隻新上榜全部搵到個股消息。
