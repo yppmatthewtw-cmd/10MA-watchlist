@@ -77,7 +77,8 @@ python3 scripts/build_report5.py     # -> data/10MA_uptrend_watchlistGit_R5.00_*
 TRADE_DATE=2026-08-31 python3 scripts/extend_series.py   # series2 + 當日 -> data/series3.pkl
 python3 scripts/screener6.py         # -> data/screen_results6.json
 python3 scripts/merge_news6.py       # 沿用 news5 + 新上榜研究 -> data/news6.json
-python3 scripts/build_report6.py     # -> data/10MA_uptrend_watchlistGit_R6.00_*.html
+python3 scripts/build_report6.py      # -> data/10MA_uptrend_watchlistGit_R6.00_*.html（跟隨系統主題）
+python3 scripts/build_report6_dark.py # -> data/10MA_uptrend_watchlistGit_R6.01_*.html（純深色）
 ```
 
 新聞研究由 AI 代理透過 Bigdata.com 新聞索引及公開網頁搜尋產生，結果暫存於 session scratchpad
