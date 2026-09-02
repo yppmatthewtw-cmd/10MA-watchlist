@@ -9,6 +9,7 @@
 
 | 版本 | 內容 |
 |------|------|
+| R8.00 | **批判性審視版**（數據仍為 2026-09-01 收盤）：5 個角度審視 R7 → 修正 4 項數據缺陷（補值日唔再製造底部；成交量不完整日唔入量比／VCP；universe 剔除基金／信託／優先股；S&P 500 改用 GICS 類別），總表 171 → 181 隻；併購釘價目標公司紅色標記＋可一鍵隱藏；跌穿底部改紅字顯示；**所有相對 R7 嘅更新以紅色標示**（新上榜／跌出／排名箭嘴／有變嘅格）並可「只顯示有更新的行」；涉及規則嘅建議（釘價股剔除、PAGE 2 狀態條件、覆蓋度、突破幅度、VCP 跳空、雙類股）列於更新卡由用戶決定 |
 | R7.00 | 數據更新至 **2026-09-01 收盤**（星期二，171 個交易日）：總表 171 隻（23 隻新上榜、30 隻跌出），ITGR 因 KKR $127 全現金收購（溢價 51.8%）躍上前列；`extend_series.py` 改為**按比例重算拆股歷史**而非整隻剔除（兩日共保留 10 隻真拆股，如 RUSHA 3:2、NXL 1拆30），只有唔似拆股嘅 COCHW 剔除；市場背景卡加入 09-01 一節（荷莫茲油輪遇襲、標普跌 0.71%、市寬 70.2% 下跌）|
 | R6.01 | **純深色主題**：調色盤只定義喺 bare `:root`，移除 media query 同 `[data-theme]` 覆蓋，無論瀏覽器／系統設定都保持深色；順手修好 `.slope` 被 `.subsc` 同 specificity 蓋過、斜率一直顯示灰色而非綠色嘅串接衝突 |
 | R6.00 | 數據更新至 **2026-08-31 收盤**（星期一）：容器網絡封鎖所有行情站、鏡像當日未出快照，改由本 repo 的 GitHub Actions runner 抓同源 Nasdaq screener 快照回傳，`extend_series.py` 接駁上序列（5,127 隻反推前收與 08-28 中位偏差 0.000%，8 隻合股股票剔除）；12 子頁＋總表全部重掃，24 隻新上榜逐隻研究，市場背景卡加入 08-31 一節 |
@@ -83,6 +84,13 @@ SERIES=series4.pkl OUT_JSON=screen_results7.json \
 python3 scripts/merge_news7.py                           # 沿用 news6 + 新上榜研究 -> data/news7.json
 SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
   python3 scripts/build_report6_dark.py                  # -> data/10MA_uptrend_watchlistGit_R7.00_*.html
+
+# R8（審視修正版 + 紅色差異標示）
+python3 scripts/patch_volume.py                          # 以鏡像較完整嘅成交量補齊當日 bar（價格須完全相同）
+SERIES=series4.pkl OUT_JSON=screen_results8.json python3 scripts/screener8.py   # 含 4 項數據修正
+python3 scripts/merge_news8.py                           # 沿用 news7 + 新上榜研究 -> data/news8.json
+SCREEN_JSON=screen_results8.json NEWS_JSON=news8.json PREV_SCREEN=screen_results7.json PREV_NEWS=news7.json \
+  PREV_REV=R7 REV=R8.00 REVIEW_JSON=review8.json python3 scripts/build_report8.py   # 紅色 = 相對 R7 嘅更新
 
 #   （R6.00 為跟隨系統主題的版本：python3 scripts/build_report6.py）
 ```

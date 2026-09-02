@@ -127,14 +127,22 @@ def cat_cell(sym):
     if not cat:
         body = '<span class="nocat">跟大市</span>'
     else:
-        body = f'<span class="catb{" chgb" if changed else ""}"><i>{esc(kind)}</i>{esc(cat)}</span>'
+        low = e.get("confidence") == "低"
+        cls = "catb" + (" chgb" if changed else "") + (" lowc" if low else "")
+        ttl = ' title="信心低：未有個股新聞來源"' if low else ""
+        body = f'<span class="{cls}"{ttl}><i>{esc(kind)}</i>{esc(cat)}</span>'
     return body + flag_html
 
 def c7_cells(r, pr):
     def parts(row):
         c = row["cert_c"]
         retr = c["retrace_pct"]
-        retr_s = "100%+" if retr >= 100 else f"{max(0.0, retr):.0f}%"
+        if retr >= 100: retr_s = "100%+"
+        elif retr < 0:
+            below = (row["close"] / c.get("pL", row["close"]) - 1) * 100 if c.get("pL") else None
+            retr_s = (f'<span class="chg">跌穿底 {below:+.1f}%</span>' if below is not None
+                      else '<span class="chg">跌穿底</span>')
+        else: retr_s = f"{retr:.0f}%"
         maf = sum(c["ma_flags"])
         return {
             "brk": ('<span class="cok">✓突破</span>' if c["broke"] else '<span class="cno">未突破</span>'),
@@ -168,12 +176,14 @@ def row_attrs(r, changed, is_new, extra=""):
     c = r["cert_c"]; s = c["s"]
     e = news_cur(r["sym"])
     has_cat = 1 if (e.get("catalyst") or "").strip() else 0
+    flag = (REVIEW.get("ticker_flags") or {}).get(r["sym"]) or {}
+    deal = 1 if ("釘價" in flag.get("badge", "") or "併購目標" in flag.get("badge", "") or "合併目標" in flag.get("badge", "")) else 0
     newcls = ' class="rownew"' if is_new else ""
     return (f'data-vcp="{r["vcp"]}" data-cert="{r["cert"]}" data-brk="{s["break"]}"'
             f' data-retr="{c["retrace_pct"]}" data-held="{c["d_held"]}" data-dvr="{c["dv_ratio"]}"'
             f' data-contr="{c["contr"]}" data-rs="{c["rs21_pct"]}" data-maf="{sum(c["ma_flags"])}"'
             f' data-slope="{r["slope"]}" data-cat="{has_cat}" data-mcap="{r["mcap"]}"'
-            f' data-chg="{1 if (changed or is_new) else 0}"{newcls}{extra}')
+            f' data-chg="{1 if (changed or is_new) else 0}" data-deal="{deal}"{newcls}{extra}')
 
 def why_decline(sym):
     e = news_cur(sym); p = news_prev(sym)
@@ -199,8 +209,10 @@ def sector_cell(r, pr):
     sub = r["gsub"] if (r["sp500"] and r.get("gsub")) else r["industry"]
     gtag = f'<i class="gics">GICS·{esc(r["gsec"])}</i>' if (r["sp500"] and r.get("gsec")) else ""
     changed = bool(pr) and (pr["sector_zh"], pr["industry"]) != (r["sector_zh"], r["industry"])
+    src = r.get("sec_src")
+    stag = f'<i class="gics">{esc(src)}</i>' if (src and not gtag) else ""
     return (f'<div class="sect {chg_cls(changed)}"><b>{esc(r["sector_zh"])}</b> <span>{esc(r["sector"])}</span>'
-            f'{gtag}<em>{esc(sub)}</em></div>')
+            f'{gtag}{stag}<em>{esc(sub)}</em></div>')
 
 def mcap_txt(v):
     if v >= 1000: return f"${v/1000:.2f}T"
@@ -221,7 +233,11 @@ def tick_cell(r, pr, L=None):
     ml = f'MA{L}' if L else "MA"
     newb = '' if pr or not PREV else '<span class="newb">新</span>'
     cap_chg = bool(pr) and pr["cap"] != r["cap"]
-    cap = f'<span class="capb{" chg" if cap_chg else ""}">{CAP_SHORT[r["cap"]]} {mcap_txt(r["mcap"])}</span>'
+    cuts = M.get("cap_cuts_b", [10.0, 2.0])
+    near = any(abs(r["mcap"] - cut) / cut <= 0.05 for cut in cuts)
+    near_tag = '<i class="near" title="市值距分組界線 5% 以內，換日可能轉組">近界</i>' if near else ""
+    cap = (f'<span class="capb{" chg" if cap_chg else ""}">{CAP_SHORT[r["cap"]]} {mcap_txt(r["mcap"])}'
+           f'{near_tag}</span>')
     nm = r["name"]
     px_d = ""
     if pr and pr["close"] != r["close"]:
@@ -465,6 +481,9 @@ td{padding:8px 8px;border-bottom:1px solid var(--grid);vertical-align:middle;ove
 tr:last-child td{border-bottom:0}
 tr:hover td{background:var(--hl)}
 tr[data-chg="0"].quiet{display:none}
+tr[data-deal="1"].dealhide{display:none}
+.catb.lowc{opacity:.55;border-style:dashed}
+.capb .near{font-style:normal;color:var(--warn);margin-left:4px;font-weight:700}
 .rk{color:var(--mut);font-weight:600;white-space:nowrap}
 .nums{font-variant-numeric:tabular-nums;white-space:nowrap}
 .mut{color:var(--mut)}
@@ -635,13 +654,15 @@ sort_btns = ('<span class="sep"></span><span class="slab">排序：</span>'
              '<button class="sbtn" data-sort="cert">按 確定性 排列</button>'
              '<button class="sbtn" data-sort="cat">按 催化劑 排列</button>'
              '<button class="sbtn" data-sort="rk">預設排名</button>'
-             + (f'<span class="sep"></span><button class="cbtn" id="onlychg">只顯示有更新的行</button>' if PREV else ""))
+             + (f'<span class="sep"></span><button class="cbtn" id="onlychg">只顯示有更新的行</button>' if PREV else "")
+             + '<button class="cbtn" id="hidedeal" title="隱藏被收購／換股合併釘住價格嘅目標公司（紅色標記者）">隱藏併購釘價股</button>')
 
 foot = f"""
 <div class="card foot">
 <h2>備註 · 數據 lineage</h2>
 ① 覆蓋範圍：可達數據源覆蓋美國上市普通股 {c["total"]:,} 隻（含 S&amp;P 500 全部 503 隻）；外國註冊而非 S&amp;P 500 嘅美國上市股（部分 ADR）未有完整歷史，未納入掃描。價格未除息調整。<br>
 ② 數據重建：GitHub 每日 Nasdaq 快照鏡像（zyhe16/top-us-stock-tickers）逐 commit 重建每日收盤序列，共 {M["n_days"]} 個交易日（{M["cal_first"]} → {M["cal_last"]}）；4 日無快照以前值填補；08-27 收盤以官方 net-change 校正。<br>②b <b>最新交易日</b>：鏡像未及時出快照時，由本 repo 嘅 GitHub Actions runner 直接抓取同一個 Nasdaq screener 來源並回傳，逐日接駁上序列；接駁前以「當日收盤減官方 net-change」反推前收同序列對賬（08-31、09-01 兩步中位偏差均 0.000%）。偏差 &gt;20% 者為公司行動：比例乾淨嘅拆股／合股按比例重算歷史股數基準（價格乘比例、成交量除比例，成交額不變）而保留；唔似拆股嘅整隻剔除。當日無報價嘅失去「存續至最新交易日」資格。<span class="chg">09-01 bar 嘅成交量已用鏡像 28 分鐘後嘅完整版本補齊（價格 7,153/7,153 完全相同；29 隻細價股成交量上調，無一隻係上榜股）。</span><br>
+②c <span class="chg"><b>R8 數據修正</b>：(1) 鏡像補值嘅 {esc("、".join(d[5:] for d in M.get("copied_days", [])))} 四日唔會成為「底」，底部嘅 ±3 日比較用真實收盤（窗口同守底日數仍按交易日計）；(2) 成交量不完整日（{esc("、".join(d[5:] for d in M.get("partial_volume_days", [])))}）同補值日唔計入量比及 VCP 成交量項；(3) universe 剔除封閉式基金／信託／優先股／票據（{c.get("not_common", 0):,} 隻），REIT、BDC、MLP、ADR 保留；(4) S&P 500 成份股類別改用 GICS。</span><br>
 ③ 市值：Nasdaq 快照 market cap（{M["cap_cuts_b"][0]:.0f}／{M["cap_cuts_b"][1]:.0f} 十億美元為界）；類別：Nasdaq 分類＋GICS（S&amp;P 500，klaywang24/market-chronicle）；交易所：irachex/open-stock-data。<br>
 ④ 確定性 7 項、VCP、排名經獨立代理人對抗性驗證；原因欄及催化劑由 AI 代理透過 <a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a> 新聞索引及公開網頁逐隻搜尋、核實再濃縮 —— 內容係新聞摘要，可能有錯漏，請以原始公告為準。<br>
 ⑤ <b>數據終點 {M["last_date"]}，建置時間 {BUILD_TS}</b> · 快照只有收盤/成交量，VCP 及確定性以收盤序列計算 · 本表只係篩選工具，唔係投資建議。<br>
@@ -655,6 +676,8 @@ js = """
   var sbtns = document.querySelectorAll('.nav button[data-sort]');
   var caprow = document.getElementById('caprow');
   var onlyBtn = document.getElementById('onlychg');
+  var dealBtn = document.getElementById('hidedeal');
+  var hideDeal = false;
   var NAVKEY = 'ma10nav-' + (document.title.match(/R\\d+/) || ['x'])[0];
   var state = { t: '1', c: 'a' };
   var sortOf = {};
@@ -680,6 +703,11 @@ js = """
   tfb.forEach(function(b) { b.addEventListener('click', function() { state.t = b.dataset.t; show(); }); });
   cpb.forEach(function(b) { b.addEventListener('click', function() { state.c = b.dataset.c; show(); }); });
   if (onlyBtn) onlyBtn.addEventListener('click', function() { onlyChg = !onlyChg; applyOnly(); });
+  if (dealBtn) dealBtn.addEventListener('click', function() {
+    hideDeal = !hideDeal;
+    document.querySelectorAll('tbody tr[data-deal="1"]').forEach(function(r) { r.classList.toggle('dealhide', hideDeal); });
+    dealBtn.classList.toggle('on', hideDeal);
+  });
   try {
     var sv = JSON.parse(localStorage.getItem(NAVKEY) || 'null');
     if (sv && sv.t && sv.c && document.getElementById('p' + (sv.t === '1' ? '1' : sv.t + sv.c))) state = sv;

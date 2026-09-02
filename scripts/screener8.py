@@ -414,7 +414,7 @@ def row(sym, q):
         "cert": st["cert"], "_certr": st["cert_raw"],
         "combo": st["combo"], "_combor": st["combo_raw"],
         "cert_c": {
-            "broke": st["broke"], "H_mid": round(st["H_mid"], 2),
+            "broke": st["broke"], "H_mid": round(st["H_mid"], 2), "pL": round(st["pL"], 4),
             "post_high": round(st["post_high"], 2),
             "retrace_pct": round(st["retrace"] * 100, 1),
             "d_held": st["d_held"], "undercut": st["undercut"],
