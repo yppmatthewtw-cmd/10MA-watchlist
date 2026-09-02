@@ -4,8 +4,7 @@
   "recovery_short": "7月24日Q2業績勁：EPS $1.76勝預期，收入增10.3%，上調全年指引，單日急升11%，RBC升目標價至$92",
   "hot": [
    "EPS $1.76勝預期",
-   "上調全年指引",
-   "單日急升11%"
+   "上調全年指引"
   ],
   "catalyst": "Q2勝預期升11%",
   "ckind": "業績",
@@ -26,7 +25,7 @@
   ],
   "catalyst": "Q2收入15億勝預期",
   "ckind": "業績",
-  "confidence": "高",
+  "confidence": "低",
   "sources": [
    "https://stockanalysis.com/stocks/ndaq/",
    "https://www.cnbc.com/quotes/NDAQ"
@@ -57,12 +56,11 @@
   "recovery_short": "8月10日獲Bernhard Capital以每股$43現金私有化（約10億美元），溢價58%，單日急升55%",
   "hot": [
    "現金私有化",
-   "溢價58%",
-   "單日急升55%"
+   "溢價58%"
   ],
   "catalyst": "$43現金私有化",
   "ckind": "併購",
-  "confidence": "高",
+  "confidence": "中",
   "sources": [
    "https://www.investing.com/news/stock-market-news/bowman-consulting-stock-surges-55-on-1-billion-buyout-deal-93CH-4849245"
   ],
@@ -78,7 +76,7 @@
   ],
   "catalyst": "AbbVie收購",
   "ckind": "併購",
-  "confidence": "高",
+  "confidence": "中",
   "sources": [
    "https://investors.apogeetherapeutics.com/news-releases/news-release-details/abbvie-acquire-apogee-therapeutics-deepening-immunology"
   ],
@@ -87,32 +85,43 @@
  },
  "MAN": {
   "decline_short": "勞動力需求降溫加AI取代職位恐慌，6月22日低見$31.33，屬板塊利空疊加大市回調",
-  "recovery_short": "6月ADP就業數據勝預期帶動招聘股齊升，Experis夥IBM推AI工作流產品，7月中單日曾爆升34%",
+  "recovery_short": "7月16日Q2經調整EPS $0.99、GAAP轉盈（去年同期蝕$1.44），Q3指引$0.96–1.06，單日爆升32.4%；7月8日Experis夥IBM推watsonx AI工作流產品屬另一件事",
   "hot": [
-   "ADP就業數據勝預期",
-   "AI工作流產品",
-   "單日曾爆升34%"
+   "Q2經調整EPS $0.99",
+   "GAAP轉盈"
   ],
-  "catalyst": "夥IBM推AI產品",
-  "ckind": "AI",
+  "catalyst": "Q2轉盈單日飆32%",
+  "ckind": "業績",
   "confidence": "高",
   "sources": [
    "https://stockstotrade.com/news/manpowergroup-man-news-2026_07_16/",
-   "https://www.barchart.com/story/news/37048673/manpowergroup-man-stock-is-up-what-you-need-to-know"
+   "https://www.barchart.com/story/news/37048673/manpowergroup-man-stock-is-up-what-you-need-to-know",
+   "https://investor.manpowergroup.com/news-releases/news-release-details/manpowergroup-reports-2nd-quarter-2026-results",
+   "https://www.gurufocus.com/news/8963007/manpowergroup-man-stock-soars-27-on-strong-q2-earnings-report",
+   "https://wp.optionbeast.com/2026/07/16/manpowergroup-is-up-33-today-the-labor-market-just-sent-a-signal/",
+   "https://www.tradingview.com/news/tradingview:636824bc55aa3:0-key-facts-manpowergroup-q3-eps-0-96-1-06-ai-to-cover-70-rev-global-revenue-rises/",
+   "https://www.manpowergroup.com/en/news-releases/news/experis-u-s-launches-excelerateworkflow-putting-enterprises-at-the-forefront-of-the-ai-powered-future-of-work"
   ],
   "decline_full": "勞動力需求降溫、通脹憂慮加上AI取代職位恐慌，令股價6月22日低見31.33美元，屬板塊性利空疊加大市回調。",
   "recovery_full": "6月ADP就業數據勝預期（9.8萬 vs 9.25萬）帶動招聘股齊升，Q2盈利預期上調至0.95美元，Experis夥IBM watsonx推AI工作流產品，7月中單日曾爆升34%。"
  },
  "SMTI": {
-  "decline_short": "7月中隨大市回調見底$23.45，8月初遭兩券商由買入降至持有，未見其他明確個股利空",
-  "recovery_short": "未見明確個股催化劑：Q2業績略遜預期但股價維持強勢，或反映收入增長勢頭，主要跟隨大市回升",
-  "hot": [],
-  "catalyst": "",
-  "ckind": "無",
-  "confidence": "低",
+  "decline_short": "7月中隨大市回調見底$23.45，8月初遭兩券商由買入降至持有；併購公布前無明確個股利空",
+  "recovery_short": "7月29日收市後MiMedx宣布收購：每股$33現金＋0.4735股MDXG（合計約$35，溢價46%，料2026年底完成）；翌日升12.6%至$34.06後一個月喺$34–35橫行，屬併購套利走勢（公布前一日已升13.6%）",
+  "hot": [
+   "MiMedx宣布收購",
+   "每股$33現金＋0.4735股MDXG"
+  ],
+  "catalyst": "MiMedx約$35收購",
+  "ckind": "併購",
+  "confidence": "高",
   "sources": [
    "https://www.dailypolitical.com/2026/08/11/sanara-medtech-nasdaqsmti-issues-quarterly-earnings-results-misses-expectations-by-0-03-eps.html",
-   "https://stockanalysis.com/stocks/smti/"
+   "https://stockanalysis.com/stocks/smti/",
+   "https://ir.sanaramedtech.com/news-releases/news-release-details/mimedx-acquire-sanara-medtech",
+   "https://www.globenewswire.com/news-release/2026/07/29/3335544/0/en/mimedx-to-acquire-sanara-medtech.html",
+   "https://www.biospace.com/press-releases/mimedx-to-acquire-sanara-medtech",
+   "https://www.beckersspine.com/orthopedic/mimedx-to-acquire-sanara-medtech-in-350m-deal/"
   ],
   "decline_full": "7月中隨大市回調見底$23.45；8月初曾遭Freedom Capital及Lake Street由買入降至持有，未見其他明確個股利空",
   "recovery_full": "未見明確個股催化劑：8月12日Q2業績EPS及收入略遜預期但股價維持強勢，市場或反映其收入增長勢頭（2025年增19%）及商業擴張，走勢主要跟隨大市回升"
@@ -127,7 +136,7 @@
   ],
   "catalyst": "$60億收購債券平台",
   "ckind": "併購",
-  "confidence": "高",
+  "confidence": "中",
   "sources": [
    "finance.yahoo.com: Is Intercontinental Exchange (ICE) a Buying Opportunity After Its 22% Drop?",
    "ts2.tech: ICE Stock Faces Currency Volatility Challenge as CPI Intersects With $6 Billion Deal Uncertainty"
@@ -145,7 +154,7 @@
   ],
   "catalyst": "後付費淨增遠超預期",
   "ckind": "業績",
-  "confidence": "高",
+  "confidence": "中",
   "sources": [
    "qz.com Verizon Q2 2026 earnings: subscriber growth beats estimates",
    "gurufocus.com Verizon Posts Mixed Q2 Results with Strong Earnings and Subscriber Growth"
@@ -246,8 +255,7 @@
   "decline_short": "市場憂慮生成式AI顛覆數據投研業務，一年跌近四成，加上6-7月大市調整，7月初見底",
   "recovery_short": "7月29日Q2業績強勁，同日獲BMO給予買入評級，AI憂慮消化，一個月反彈逾20%",
   "hot": [
-   "Q2業績強勁",
-   "一個月反彈逾20%"
+   "Q2業績強勁"
   ],
   "catalyst": "Q2業績強勁",
   "ckind": "業績",
@@ -312,14 +320,14 @@
   "recovery_full": "油輪運價強勁：Q2 EPS 5.91美元超預期12%，收入按年急升139%，混合TCE日租79,000美元（去年27,500），上半年純利5.81億美元，運價持續企穩。"
  },
  "TW": {
-  "decline_short": "7月30日Q2收入$5.589億遜預期、增速放慢至9%，單日瀉12%見52週低位，券商下調目標價。",
-  "recovery_short": "8月公佈7月成交量達$67.5萬億創強勁水平，估值修復，股價由$97回升至$108以上。",
+  "decline_short": "7月30日Q2收入$5.589億遜預期、增速放慢至9%，單日瀉9.6%至$97.80，重返7月9日低位附近，券商下調目標價。",
+  "recovery_short": "8月公佈7月成交量達$67.5萬億創強勁水平，估值修復，股價由$97回升至$107水平。",
   "hot": [
    "7月成交量達$67.5萬億"
   ],
   "catalyst": "7月成交量強勁",
   "ckind": "業績",
-  "confidence": "高",
+  "confidence": "中",
   "sources": [
    "finance.yahoo.com Why Tradeweb Markets (TW) Shares Are Getting Obliterated Today",
    "simplywall.st Tradeweb strong July trading volumes"
@@ -385,8 +393,7 @@
   "decline_short": "六月底大市回調，聯邦客戶開支受壓、收入近乎零增長，七月中回落至75附近見底。",
   "recovery_short": "8月6日Q2調整後EPS $1.86超預期約13%，重申全年指引，翌日急升逾10%。",
   "hot": [
-   "EPS $1.86超預期約13%",
-   "翌日急升逾10%"
+   "EPS $1.86超預期約13%"
   ],
   "catalyst": "EPS超預期13%",
   "ckind": "業績",
@@ -458,7 +465,6 @@
   "recovery_short": "7月29日Q2非GAAP EPS $1.33勝預期，七月累升約44%，擴大8億美元回購兼AI產品推動升勢",
   "hot": [
    "EPS $1.33勝預期",
-   "七月累升約44%",
    "擴大8億美元回購"
   ],
   "catalyst": "Q2勝預期兼8億回購",
@@ -512,8 +518,7 @@
   "recovery_short": "Q2 EPS及收入勝預期，上調全年指引高於市場預期，8月初單日彈逾11%，分析師接連上調目標價",
   "hot": [
    "Q2 EPS及收入勝預期",
-   "上調全年指引",
-   "單日彈逾11%"
+   "上調全年指引"
   ],
   "catalyst": "Q2勝預期兼升指引",
   "ckind": "業績",
@@ -532,8 +537,8 @@
    "ALTO-207",
    "上調目標價至$37"
   ],
-  "catalyst": "$1億配股推三期",
-  "ckind": "臨床",
+  "catalyst": "大行升目標價至$37",
+  "ckind": "評級",
   "confidence": "高",
   "sources": [
    "https://investors.altoneuroscience.com/news/news-details/2026/Alto-Neuroscience-Announces-Pricing-of-100-0-Million-Underwritten-Registered-Direct-Offering-of-Common-Stock/default.aspx",
@@ -547,8 +552,7 @@
   "recovery_short": "8月5日Q2大幅超預期，EPS較預期高約47%，美歐市佔提升兼控成本減債，一週內反彈約27%",
   "hot": [
    "Q2大幅超預期",
-   "EPS較預期高約47%",
-   "一週內反彈約27%"
+   "EPS較預期高約47%"
   ],
   "catalyst": "EPS超預期47%",
   "ckind": "業績",
@@ -565,7 +569,6 @@
   "decline_short": "6月1日宣佈裁員約6%兼重組傳統業務，業績前觀望加7月下旬大市回調，7月23日低見$147.43。",
   "recovery_short": "7月28日Q2大勝：EPS $1.39勝預期，雲收入增26%，上調全年指引，翌日爆升逾25%，分析師齊升目標價。",
   "hot": [
-   "爆升逾25%",
    "雲收入增26%",
    "上調全年指引"
   ],
@@ -587,8 +590,6 @@
   "decline_short": "5月14日Q1後單日瀉18.3%：淨虧損擴大、指引偏弱兼高槓桿，7月23日隨大市急跌低見$10.43。",
   "recovery_short": "8月10日Q2連續第五季勝指引：EPS $0.27超預期，上調全年指引，8月11日單日飆逾31%，30日累升約57%。",
   "hot": [
-   "單日飆逾31%",
-   "累升約57%",
    "連續第五季勝指引"
   ],
   "catalyst": "Q2勝指引飆31%",
@@ -627,10 +628,10 @@
   "decline_short": "6月24日Q4業績後受壓：FY2027指引僅增5-6%，遠遜FY2026嘅17%增速，7月23日低見$110.66。",
   "recovery_short": "分析師接力升目標價（Citi升至$150），Paycor併購協同推動bookings，隨大市反彈。",
   "hot": [
-   "Paycor併購協同"
+   "Citi升至$150"
   ],
-  "catalyst": "Paycor併購協同",
-  "ckind": "併購",
+  "catalyst": "Citi升目標價至$150",
+  "ckind": "評級",
   "confidence": "高",
   "sources": [
    "https://www.stocktitan.net/news/PAYX/paychex-reports-fourth-quarter-and-full-year-2026-71f7fzplftic.html",
@@ -660,13 +661,13 @@
   "recovery_full": "8月4日Q2收入$3.866億增7.7%勝預期，EPS $0.96（去年$0.65），錄得約$2,620萬IEEPA關稅退款利好，無負債兼持續回購，帶動強勁反彈。"
  },
  "NWS": {
-  "decline_short": "未見單一個股利空：6月30日隨大市回調見最深低位，7月22-23日再急跌，8月5日放榜後盤後回軟。",
-  "recovery_short": "8月5日Q4業績大勝：收入升11%至$23.4億，EPS $0.35遠勝預期$0.22，續推$10億回購，大行齊升目標價。",
+  "decline_short": "Google AI摘要令出版商搜尋轉介流量按年大跌（部分媒體逾40%），加上6月大市回調，6月30日見底24.83美元。",
+  "recovery_short": "8月5日Q4業績大勝：收入升11%至$23.4億，EPS $0.35遠勝預期$0.22；FY26回購$6.43億（2025年7月授權嘅$10億計劃，去年逾4倍），大行齊升目標價",
   "hot": [
-   "業績大勝",
-   "$10億回購"
+   "EPS $0.35遠勝預期$0.22",
+   "FY26回購$6.43億"
   ],
-  "catalyst": "Q4大勝兼10億回購",
+  "catalyst": "Q4大勝兼回購$6.43億",
   "ckind": "業績",
   "confidence": "高",
   "sources": [
@@ -676,7 +677,11 @@
    "https://m.uk.investing.com/news/transcripts/earnings-call-transcript-news-corp-posts-record-q4-2026-profit-shares-slip-after-hours-93CH-4813152?ampMode=1",
    "https://www.barchart.com/story/news/1873894/what-are-wall-street-analysts-target-price-for-news-corporation-stock",
    "https://www.sec.gov/Archives/edgar/data/0001564708/000156470826000171/release-q4fy2026.htm",
-   "https://www.marketbeat.com/instant-alerts/news-nasdaqnwsa-price-target-raised-to-3800-2026-08-21/"
+   "https://www.marketbeat.com/instant-alerts/news-nasdaqnwsa-price-target-raised-to-3800-2026-08-21/",
+   "https://www.thewrap.com/industry-news/business/news-corp-q4-2026-earnings-revenue-eps-dow-jones/",
+   "https://finance.biggo.com/news/US_NWSA_2026-08-05",
+   "https://www.sec.gov/Archives/edgar/data/1564708/000156470825000379/a07152025pressrelease-buyb.htm",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-news-corp-posts-record-q4-2026-profit-shares-slip-after-hours-93CH-4839620"
   ],
   "decline_full": "未見單一重大個股利空：6月30日最深低位主要跟隨大市六月喺高估值、關稅同油價憂慮下嘅整體回調，媒體股同期亦遭資金輪出；7月22至23日隨大市急跌，A股NWSA於7月23日單日跌3.7%、一週累跌8.2%而無伴隨公司消息；8月5日放榜後股價盤後回軟，構成8月7日低位。",
   "recovery_full": "8月5日FY2026 Q4業績大勝預期：收入升11%至$23.4億（超預期約$6,090萬）、調整後EPS $0.35遠勝預期$0.22，全年自由現金流升42%至$8.11億並持續推進$10億回購；Morgan Stanley 8月6日上調目標價至$35、JPMorgan 8月21日再上調至$38維持增持，加上8月27日Nvidia業績帶動大市創新高，股價至8月28日回升至$34.85。"
@@ -733,18 +738,22 @@
  },
  "BLFS": {
   "decline_short": "7月初低位主要隨大市回調，屬Repligen收購消息前後整固，未見明確個股利空",
-  "recovery_short": "獲Repligen以約16億美元收購（$31/股）；8月6日Q2收入升21%、轉虧為盈勝預期，90日累升近70%",
+  "recovery_short": "7月22日獲Repligen收購：每股$11.25現金＋0.1442股RGEN（公布時合計$31、溢價24%，料Q4完成）；RGEN其後因Q2勝預期急升，令BLFS隨之升至$35.47（隱含RGEN約$168）；8月6日Q2收入升21%、轉虧為盈",
   "hot": [
-   "Repligen以約16億美元收購",
-   "轉虧為盈",
-   "90日累升近70%"
+   "每股$11.25現金＋0.1442股RGEN",
+   "轉虧為盈"
   ],
-  "catalyst": "$31/股被收購",
+  "catalyst": "Repligen換股收購",
   "ckind": "併購",
   "confidence": "高",
   "sources": [
    "https://www.stocktitan.net/sec-filings/BLFS/8-k-biolife-solutions-inc-reports-material-event-9bd523c32e60.html",
-   "https://finance.yahoo.com/healthcare/articles/biolife-solutions-inc-blfs-q2-214003579.html"
+   "https://finance.yahoo.com/healthcare/articles/biolife-solutions-inc-blfs-q2-214003579.html",
+   "https://investors.repligen.com/press-releases/news-details/2026/Repligen-to-Acquire-BioLife-Solutions-Expanding-Its-Cell-Therapy-Capabilities-with-Market-Leading-Biopreservation-Media/default.aspx",
+   "https://www.globenewswire.com/news-release/2026/07/22/3331162/0/en/repligen-to-acquire-biolife-solutions-expanding-its-cell-therapy-capabilities-with-market-leading-biopreservation-media.html",
+   "https://finance.yahoo.com/markets/stocks/articles/repligen-beats-q2-earnings-estimates-162300941.html",
+   "https://www.gurufocus.com/news/9008744/is-it-too-late-to-buy-repligen-corp-rgen-after-5-8-rally-gf-value-says-undervalued",
+   "https://www.stocktitan.net/sec-filings/BLFS/8-k-biolife-solutions-inc-reports-material-event-0fbfa90dd3a6.html"
   ],
   "decline_full": "7月初低位主要跟隨大市回調，屬Repligen收購消息公佈前後嘅整固；未見明確個股利空。",
   "recovery_full": "獲Repligen以約16億美元收購（$31/股）成為核心催化，8月6日Q2再報捷：收入$28.5M升21%，EPS $0.04勝預期（預期虧損），成功轉虧為盈；90日累計升近70%，股價一度高於作價。"
@@ -812,7 +821,7 @@
   ],
   "catalyst": "Q3業績勝預期",
   "ckind": "業績",
-  "confidence": "高",
+  "confidence": "中",
   "sources": [
    "fool.com Tetra Tech (TTEK) Q3 2026 Earnings Call Transcript",
    "finance.yahoo.com Tetra Tech Q3 Earnings Beat Estimates on Core Market Growth"
@@ -838,15 +847,14 @@
  },
  "HALO": {
   "decline_short": "6月底COO離職盤後跌約3%，加上6月底至7月中生科板塊及大市回調，7月14日見底$75",
-  "recovery_short": "8月6日Q2破紀錄：收入$4.81億升48%、EPS $2.28大勝預期，上調全年指引，單日急升18%創歷史新高",
+  "recovery_short": "8月6日Q2破紀錄：收入$4.81億升48%、EPS $2.28大勝預期，上調全年指引，翌日急升20.2%創歷史新高",
   "hot": [
    "收入$4.81億升48%",
-   "EPS $2.28大勝預期",
-   "單日急升18%創歷史新高"
+   "EPS $2.28大勝預期"
   ],
-  "catalyst": "Q2大勝單日飆18%",
+  "catalyst": "Q2大勝翌日飆20%",
   "ckind": "業績",
-  "confidence": "高",
+  "confidence": "中",
   "sources": [
    "prnewswire.com: Halozyme Reports Record Second Quarter 2026 Results",
    "investing.com: Halozyme stock falls as chief operating officer departs",
@@ -856,7 +864,7 @@
   "recovery_full": "8月6日公佈破紀錄Q2業績：收入$4.81億升48%、EPS $2.28大幅勝預期，上調全年指引，年內新簽5項ENHANZE授權合作，單日急升18%創歷史新高。"
  },
  "EPAM": {
-  "decline_short": "年內曾腰斬，IT服務需求疲弱；8月6日Q2雖勝預期但全年收入指引大削至3.2-4.2%，盤前瀉9%。",
+  "decline_short": "年內曾腰斬，IT服務需求疲弱；8月6日Q2雖勝預期但全年收入指引大削至3.2-4.2%，單日收瀉15.3%。",
   "recovery_short": "一個月反彈約19%：AI原生業務加速、成為OpenAI Advanced Partner、完成大型回購，重估AI前景。",
   "hot": [
    "成為OpenAI Advanced Partner",
@@ -917,7 +925,7 @@
   ],
   "catalyst": "Q2業績勝預期",
   "ckind": "業績",
-  "confidence": "高",
+  "confidence": "中",
   "sources": [
    "finance.yahoo.com: HCA Stock Plummets After Slashing 2026 Guidance",
    "abcmoney.co.uk: HCA Healthcare Quarterly Earnings Beat Wall Street"
@@ -979,15 +987,14 @@
  },
  "NAVI": {
   "decline_short": "年內累跌約三成，7月9日低見$8.03；Q2淨利息收入按年跌逾8%遜預期，8月7日跌4.8%。",
-  "recovery_short": "8月3日上訴法院裁決令$23B學貸和解推進，單日升約6%；核心EPS按年升45%，貸款發放量增63%，維持派息。",
+  "recovery_short": "8月初學貸股借Sweet v. McMahon $23B和解（借款人訴教育部，Navient並非當事方）獲上訴法院維持而炒上，8月3–4日累升12%；核心EPS按年升45%，貸款發放量增63%，維持派息",
   "hot": [
-   "$23B學貸和解推進",
    "核心EPS按年升45%",
    "貸款發放量增63%"
   ],
-  "catalyst": "$23B學貸和解推進",
+  "catalyst": "學貸和解憧憬(非當事方)",
   "ckind": "監管",
-  "confidence": "高",
+  "confidence": "中",
   "sources": [
    "https://stockstory.org/us/stocks/nasdaq/navi/news/why-up-down/why-navient-navi-stock-is-falling-today",
    "https://markets.financialcontent.com/stocks/article/stockstory-2026-8-3-why-navient-navi-stock-is-trading-up-today",
@@ -995,7 +1002,12 @@
    "https://www.investing.com/news/company-news/navient-q2-2026-slides-earnings-jump-45-on-strong-loan-growth-93CH-4844677",
    "https://finance.yahoo.com/markets/stocks/articles/navient-stock-q2-earnings-beat-180300351.html",
    "https://www.marketscreener.com/news/navient-to-announce-second-quarter-2026-results-host-earnings-webcast-august-6-ce7f5fd3d88ef121",
-   "https://stockanalysis.com/stocks/navi/"
+   "https://stockanalysis.com/stocks/navi/",
+   "https://finance.yahoo.com/markets/stocks/articles/why-navient-navi-stock-trading-173322455.html",
+   "https://www.ppsl.org/news/appealscourt-denies-department-of-educations-request-to-delay-settlementnbspreliefnbspinnbspsweet-v-mcmahonnbspborrower-defense-lawsuit",
+   "https://www.cnbc.com/2026/07/31/sweet-v-mcmahon-student-loans-borrower-defense.html",
+   "https://finance.yahoo.com/markets/stocks/articles/why-navient-navi-stock-falling-222122839.html",
+   "https://www.nasfaa.org/news-item/26931/What_Borrowers_Need_to_Know_About_the_Navient_Settlement"
   ],
   "decline_full": "7月9日低見$8.03未見單一明確利空，主要係股價年內累跌約三成、核心貸款業務利息收入受壓嘅跌勢延續，加上部分大行維持偏淡評級；8月6日收市後公布Q2業績，淨利息收入約$120M按年跌逾8%、遜市場預期，8月7日股價跌4.8%，8月10日回落至$8.47。",
   "recovery_full": "8月3日上訴法院裁決令涉及約45萬借款人、約$23B減免嘅學貸和解（Sweet v. Cardona）得以推進，掃除法律不確定性，股價單日升約6%；Q2核心EPS $0.29按年升45%（去年同期$0.20）、貸款發放量$815M按年增63%，8月13日董事會再批准每股$0.16第三季股息，配合8月下旬大市創新高，股價回升至8月28日$9.46。"
@@ -1037,8 +1049,7 @@
   "decline_short": "7月20日獲降級、目標價削至$225；8月5日Q2指引遜預期，翌日瀉約19%創上市最大單日跌幅。",
   "recovery_short": "批准額外$10億回購，市場消化指引重設後認為拋售過度；8月27日乘科技股升浪單日升近8%。",
   "hot": [
-   "$10億回購",
-   "單日升近8%"
+   "$10億回購"
   ],
   "catalyst": "$10億回購",
   "ckind": "回購",
@@ -1095,14 +1106,21 @@
  },
  "STEP": {
   "decline_short": "五個月累跌約45%：市場憂慮AI衝擊其軟件類私募投資，另類資管板塊受壓，6月26日見底$39.54。",
-  "recovery_short": "8月6日業績EPS雖略遜兼錄非現金虧損，但費用相關收入增長強勁，AI憂慮消退，隨金融板塊回升。",
-  "hot": [],
-  "catalyst": "",
-  "ckind": "無",
+  "recovery_short": "8月6日業績EPS雖略遜兼錄非現金虧損，但費用相關收入增長強勁、季息加18%至$0.33；8月11日UBS升評級至買入（目標價$63→$69）、巴克萊及Evercore同日升目標價，單日升6.6%（鏡像補值令此升幅顯示喺8月13日）",
+  "hot": [
+   "UBS升評級至買入（目標價$63→$69）"
+  ],
+  "catalyst": "UBS升評級至買入",
+  "ckind": "評級",
   "confidence": "中",
   "sources": [
    "https://seekingalpha.com/article/4923669-stepstone-group-a-complicated-story",
-   "https://finance.yahoo.com/markets/stocks/articles/stepstone-group-inc-step-misses-231017672.html"
+   "https://finance.yahoo.com/markets/stocks/articles/stepstone-group-inc-step-misses-231017672.html",
+   "https://news.alphastreet.com/stepstone-group-jumps-6-6-after-ubs-maintains-buy/amp/",
+   "https://www.sahmcapital.com/news/content/how-investors-may-respond-to-stepstone-group-step-earnings-miss-dividend-hike-and-private-wealth-buy-in-2026-08-13",
+   "https://www.cnbc.com/2026/08/12/stock-market-today-live-updates.html",
+   "https://news.alphastreet.com/stepstone-group-jumps-5-5-amid-sector-wide-rally/amp/",
+   "https://www.globenewswire.com/news-release/2026/08/26/3351309/0/en/stepstone-group-closes-its-infrastructure-secondaries-fund-raising-1-7-billion-across-the-fund-and-related-separate-accounts.html"
   ],
   "decline_full": "五個月累跌約45%：市場憂慮AI衝擊其軟件類私募投資（雖僅佔AUM約11%），另類資產管理板塊受壓，加上6月底大市調整，6月26日見底$39.54",
   "recovery_full": "8月6日公佈季度業績雖然EPS輕微遜預期兼錄GAAP虧損（主要為非現金項目），但費用相關收入增長強勁、基本面具韌性，市場憂慮消退，隨大市及金融板塊回升"
@@ -1197,13 +1215,12 @@
  },
  "PMTS": {
   "decline_short": "7月低位約18.7美元，主要隨大市及中小型股回調，未見明確個股利淡。",
-  "recovery_short": "8月6日Q2收入1.49億勝預期、按年+15%，自由現金流創紀錄，單日飆13%；B. Riley目標價上調至34美元。",
+  "recovery_short": "8月6日Q2收入1.49億勝預期、按年+15%，自由現金流創紀錄，兩日累升22%；B. Riley目標價上調至34美元。",
   "hot": [
    "收入1.49億勝預期",
-   "自由現金流創紀錄",
-   "單日飆13%"
+   "自由現金流創紀錄"
   ],
-  "catalyst": "Q2業績單日飆13%",
+  "catalyst": "Q2業績兩日升22%",
   "ckind": "業績",
   "confidence": "高",
   "sources": [
@@ -1216,7 +1233,9 @@
  "MAIN": {
   "decline_short": "七月初隨大市回調見底，未見明確個股利空，BDC股短暫受風險情緒影響。",
   "recovery_short": "派息持續加碼：月息按年升3.9%，2026年每季加派0.3美元特別息，CEO預告12月再派大額特別息，高息吸引資金回流。",
-  "hot": [],
+  "hot": [
+   "每季加派0.3美元特別息"
+  ],
   "catalyst": "派息加碼兼特別息",
   "ckind": "指引",
   "confidence": "中",
@@ -1329,11 +1348,10 @@
  },
  "ACN": {
   "decline_short": "6月18日Q3業績後全年收入指引由3–5%削至3–4%，大單押後至2027財年，單日暴跌18%創史上最大跌幅。",
-  "recovery_short": "6月23日加碼回購20億美元、全年回購增至75億（+62%），收購預算由50億上調至90億，30日內反彈26%。",
+  "recovery_short": "6月23日（底部前一週）加碼回購20億美元、全年回購增至75億（+62%），收購預算由50億上調至90億，30日內反彈26%。",
   "hot": [
    "加碼回購20億美元",
-   "收購預算由50億上調至90億",
-   "30日內反彈26%"
+   "收購預算由50億上調至90億"
   ],
   "catalyst": "回購加碼20億美元",
   "ckind": "回購",
@@ -1407,7 +1425,11 @@
   "sources": [
    "https://www.niemanlab.org/2026/07/search-traffic-has-declined-so-much-that-some-publishers-are-considering-opting-out-of-google-entirely/",
    "https://www.webwire.com/ViewPressRel.asp?aId=358676",
-   "https://finance.biggo.com/news/US_NWSA_2026-08-05"
+   "https://finance.biggo.com/news/US_NWSA_2026-08-05",
+   "https://www.sec.gov/Archives/edgar/data/0001564708/000156470826000171/release-q4fy2026.htm",
+   "https://www.thewrap.com/industry-news/business/news-corp-q4-2026-earnings-revenue-eps-dow-jones/",
+   "https://www.sec.gov/Archives/edgar/data/1564708/000156470825000379/a07152025pressrelease-buyb.htm",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-news-corp-posts-record-q4-2026-profit-shares-slip-after-hours-93CH-4839620"
   ]
  },
  "WT": {
@@ -1462,11 +1484,10 @@
  },
  "RCEL": {
   "decline_short": "連番下調指引兼業績失色，Q1財報披露持續經營重大疑慮（現金僅1430萬美元），7月13日插至3.95美元。",
-  "recovery_short": "8月6日Q2收入創新高2170萬美元、盤前飆21.7%；8月18日PermeaDerm試驗效果媲美屍皮但平七成，單日抽25%。",
+  "recovery_short": "8月6日Q2收入創新高2170萬美元，翌日收升63.6%；8月18日PermeaDerm試驗效果媲美屍皮但平七成，單日抽24.7%。",
   "hot": [
-   "盤前飆21.7%",
-   "PermeaDerm試驗效果媲美屍皮但平七成",
-   "單日抽25%"
+   "Q2收入創新高2170萬美元",
+   "PermeaDerm試驗效果媲美屍皮但平七成"
   ],
   "catalyst": "Q2收入創新高",
   "ckind": "業績",
@@ -1481,8 +1502,7 @@
   "decline_short": "美伊停火、荷莫茲復航，油價自2026高位挫約20%至三個月低，鑽井需求憂慮拖累油服股7月1日見底",
   "recovery_short": "7月24日Q2每股$0.55勝預期$0.51，股價單日彈9.6%；8月油價回穩帶動油服板塊，大行上調目標價",
   "hot": [
-   "每股$0.55勝預期$0.51",
-   "股價單日彈9.6%"
+   "每股$0.55勝預期$0.51"
   ],
   "catalyst": "Q2勝預期彈9.6%",
   "ckind": "業績",
@@ -1497,10 +1517,10 @@
  },
  "JNJ": {
   "decline_short": "7月15日Q2雖勝預期兼上調指引，但MedTech銷售僅升4.5%、遜預期，股價回吐見$247",
-  "recovery_short": "Q2收入創紀錄$253億、升6.6%，EPS $2.90勝預期並上調全年銷售及盈利指引，腫瘤及免疫新藥監管捷報接力推升",
+  "recovery_short": "Q2（收入創紀錄$253億、上調全年指引）當日跌2.7%後獲消化，腫瘤及免疫新藥監管捷報接力推升",
   "hot": [
-   "收入創紀錄$253億",
-   "上調全年銷售及盈利指引"
+   "上調全年指引",
+   "腫瘤及免疫新藥監管捷報"
   ],
   "catalyst": "Q2上調全年指引",
   "ckind": "業績",
@@ -1550,8 +1570,7 @@
   "recovery_short": "8月4日Q2收入$1,994萬創新高兼勝預期，上調全年指引至$7,200萬-$7,500萬，股價單日飆36%",
   "hot": [
    "收入$1,994萬創新高",
-   "上調全年指引至$7,200萬-$7,500萬",
-   "股價單日飆36%"
+   "上調全年指引至$7,200萬-$7,500萬"
   ],
   "catalyst": "Q2創新高飆36%",
   "ckind": "業績",
@@ -1604,8 +1623,7 @@
   "recovery_short": "8月18日彭博報Copart洽購，Elliott建倉推動公司啟動出售程序，股價單日彈10%至$7.39",
   "hot": [
    "彭博報Copart洽購",
-   "Elliott建倉",
-   "股價單日彈10%至$7.39"
+   "Elliott建倉"
   ],
   "catalyst": "傳Copart洽購",
   "ckind": "併購",
@@ -1654,11 +1672,10 @@
  },
  "INSP": {
   "decline_short": "5月因Inspire V CPT編碼失效、報銷混亂下調全年指引挫18.8%，7月續受壓於低位",
-  "recovery_short": "8月初Q2收入2.006億美元勝預期、EBITDA勝40.5%，全年指引上調至8.55億，單日彈13.6%",
+  "recovery_short": "8月初Q2收入2.006億美元勝預期、EBITDA勝40.5%，全年指引上調至8.55億，單日彈22.8%",
   "hot": [
    "EBITDA勝40.5%",
-   "全年指引上調至8.55億",
-   "單日彈13.6%"
+   "全年指引上調至8.55億"
   ],
   "catalyst": "Q2勝預期上調指引",
   "ckind": "業績",
@@ -1671,15 +1688,15 @@
   ]
  },
  "EFX": {
-  "decline_short": "7月21日公布Q2後急挫逾7%，Q3收入指引中位低於市場預期，長息回升令按揭需求轉弱",
+  "decline_short": "7月21日公布Q2後三日累挫7.4%，Q3收入指引中位低於市場預期，長息回升令按揭需求轉弱",
   "recovery_short": "8月21日獲上調評級至買入、目標價升至$235；Q2收入升11%，7.5億美元購墨西哥信用局，AI省本目標倍增至1.5億",
   "hot": [
    "目標價升至$235",
    "7.5億美元購墨西哥信用局",
    "AI省本目標倍增至1.5億"
   ],
-  "catalyst": "獲上調評級至買入",
-  "ckind": "業績",
+  "catalyst": "升評級至買入",
+  "ckind": "評級",
   "confidence": "中",
   "sources": [
    "https://www.fool.com/investing/2026/07/21/why-equifax-stock-is-tumbling-today/",
@@ -1709,9 +1726,7 @@
   "decline_short": "7月23日中東局勢緊張、油價急升觸發避險，資金撤出企業軟件股；並無個股利淡消息",
   "recovery_short": "8月4日Q2收入升19%轉GAAP盈利、上調指引兼推AI agent，單日升8.9%，一個月累升29.7%",
   "hot": [
-   "轉GAAP盈利",
-   "單日升8.9%",
-   "一個月累升29.7%"
+   "轉GAAP盈利"
   ],
   "catalyst": "轉盈兼上調指引",
   "ckind": "業績",
@@ -1763,8 +1778,7 @@
   "recovery_short": "7月30日Q2經調整EPS $0.18勝預期-$0.01兼上調指引；8月24日BTIG升目標價至$55，創52週新高",
   "hot": [
    "經調整EPS $0.18勝預期-$0.01",
-   "BTIG升目標價至$55",
-   "創52週新高"
+   "BTIG升目標價至$55"
   ],
   "catalyst": "Q2轉盈上調指引",
   "ckind": "業績",
@@ -1798,8 +1812,7 @@
   "decline_short": "現金$1.6億跑道僅到2027年中，8月14日美銀削目標價至$6，7月22日低見$3.12。",
   "recovery_short": "8月10日Q2披露UP421移植14個月無需免疫抑制仍有效、10月2日EASD年會發表數據，8月19日單日飆10%。",
   "hot": [
-   "UP421移植14個月無需免疫抑制仍有效",
-   "8月19日單日飆10%"
+   "UP421移植14個月無需免疫抑制仍有效"
   ],
   "catalyst": "胰島細胞14月數據",
   "ckind": "臨床",
@@ -1847,8 +1860,7 @@
   "recovery_short": "7月23日Q2收入升10%至$119.9億、超預期$3億，並上調全年收入及EPS指引，當日抽升逾9%。",
   "hot": [
    "Q2收入升10%至$119.9億",
-   "上調全年收入及EPS指引",
-   "當日抽升逾9%"
+   "上調全年收入及EPS指引"
   ],
   "catalyst": "Q2勝預期上調指引",
   "ckind": "業績",
@@ -1911,7 +1923,6 @@
   "recovery_short": "8月10日FQ1每股賺$2.68勝預期$2.55，單日彈9.5%；富國上調目標價至$110（由$94），股價創52週高。",
   "hot": [
    "FQ1每股賺$2.68勝預期$2.55",
-   "單日彈9.5%",
    "富國上調目標價至$110"
   ],
   "catalyst": "FQ1盈利勝預期",
@@ -1992,7 +2003,7 @@
    "SGT-003已為53人給藥",
    "Q4將同FDA商討加速批准途徑"
   ],
-  "catalyst": "FDA加速批准商談",
+  "catalyst": "SGT-003耐受良好",
   "ckind": "臨床",
   "confidence": "中",
   "sources": [
@@ -2009,7 +2020,7 @@
    "有機ASV升7.1%至$24.9億"
   ],
   "catalyst": "大行上調目標價",
-  "ckind": "AI",
+  "ckind": "評級",
   "confidence": "中",
   "sources": [
    "https://www.globenewswire.com/news-release/2026/07/01/3320500/0/en/factset-reports-results-for-third-quarter-2026.html",
@@ -2020,11 +2031,10 @@
  },
  "NOW": {
   "decline_short": "7月22-23日科技股急挫，市場怕4月「利潤率失守」重演而減磅，7月23日低見91.94美元。",
-  "recovery_short": "7月22日Q2 EPS超預期18%、AI年合約值破$10億，翌日抽6.1%；8月27日Salesforce勁績再飆9%。",
+  "recovery_short": "7月22日Q2 EPS超預期18%、AI年合約值破$10億，翌日先跌3.7%見底、再翌日抽7.4%；8月27日Salesforce勁績再飆9%。",
   "hot": [
    "AI年合約值破$10億",
-   "翌日抽6.1%",
-   "8月27日Salesforce勁績再飆9%"
+   "Salesforce勁績再飆9%"
   ],
   "catalyst": "AI年合約值破$10億",
   "ckind": "AI",
@@ -2067,13 +2077,20 @@
  },
  "CXM": {
   "decline_short": "搵唔到個股消息；7月22-23日軟件股跟隨科技股急挫，7月23日低見5.50美元。",
-  "recovery_short": "無查證到公司催化劑；8月27日Salesforce勁績重估SaaS估值，軟件板塊回暖，股價升返$8.16。",
-  "hot": [],
+  "recovery_short": "無單一催化劑：7月1日新CRO到任、微軟AI總裁Jordi Ribas 8月17日加入董事會、新AI功能，8月27日隨軟件板塊升7.2%（三個月累升63%）；9月1日Q2業績（9月2日開市前公布）前跌7.4%至$7.60",
+  "hot": [
+   "微軟AI總裁Jordi Ribas 8月17日加入董事會"
+  ],
   "catalyst": "",
   "ckind": "無",
-  "confidence": "低",
+  "confidence": "中",
   "sources": [
-   "https://ts2.tech/en/servicenow-stock-jumps-9-adding-11-7-billion-as-salesforce-ai-results-reprice-software/"
+   "https://ts2.tech/en/servicenow-stock-jumps-9-adding-11-7-billion-as-salesforce-ai-results-reprice-software/",
+   "https://www.investing.com/news/investment-ideas/investingpro-fair-value-spots-sprinklrs-63-surge-in-under-3-months-93CH-4883841",
+   "https://www.marketscreener.com/news/sprinklr-announces-appointment-of-thomas-addis-to-chief-revenue-officer-effective-july-1-2026-ce7f5fd2db8bf02c",
+   "https://finance.yahoo.com/markets/stocks/articles/amplitude-gitlab-doximity-freshworks-sprinklr-060107087.html",
+   "https://www.thecerbatgem.com/2026/09/01/sprinklr-nysecxm-trading-down-5-4-heres-why.html",
+   "https://www.nasdaq.com/press-release/sprinklr-announces-date-second-quarter-financial-results-2026-08-12"
   ]
  },
  "ALEC": {
@@ -2147,8 +2164,7 @@
   "decline_short": "7月17日生菜環孢子蟲爆發回收（全美11,458宗病例）拖累雜貨股，7月23日與Kroger等齊挫至$8.94。",
   "recovery_short": "8月19日Q2銷售增1.1%至$11.9億、客流升1.8%、毛利率30.2%高過指引，管理層上調全年指引，股價急彈13.7%。",
   "hot": [
-   "上調全年指引",
-   "急彈13.7%"
+   "上調全年指引"
   ],
   "catalyst": "上調全年指引",
   "ckind": "指引",
@@ -2176,11 +2192,10 @@
  },
  "SBET": {
   "decline_short": "以太幣由高位插68%，SBET較52週高$40.46低約88%，一個月內再跌近22%，7月9日見底$5.32。",
-  "recovery_short": "8月中撥$2億ETH予Lido做質押，機構持股升至約六成，累計回購逾400萬股，8月下旬單日彈13.75%，股價重上$8.20。",
+  "recovery_short": "8月中撥$2億ETH予Lido做質押，機構持股升至約六成，累計回購逾400萬股，8月19日單日彈12.6%，股價重上$8。",
   "hot": [
    "撥$2億ETH予Lido做質押",
-   "累計回購逾400萬股",
-   "單日彈13.75%"
+   "累計回購逾400萬股"
   ],
   "catalyst": "$2億ETH質押",
   "ckind": "大單",
@@ -2211,7 +2226,7 @@
  },
  "CHRD": {
   "decline_short": "6月中美伊停火後海灣供應恢復、油價急回，頁岩油股同步回吐，7月6日跌至$111.59。",
-  "recovery_short": "7月23日油價曾飆至$105/桶，8月5日Q2自由現金流$4.14億、季內回購$1.474億，WTI 8月底仍企$83.8，股價升至$146。",
+  "recovery_short": "7月23日油價曾飆至$105/桶，8月5日Q2自由現金流$4.14億、季內回購$1.474億，WTI 8月底仍企$83.8，股價升至$150水平。",
   "hot": [
    "油價曾飆至$105/桶",
    "回購$1.474億"
@@ -2247,8 +2262,7 @@
   "decline_short": "6月17日Q1業績勝預期，但每部車毛利被主動壓縮、零售銷量持平，7月6日跌至50.21美元。",
   "recovery_short": "CEO及董事6月底自購約100萬美元股票，並以5億美元定期貸款清還循環信貸，7月15日單日升6.51%。",
   "hot": [
-   "自購約100萬美元股票",
-   "7月15日單日升6.51%"
+   "自購約100萬美元股票"
   ],
   "catalyst": "管理層增持轉型",
   "ckind": "重組",
@@ -2310,7 +2324,6 @@
   "decline_short": "7月15日跌至285.12美元，未見個股利淡消息；業績前保險經紀股隨大市高位回吐受壓。",
   "recovery_short": "7月30日Q2調整後EPS 3.35美元升17%、有機增長5%，股價單日飆6.4%；瑞穗上調目標價至406美元。",
   "hot": [
-   "股價單日飆6.4%",
    "瑞穗上調目標價至406美元"
   ],
   "catalyst": "Q2 EPS升17%",
@@ -2323,28 +2336,29 @@
   ]
  },
  "PSNL": {
-  "decline_short": "7月20日Tempus提出每股16.25美元換股收購，溢價僅6%，股價單日插近15%。",
-  "recovery_short": "Q2收入2240萬勝預期1670萬美元，MRD檢測量按年飆199%，股價升穿16.25美元收購價。",
+  "decline_short": "7月20日Tempus提出收購：每股目標值$16.25、全股支付（Tempus可選最多50%現金），換股比率浮動、上限0.3356股（TEM低於$48.42時固定），溢價僅5.6%，股價單日插近15%",
+  "recovery_short": "Q2收入2240萬勝預期1670萬美元，MRD檢測量按年飆199%；股價升穿$16.25目標值，反映市場憧憬加價或TEM股價支撐",
   "hot": [
-   "MRD檢測量按年飆199%",
-   "股價升穿16.25美元收購價"
+   "MRD檢測量按年飆199%"
   ],
-  "catalyst": "$16.25被收購",
+  "catalyst": "Tempus換股收購",
   "ckind": "併購",
   "confidence": "高",
   "sources": [
    "https://www.businesswire.com/news/home/20260720857328/en/Tempus-to-Acquire-Personalis-More-Tightly-Integrating-Molecular-Residual-Disease-MRD-into-Its-AI-Enabled-Precision-Oncology-Platform",
    "https://www.cooley.com/news/coverage/2026/2026-07-20-personalis-to-be-acquired-by-tempus-ai-for-1-9-billion",
    "https://finance.yahoo.com/markets/stocks/articles/tem-psnl-stocks-falling-why-193802754.html",
-   "https://stockstotrade.com/news/personalisinc-psnl-news-2026_08_23/"
+   "https://stockstotrade.com/news/personalisinc-psnl-news-2026_08_23/",
+   "https://www.stocktitan.net/sec-filings/TEM/425-tempus-ai-inc-business-combination-communication-cf2da6a0b981.html",
+   "https://www.bloomberg.com/news/articles/2026-07-20/tempus-ai-to-buy-cancer-tech-firm-personalis-for-1-7-billion",
+   "https://www.insidearbitrage.com/2026/07/tempus-ai-to-acquire-personalis-for-1-5-billion/"
   ]
  },
  "PESI": {
   "decline_short": "7月10日見13.87美元；Q2收入跌至1290萬、虧損擴至620萬，公布後單日瀉7.6%。",
   "recovery_short": "獲Hanford主IDIQ分包合約、DFLAW廢料開始接收，處理積壓訂單上升，一個月累升22.95%。",
   "hot": [
-   "獲Hanford主IDIQ分包合約",
-   "一個月累升22.95%"
+   "獲Hanford主IDIQ分包合約"
   ],
   "catalyst": "Hanford大單",
   "ckind": "大單",
@@ -2389,10 +2403,9 @@
   "decline_short": "7月7日見14.66後回吐，7月13日插7.8%，7月29日累跌20.7%，無公司壞消息",
   "recovery_short": "8月13日Q2更新：bota-vec擬2026年遞交全球註冊申請、2027年首商業化，翌日彈6.7%",
   "hot": [
-   "bota-vec擬2026年遞交全球註冊申請",
-   "翌日彈6.7%"
+   "bota-vec擬2026年遞交全球註冊申請"
   ],
-  "catalyst": "bota-vec報批",
+  "catalyst": "bota-vec擬年內報批",
   "ckind": "監管",
   "confidence": "中",
   "sources": [
@@ -2404,8 +2417,7 @@
   "decline_short": "5月底至7月29日累跌39%至2.98，7月13日插13.1%，ATEC濾芯出貨減少拖累",
   "recovery_short": "Q2披露北管道已簽21,275 AFY供水合約、獲BLM 45年路權，8月25日單日彈9.8%",
   "hot": [
-   "北管道已簽21,275 AFY供水合約",
-   "8月25日單日彈9.8%"
+   "北管道已簽21,275 AFY供水合約"
   ],
   "catalyst": "北管道供水合約",
   "ckind": "大單",
@@ -2420,8 +2432,6 @@
   "decline_short": "6月季績後憂成長放緩，6月9日插11.5%，6月2至24日累跌37%；7月10日再跌7.7%",
   "recovery_short": "ARR升26%至$11.63億，8月17日TD Cowen上調目標價至$22，8月27日單日飆14.4%",
   "hot": [
-   "8月17日TD Cowen上調目標價至$22",
-   "8月27日單日飆14.4%",
    "ARR升26%至$11.63億"
   ],
   "catalyst": "ARR升26%",
@@ -2490,8 +2500,7 @@
   "recovery_short": "8月10日Q2收入升23%、經調整EBITDA升48%，利潤率創42%新高，三日累彈12.3%",
   "hot": [
    "Q2收入升23%",
-   "利潤率創42%新高",
-   "三日累彈12.3%"
+   "利潤率創42%新高"
   ],
   "catalyst": "Q2收入升23%",
   "ckind": "業績",
@@ -2505,8 +2514,7 @@
   "decline_short": "增長放緩（FY26收入只升8%）估值受壓，6月5日插7.2%、6月累跌25%",
   "recovery_short": "8月13日隨軟件股彈7.5%，夥Google Cloud Gemini推法務AI，8月27日再彈5.4%",
   "hot": [
-   "夥Google Cloud Gemini推法務AI",
-   "8月27日再彈5.4%"
+   "夥Google Cloud Gemini推法務AI"
   ],
   "catalyst": "夥Google Cloud",
   "ckind": "AI",
@@ -2627,8 +2635,7 @@
   "recovery_short": "Q2每股蝕0.25美元勝預期，FY26開支指引削1500萬至3.75億、跑道延至2028年初，8月25日升7.23%。",
   "hot": [
    "開支指引削1500萬至3.75億",
-   "跑道延至2028年初",
-   "8月25日升7.23%"
+   "跑道延至2028年初"
   ],
   "catalyst": "削開支延現金跑道",
   "ckind": "指引",
@@ -2658,11 +2665,10 @@
  },
  "CAI": {
   "decline_short": "7月20日挫5.64%、跌穿50天線創數月新低，較52週高42.50美元低63%，無公司利淡消息。",
-  "recovery_short": "8月5日Q2收入升45%、勝預期10.8%，上調全年指引至10.3-10.4億美元，盤後飆15.26%。",
+  "recovery_short": "8月5日Q2收入升45%、勝預期10.8%，上調全年指引至10.3-10.4億美元，翌日收升21.6%。",
   "hot": [
    "Q2收入升45%",
-   "上調全年指引至10.3-10.4億美元",
-   "盤後飆15.26%"
+   "上調全年指引至10.3-10.4億美元"
   ],
   "catalyst": "Q2升45%上調指引",
   "ckind": "業績",
@@ -2675,7 +2681,7 @@
   ]
  },
  "FCX": {
-  "decline_short": "Grasberg復產落後、產能僅65%；7月23日Q2雖勝預期，惟2027資本開支加$3億兼延期，單日跌3.9%。",
+  "decline_short": "Grasberg復產落後、產能僅65%；7月23日Q2雖勝預期，惟2027資本開支加$3億兼延期，業績日收跌2.3%。",
   "recovery_short": "銅價創新高，Q2 EPS $0.74勝預期25.4%；下半年銅銷量指引升逾20%、黃金升逾65%，8月股價創歷史新高。",
   "hot": [
    "Q2 EPS $0.74勝預期25.4%",
@@ -2712,19 +2718,22 @@
  },
  "SRPT": {
   "decline_short": "7月底Q2收入$4.01億按年跌34%，全年指引上限由$14億削至$13億，Q3 Elevidys或再跌。",
-  "recovery_short": "新CEO 7月28日上任，投資者憧憬年底Elevidys非行走病人數據，8月27日單日彈12.9%，創5個月最佳一周。",
+  "recovery_short": "新CEO 7月28日上任；8月27日單日彈14.1%：對手Capricor deramiocel遭FDA顧問委員會9比3反對（PDUFA押後至11月）、Wolfe升評級（目標價$27）、資金為下半年Elevidys數據提前布局",
   "hot": [
-   "新CEO 7月28日上任",
-   "8月27日單日彈12.9%",
-   "創5個月最佳一周"
+   "對手Capricor deramiocel遭FDA顧問委員會9比3反對",
+   "Wolfe升評級（目標價$27）"
   ],
-  "catalyst": "新CEO上任憧憬數據",
-  "ckind": "重組",
+  "catalyst": "對手FDA受挫+升評級",
+  "ckind": "監管",
   "confidence": "中",
   "sources": [
    "https://simplywall.st/stocks/us/pharmaceuticals-biotech/nasdaq-srpt/sarepta-therapeutics/news/why-sarepta-therapeutics-srpt-is-up-129-after-cutting-2026-g",
    "https://finance.yahoo.com/healthcare/articles/srpt-track-best-week-5-190032513.html",
-   "https://www.sahmcapital.com/news/content/sarepta-therapeutics-srpt-stock-rally-hinges-on-profit-progress-and-revenue-drop-2026-08-07"
+   "https://www.sahmcapital.com/news/content/sarepta-therapeutics-srpt-stock-rally-hinges-on-profit-progress-and-revenue-drop-2026-08-07",
+   "https://ts2.tech/en/sarepta-stock-jumps-13-but-elevidys-safety-study-slips-five-months/",
+   "https://www.dailypolitical.com/2026/08/27/sarepta-therapeutics-nasdaqsrpt-shares-up-15-2-whats-next.html",
+   "https://www.biospace.com/fda/capricor-shares-rise-as-fda-lifts-duchenne-cell-therapy-rejection",
+   "https://www.marketbeat.com/instant-alerts/price-sarepta-therapeutics-nasdaq-srpt-stock-price-up-152-whats-next-2026-08-27/"
   ]
  },
  "TALO": {
@@ -2746,7 +2755,7 @@
   ]
  },
  "GLOB": {
-  "decline_short": "7月初無個股消息隨科技股回吐；8月14日Q2 $1.40遜預期$1.50兼削全年指引，單日瀉17%。",
+  "decline_short": "7月初無個股消息隨科技股回吐；8月14日Q2 $1.40遜預期$1.50兼削全年指引，單日收瀉8.8%。",
   "recovery_short": "急挫17%後超賣反彈，Glob.AI年化收入$5,280萬（按季+60%）、全年AI指引上調至最少$1.1億。",
   "hot": [
    "Glob.AI年化收入$5,280萬",
@@ -2873,12 +2882,11 @@
   ]
  },
  "TEM": {
-  "decline_short": "7月20日宣布$15億全股收購Personalis，溢價僅6%惹攤薄憂慮兼高管減持，月內挫28.7%",
+  "decline_short": "7月20日宣布以全股（可選最多50%現金）收購Personalis，股權價值$19億（扣除已持股份約$15億），溢價僅6%惹攤薄憂慮兼高管減持，月內挫28.7%",
   "recovery_short": "8月19日Q2首錄GAAP盈利$560萬、收入$3.825億升22%，上調全年收入指引至約$16億，單日飆19%",
   "hot": [
    "首錄GAAP盈利",
-   "上調全年收入指引",
-   "單日飆19%"
+   "上調全年收入指引"
   ],
   "catalyst": "Q2轉盈升指引",
   "ckind": "業績",
@@ -2915,7 +2923,7 @@
    "第四季重交NDA",
    "大摩Overweight首評、目標價13美元"
   ],
-  "catalyst": "私募融資兼大摩首評",
+  "catalyst": "私募$3.54億兼重交NDA",
   "ckind": "監管",
   "confidence": "高",
   "sources": [
@@ -2951,8 +2959,7 @@
   "recovery_short": "8月下旬Q2 EPS $4.17遠勝預期$1.98（含約$1億關稅退款），上調全年指引兼$5億回購，一週飆36%",
   "hot": [
    "EPS $4.17遠勝預期$1.98",
-   "上調全年指引兼$5億回購",
-   "一週飆36%"
+   "上調全年指引兼$5億回購"
   ],
   "catalyst": "Q2爆賺兼升指引",
   "ckind": "業績",
@@ -3042,7 +3049,7 @@
  },
  "A": {
   "decline_short": "關稅成本與科研經費隱憂加大市回調，7月8日跌至$129.07，較52週高位挫逾18%、年初至今跌6.1%。",
-  "recovery_short": "8月26日Q3勝預期：EPS $1.62、核心增長7.3%、中國收入升9%，上調全年指引，盤後升3.17%。",
+  "recovery_short": "8月26日Q3勝預期：EPS $1.62、核心增長7.3%、中國收入升9%，上調全年指引，翌日僅升1.9%後連跌三日，已跌穿8月24日底$153.43。",
   "hot": [
    "核心增長7.3%",
    "中國收入升9%",
@@ -3095,7 +3102,7 @@
   ]
  },
  "VREX": {
-  "decline_short": "5月7日Q2毛利率按年縮240點子、GAAP蝕$0.19，關稅侵蝕成本，6月29日插至$9.98近52週低。",
+  "decline_short": "5月7日Q2毛利率按年縮240點子、GAAP蝕$0.19，關稅侵蝕成本，6月29日插至$9.98，重返5月低位（$9.32）附近。",
   "recovery_short": "8月10日Teledyne宣布$18.90全現金收購、作價約$11億、溢價近88%；同日Q3轉賺兼收$1,700萬關稅退款，股價直逼收購價。",
   "hot": [
    "$18.90全現金收購",
@@ -3113,7 +3120,7 @@
   ]
  },
  "ZBH": {
-  "decline_short": "Baird、BTIG先後降級至中性，憂髖膝業務增長慢、定價侵蝕及約$69億淨債，7月1日跌至$84.17近52週低。",
+  "decline_short": "Baird、BTIG先後降級至中性，憂髖膝業務增長慢、定價侵蝕及約$69億淨債，7月1日跌至$84.17，重返5月低位（$79.58）上方。",
   "recovery_short": "8月5日Q2收入$21.8億按年升4.8%、EPS $2.07勝預期兼上調全年指引，Truist上調目標價至$106。",
   "hot": [
    "收入$21.8億按年升4.8%",
@@ -3135,8 +3142,7 @@
   "recovery_short": "7月29日Q2收入$2.198億、按年升13%，EPS $0.70勝預期，AI數碼銀行需求強勁帶動上調全年指引，股價單日彈11.5%。",
   "hot": [
    "按年升13%",
-   "上調全年指引",
-   "單日彈11.5%"
+   "上調全年指引"
   ],
   "catalyst": "Q2升13%上調指引",
   "ckind": "業績",
@@ -3219,7 +3225,7 @@
  },
  "SENEA": {
   "decline_short": "冇明確公司負面消息，7月中純屬高位獲利回吐兼隨大市回落，7月20日跌至$161.48。",
-  "recovery_short": "8月6日財年Q1收入$4.052億遠拋離預期$3.27億、純利$1,950萬，股價連創歷史新高見$196.50，目標價上調至$202。",
+  "recovery_short": "8月6日財年Q1收入$4.052億遠拋離預期$3.27億、純利$1,950萬，股價連創歷史新高並升穿$200，目標價上調至$202。",
   "hot": [
    "收入$4.052億遠拋離預期$3.27億",
    "連創歷史新高",
@@ -3289,14 +3295,13 @@
   ]
  },
  "WDAY": {
-  "decline_short": "憂AI顛覆按人頭收費SaaS模式，FY27訂閱收入指引低過$100億共識，股價自$276高位挫約57%，7月23日見$127.87。",
-  "recovery_short": "8月13日路透報Silver Lake洽私有化，單日飆18%創十年最佳；8月27日Q2 EPS $2.75勝預期，AI佔新增ACV逾25%。",
+  "decline_short": "憂AI顛覆按人頭收費SaaS模式，FY27訂閱收入指引低過$100億共識，股價自$276高位挫約54%，7月23日見$127.87。",
+  "recovery_short": "8月13日路透報Silver Lake洽私有化，單日飆12.1%；8月27日Q2 EPS $2.75勝預期，AI佔新增ACV逾25%。",
   "hot": [
    "Silver Lake洽私有化",
-   "單日飆18%創十年最佳",
    "AI佔新增ACV逾25%"
   ],
-  "catalyst": "傳私有化飆18%",
+  "catalyst": "傳銀湖私有化",
   "ckind": "併購",
   "confidence": "高",
   "sources": [
@@ -3343,12 +3348,11 @@
   ]
  },
  "SBH": {
-  "decline_short": "上季業績雖勝預期，股價仍插5.3%至$14.01；Beauty Systems Group護髮需求疲弱、消費者審慎，7月2日低見$14.14。",
+  "decline_short": "上季業績雖勝預期，股價仍插5.3%；Beauty Systems Group護髮需求疲弱、消費者審慎，7月2日低見$14.14。",
   "recovery_short": "8月3日Q3調整後EPS $0.55勝預期，毛利率擴至52.4%、電商升11%，股價單日彈7.8%；全年EPS指引收窄至$2.04-2.08。",
   "hot": [
    "Q3調整後EPS $0.55勝預期",
-   "毛利率擴至52.4%",
-   "股價單日彈7.8%"
+   "毛利率擴至52.4%"
   ],
   "catalyst": "Q3彈7.8%",
   "ckind": "業績",
@@ -3399,11 +3403,10 @@
   "decline_short": "5月27日FY27 ARR指引只得16-17%（原25%），單日暴跌31.5%兼被降評，7月續尋底至139美元。",
   "recovery_short": "8月27日摩通上調目標價至215美元，加上CrowdStrike、Okta業績帶動網安板塊重估，單日彈9.98%。",
   "hot": [
-   "摩通上調目標價至215美元",
-   "單日彈9.98%"
+   "摩通上調目標價至215美元"
   ],
   "catalyst": "摩通升目標價",
-  "ckind": "業績",
+  "ckind": "評級",
   "confidence": "高",
   "sources": [
    "https://www.tikr.com/blog/zscaler-reports-q4-fy2026-earnings-september-3-what-the-stock-needs-to-show",
@@ -3417,8 +3420,7 @@
   "recovery_short": "8月28日Q2收入升15.1%、EPS 0.70美元超預期，上調全年收入至20億美元，單日飆23%。",
   "hot": [
    "Q2收入升15.1%",
-   "上調全年收入至20億美元",
-   "單日飆23%"
+   "上調全年收入至20億美元"
   ],
   "catalyst": "Q2超預期飆23%",
   "ckind": "業績",
@@ -3434,8 +3436,7 @@
   "decline_short": "6月1日每股9.42美元配售1,060萬股籌1億美元，股權攤薄兼傳統業務弱，7月16日跌至9.6美元。",
   "recovery_short": "8月10日Q1收入升26%、非GAAP EPS 0.18美元轉盈（預期蝕錢），清零1.448億美元債務，單日飆53%。",
   "hot": [
-   "清零1.448億美元債務",
-   "單日飆53%"
+   "清零1.448億美元債務"
   ],
   "catalyst": "Q1爆升兼零負債",
   "ckind": "業績",
@@ -3451,8 +3452,7 @@
   "decline_short": "併購MRC後ERP整合失靈，2月20日曾插19.1%，證券集體訴訟陰霾未散，7月2日跌至12.6美元。",
   "recovery_short": "8月6日Q2收入13.1億美元勝預期，上調全年收入至50-51億美元，年內回購7,500萬美元，單日抽9.4%。",
   "hot": [
-   "上調全年收入至50-51億美元",
-   "單日抽9.4%"
+   "上調全年收入至50-51億美元"
   ],
   "catalyst": "Q2勝預期上調指引",
   "ckind": "業績",
@@ -3466,10 +3466,9 @@
  },
  "TWLO": {
   "decline_short": "7月7日遭降評至沽售、指估值貴64.6%，7月21日再挫4.4%，疊加7月22-23日大市回調至183.38美元。",
-  "recovery_short": "8月7日Q2收入升22%、EPS 1.47美元勝預期，全年增長指引由14-15%上調至18-18.5%，單日飆15.7%。",
+  "recovery_short": "8月7日Q2收入升22%、EPS 1.47美元勝預期，全年增長指引由14-15%上調至18-18.5%，單日飆24.9%。",
   "hot": [
-   "全年增長指引由14-15%上調至18-18.5%",
-   "單日飆15.7%"
+   "全年增長指引由14-15%上調至18-18.5%"
   ],
   "catalyst": "Q2勝預期升指引",
   "ckind": "業績",
@@ -3557,7 +3556,7 @@
    "目標價上調至$19"
   ],
   "catalyst": "獲醫保覆蓋",
-  "ckind": "業績",
+  "ckind": "監管",
   "confidence": "高",
   "sources": [
    "https://investors.angiodynamics.com/news-releases/news-release-details/angiodynamics-reports-record-fiscal-year-2026-fourth-quarter-and",
@@ -3587,8 +3586,7 @@
   "decline_short": "增長放緩兼業界逆風，一年跌35%，分析師降評兼CEO減持，7月22日見底$59",
   "recovery_short": "8月4日Q1收入升11%、EPS升22%，新客銷售升逾60%、索償量升8%，股價單日升5.9%",
   "hot": [
-   "新客銷售升逾60%",
-   "股價單日升5.9%"
+   "新客銷售升逾60%"
   ],
   "catalyst": "Q1 EPS升22%",
   "ckind": "業績",
@@ -3621,8 +3619,7 @@
   "decline_short": "無明確公司特定利淡；7月23日隨大市回落見底$30.84，其後受長債息抽升及合併換股安排拖累",
   "recovery_short": "7月30日股東通過與Equitable合併，8月5日Q2核心EPS升14%、回購$3億，股價單日升6.7%",
   "hot": [
-   "股東通過與Equitable合併",
-   "股價單日升6.7%"
+   "股東通過與Equitable合併"
   ],
   "catalyst": "合併獲通過",
   "ckind": "併購",
@@ -3653,13 +3650,12 @@
  },
  "FIVE": {
   "decline_short": "6月3日Q1業績雖勝預期，但市場擔心關稅假設同低收入消費壓力，股價急挫逾11%，7月7日低見$176.25",
-  "recovery_short": "Q1經調整EPS $2.22遠勝$1.69；8月13日Jefferies升至買入、目標價由$210抽上$350",
+  "recovery_short": "6月Q1業績日曾跌13.8%；8月13日Jefferies升至買入、目標價由$210抽上$350，消費股回暖下重拾升勢",
   "hot": [
-   "Q1經調整EPS $2.22遠勝$1.69",
-   "8月13日Jefferies升至買入、目標價由$210抽上$350"
+   "Jefferies升至買入、目標價由$210抽上$350"
   ],
-  "catalyst": "目標價升至$350",
-  "ckind": "業績",
+  "catalyst": "升評級·目標價$350",
+  "ckind": "評級",
   "confidence": "高",
   "sources": [
    "https://finance.yahoo.com/markets/stocks/articles/five-below-shares-fall-tariff-133800314.html",
@@ -3673,8 +3669,7 @@
   "recovery_short": "7月28日Q2收入首破$10億、經調整EPS升24%至$1.44，同店銷售+5.8%；8月獲上調評級單日曾飆約11%",
   "hot": [
    "Q2收入首破$10億",
-   "經調整EPS升24%至$1.44",
-   "單日曾飆約11%"
+   "經調整EPS升24%至$1.44"
   ],
   "catalyst": "Q2收入破$10億",
   "ckind": "業績",
@@ -3708,8 +3703,7 @@
   "recovery_short": "7月30日Q2 EPS $1.16遠勝$0.51，上調全年EBITDA指引至$1.15-1.25億，翌日單日飆近22%",
   "hot": [
    "Q2 EPS $1.16遠勝$0.51",
-   "上調全年EBITDA指引至$1.15-1.25億",
-   "翌日單日飆近22%"
+   "上調全年EBITDA指引至$1.15-1.25億"
   ],
   "catalyst": "上調指引飆22%",
   "ckind": "業績",
@@ -3809,11 +3803,10 @@
   "decline_short": "7月下旬單日瀉9.45%，市場憂雲端安全競爭加劇；Q2經營利潤率指引負14%至負15%，現金流仍負。",
   "recovery_short": "大行連環上調目標價、7月31日膺Gartner SASE領導者、8月4日推AI數據安全新品，自6月中累升75%。",
   "hot": [
-   "大行連環上調目標價",
-   "自6月中累升75%"
+   "大行連環上調目標價"
   ],
   "catalyst": "大行上調目標價",
-  "ckind": "AI",
+  "ckind": "評級",
   "confidence": "中",
   "sources": [
    "https://stockstotrade.com/news/netskope-inc-ntsk-news-2026_07_22/",
@@ -3824,27 +3817,32 @@
  },
  "MDB": {
   "decline_short": "軟體股遭「AI取代SaaS」憂慮殺估值，7月10日單日挫5.73%，7月23日跌至299美元。",
-  "recovery_short": "AI應用帶動Atlas數據庫需求，一個月急升逾32%；Citi上調目標價至450美元，機構9月1日業績前吸納。",
+  "recovery_short": "AI應用帶動Atlas數據庫需求，一個月急升逾32%，Citi上調目標價至450美元；9月1日盤後Q2收入$7.718億升30%、EPS $1.90勝預期並上調全年指引，惟盤後急跌約13%至$377水平（9月2日反應未入本版數據）",
   "hot": [
-   "一個月急升逾32%",
-   "Citi上調目標價至450美元"
+   "Q2收入$7.718億升30%",
+   "上調全年指引"
   ],
-  "catalyst": "AI數據庫需求",
-  "ckind": "AI",
-  "confidence": "中",
+  "catalyst": "Q2勝預期惟盤後跌13%",
+  "ckind": "業績",
+  "confidence": "高",
   "sources": [
    "https://finance.yahoo.com/markets/stocks/articles/mongodb-mdb-stock-sinks-market-221503240.html",
    "https://finance.yahoo.com/markets/stocks/articles/mongodb-latest-saas-apocalypse-victim-131000151.html",
    "https://247wallst.com/investing/2026/08/26/is-mongodb-mdb-stock-the-best-ai-database-play-before-september-1-earnings/",
-   "https://finance.yahoo.com/markets/stocks/articles/mongodb-surging-next-catalyst-almost-153000580.html"
+   "https://finance.yahoo.com/markets/stocks/articles/mongodb-surging-next-catalyst-almost-153000580.html",
+   "https://www.prnewswire.com/news-releases/mongodb-inc-announces-second-quarter-fiscal-2027-financial-results-302866656.html",
+   "https://siliconangle.com/2026/09/01/mongodb-delivers-stellar-earnings-and-revenue-beat-but-its-stock-tanks-anyway/",
+   "https://markets.financialcontent.com/stocks/article/stockstory-2026-9-1-mongodbs-nasdaqmdb-q2-cy2026-strong-sales-but-stock-drops-137",
+   "https://www.thecerbatgem.com/2026/09/01/mongodb-nasdaqmdb-releases-q3-2027-earnings-guidance.html",
+   "https://www.investing.com/news/earnings/mongodb-stock-tumbles-despite-earnings-beat-on-profittaking-4884571"
   ]
  },
  "NUE": {
   "decline_short": "6月底至7月初六日累跌逾10%屬估值獲利回吐；8月19日傳美加鋼鋁關稅減至25%，板塊急挫。",
-  "recovery_short": "Q2每股5.04美元（去年2.60）、出貨創紀錄，熱軋卷提價至1135美元；8月24日美加談判破裂單日升4%。",
+  "recovery_short": "Q2每股5.04美元（去年2.60）、出貨創紀錄，熱軋卷提價至1135美元；8月24日美加談判破裂、關稅減免憂慮消退，8月21至25日累升2.9%。",
   "hot": [
    "熱軋卷提價至1135美元",
-   "8月24日美加談判破裂單日升4%"
+   "美加談判破裂"
   ],
   "catalyst": "美加談判破裂",
   "ckind": "監管",
@@ -3871,6 +3869,415 @@
    "https://investors.sentinelone.com/press-releases/news-details/2026/SentinelOne-Announces-Second-Quarter-Fiscal-Year-2027-Financial-Results/default.aspx",
    "https://www.quiverquant.com/news/SentinelOne+stock+rises+as+investors+position+for+earnings+and+analysts+grow+more+bullish",
    "https://247wallst.com/investing/2026/08/28/sentinelone-slides-8-as-trimmed-profit-forecast-outweighs-revenue-beat-crowdstrike-declines-7/"
+  ]
+ },
+ "FORR": {
+  "decline_short": "Q2收入按年跌10%、全年指引收入跌9-12%，AI衝擊研究業務憂慮，加上7月22-23日大市急跌，7月23日見底$8.85。",
+  "recovery_short": "7月30日Q2經調整EPS $0.40勝預期，收入$100.2M勝預期，維持全年指引，重啟並加速回購，Forrester AI Prompts按季升58%；業績後股價反彈。",
+  "hot": [
+   "Q2經調整EPS $0.40勝預期",
+   "重啟並加速回購"
+  ],
+  "catalyst": "Q2勝預期+回購",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://m.uk.investing.com/news/transcripts/earnings-call-transcript-forrester-beats-q2-2026-estimates-but-shares-slip-93CH-4801010?ampMode=1",
+   "https://seekingalpha.com/news/4622614-forrester-targets-2026-eps-of-0_72-to-0_82-while-maintaining-350m-360m-revenue-outlook",
+   "https://finance.yahoo.com/markets/stocks/articles/forrester-research-forr-surpasses-q2-220010202.html",
+   "https://www.aaii.com/investingideas/article/443444-why-forrester-research-inc8217s-forr-stock-is-up-711",
+   "https://kalkinemedia.com/us/stocks/midcap/forrester-research-nasdaqforr-midcap-stock-gains-fresh-market-attention"
+  ]
+ },
+ "PCTY": {
+  "decline_short": "AI取代SaaS憂慮拖累軟件股，公司指引增長放緩至7-9%，一年跌約40%；7月22-23日大市急跌，7月23日見底$120.6。",
+  "recovery_short": "8月4日Q4收入$444.7M升11%勝預期，FY27 EBITDA指引$690M；8月5-6日花旗目標價$136→$168、BTIG升至$180，8月20日TD Cowen升至$177。",
+  "hot": [
+   "Q4收入$444.7M升11%勝預期",
+   "花旗目標價$136→$168"
+  ],
+  "catalyst": "Q4勝預期+升目標",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-paylocity-tops-revenue-estimates-in-q4-2026-shares-rise-93CH-4836130",
+   "https://www.globenewswire.com/news-release/2026/08/04/3338801/29665/en/Paylocity-Announces-Fourth-Quarter-and-Fiscal-2026-Financial-Results.html",
+   "https://www.marketbeat.com/instant-alerts/paylocity-nasdaqpcty-price-target-raised-to-18000-2026-08-05/",
+   "https://www.thecerbatgem.com/2026/08/20/td-cowen-issues-positive-forecast-for-paylocity-nasdaqpcty-stock-price.html",
+   "https://www.tikr.com/blog/down-40-in-last-12-months-can-paylocity-nasdaq-stock-recover-in-2026"
+  ]
+ },
+ "GSHD": {
+  "decline_short": "AI去中介化憂慮及收入減速令分析員下調目標價，5月13日跌7.6%，內部人沽貨拖累股價創52週新低，7月14日見底$50.3。",
+  "recovery_short": "7月15日Piper Sandler目標價$52→$72；7月22日Q2 EPS $0.64勝預期$0.48、收入$113.4M，上調全年收入增長指引至12-19%，7月23日升4.9%。",
+  "hot": [
+   "Piper Sandler目標價$52→$72",
+   "Q2 EPS $0.64勝預期$0.48",
+   "上調全年收入增長指引至12-19%"
+  ],
+  "catalyst": "Q2勝預期上調指引",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.gurufocus.com/news/8959789/gshd-maintained-by-piper-sandler-price-target-raised-to-72",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-goosehead-beats-q2-2026-estimates-shares-rebound-after-hours-93CH-4807139",
+   "https://www.chartmill.com/news/GSHD/Chartmill-51413-Goosehead-Insurance-NASDAQGSHD-Soars-on-Earnings-Beat-and-Raised-Guidance",
+   "https://www.stocktitan.net/sec-filings/GSHD/8-k-goosehead-insurance-inc-reports-material-event-15f1bb843d5d.html",
+   "https://www.marketbeat.com/instant-alerts/goosehead-insurance-nasdaqgshd-stock-price-down-76-time-to-sell-2026-05-13/",
+   "https://kalkinemedia.com/us/stocks/financial/goosehead-insurance-hits-fresh-trading-weakness"
+  ]
+ },
+ "GLP": {
+  "decline_short": "無公司特定利淡消息，主要跟隨大市；7月17日見底$47.8，7月30日贖回$75M B系優先股前後窄幅整固。",
+  "recovery_short": "8月7日Q2淨利$71.0M（去年$25.2M）、每單位EPS $1.86（去年$0.55）勝預期、經調整EBITDA $148.2M，季度分派$0.78，市場視為穩健，單位緩步上行。",
+  "hot": [
+   "Q2淨利$71.0M（去年$25.2M）",
+   "每單位EPS $1.86（去年$0.55）勝預期"
+  ],
+  "catalyst": "Q2淨利倍增",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.stocktitan.net/news/GLP/global-partners-lp-reports-second-quarter-2026-financial-l4r9tirgcz82.html",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-global-partners-beats-on-q2-2026-profit-misses-on-revenue-93CH-4847012",
+   "https://www.stocktitan.net/news/GLP/global-partners-lp-announces-full-redemption-of-series-b-fixed-rate-u7otvf3yp0gv.html",
+   "https://www.tipranks.com/news/company-announcements/global-partners-reports-strong-quarterly-earnings-and-cash-returns"
+  ]
+ },
+ "CNNE": {
+  "decline_short": "無公司特定利淡消息，6月大盤回調延續至7月8日見底$14.26；其後7月23日、7月31日及8月14日隨大市回試$14.4-14.6，波幅細。",
+  "recovery_short": "7月30日以$90M售Watkins 49%股權；8月17日Q2 EPS $0.86轉盈（淨利$37.5M），SpaceX持股錄$83.4M收益，抵銷$32.1M商譽減值，下半年優先回購，盤後升2.3%。",
+  "hot": [
+   "Q2 EPS $0.86轉盈",
+   "SpaceX持股錄$83.4M收益"
+  ],
+  "catalyst": "Q2轉盈+持股收益",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-cannae-beats-q2-2026-estimates-as-stock-rises-after-hours-93CH-4850464",
+   "https://www.businesswire.com/news/home/20260730557314/en/Cannae-Holdings-Inc.-Sells-its-Ownership-Interest-in-The-Watkins-Company-to-KDSA-Investment-Partners",
+   "https://www.fool.com/earnings/call-transcripts/2026/08/19/cannae-holdings-cnne-q2-2026-earnings-call-transcript/",
+   "https://www.stocktitan.net/sec-filings/CNNE/10-q-cannae-holdings-inc-quarterly-earnings-report-8c0cd39bf41e.html",
+   "https://finance.yahoo.com/markets/stocks/articles/cannae-q2-earnings-call-highlights-030355595.html"
+  ]
+ },
+ "APAM": {
+  "decline_short": "5月獲通知$5.7B美國價值策略分包授權6月初終止，宣佈結束US Value團隊；加上6月大市回調，7月1日見底$33.97。",
+  "recovery_short": "7月28日Q2經調整EPS $0.94升13%、收入$307.9M勝預期，AUM創新高$183B、經調整利潤率32.9%；8月11日7月AUM $183.0B穩定，隨大市創新高上行。",
+  "hot": [
+   "Q2經調整EPS $0.94升13%",
+   "AUM創新高$183B"
+  ],
+  "catalyst": "Q2勝預期AUM新高",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.tradingview.com/news/tradingview:5f9245ab98ae3:0-artisan-partners-reports-may-aum-of-186-0b-5-7b-u-s-value-sub-advisory-mandate-to-terminate/",
+   "https://www.apam.com/news-releases/news-release-details/artisan-partners-asset-management-inc-reports-june-2026-assets",
+   "https://www.globenewswire.com/news-release/2026/07/28/3334748/0/en/Artisan-Partners-Asset-Management-Inc-Reports-2Q26-Results-and-Quarterly-Dividend.html",
+   "https://www.investing.com/news/company-news/artisan-partners-q2-2026-slides-record-aum-amid-flow-headwinds-93CH-4821215",
+   "https://www.globenewswire.com/news-release/2026/08/11/3343185/0/en/artisan-partners-asset-management-inc-reports-july-2026-assets-under-management.html"
+  ]
+ },
+ "NEXT": {
+  "decline_short": "7月28日見底$6.14；7月30日Q2淨虧損擴大至$65.4M（每股虧$0.25）並登記發行5百萬股ESOP，股價受壓，8月5日回試$6.42。",
+  "recovery_short": "荷莫茲危機威脅LNG供應（卡塔爾Ras Laffan近20%產能受損）、8月布蘭特近$89，買家轉投美國LNG；Rio Grande進度超前、Train 6已向FERC申請，股價回升近$8。",
+  "hot": [
+   "荷莫茲危機威脅LNG供應",
+   "Train 6已向FERC申請"
+  ],
+  "catalyst": "",
+  "ckind": "無",
+  "confidence": "中",
+  "sources": [
+   "https://simplywall.st/stocks/us/energy/nasdaq-next/nextdecade/news/nextdecade-next-is-down-204-after-widening-q2-losses-test-it/amp",
+   "https://www.businesswire.com/news/home/20260730544785/en/NextDecade-Provides-Second-Quarter-2026-Business-Update",
+   "https://investors.next-decade.com/news-releases/news-release-details/nextdecade-provides-second-quarter-2026-business-update",
+   "https://finance.yahoo.com/energy/articles/forget-tanker-trade-hormuz-crisis-105227829.html",
+   "https://intellectia.ai/blog/rising-oil-prices-stock-market-impact-august-2026"
+  ]
+ },
+ "CACC": {
+  "decline_short": "7月11日報道次級車貸拖欠率創32年最差，2021-24年貸款表現遜預期，市場憂慮業績前信貸壓力，7月27日見底$552.73。",
+  "recovery_short": "8月4日Q2 GAAP EPS $12.66升71%、經調整$12.12升21%，7月放款量按年升逾20%、活躍經銷商創紀錄11,004家；8月20日完成$600M ABS融資，信貸趨勢改善。",
+  "hot": [
+   "Q2 GAAP EPS $12.66升71%",
+   "7月放款量按年升逾20%",
+   "完成$600M ABS融資"
+  ],
+  "catalyst": "Q2 EPS升71%",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.fool.com/investing/2026/07/11/subprime-auto-loans-just-hit-their-worst-delinquen/",
+   "https://ca.investing.com/news/earnings/credit-acceptance-earnings-on-deck-amid-subprime-loan-stress-93CH-4775245",
+   "https://www.stocktitan.net/news/CACC/credit-acceptance-announces-second-quarter-2026-81xkgoplf752.html",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-credit-acceptance-tops-q2-2026-eps-forecast-shares-rise-93CH-4836024",
+   "https://www.stocktitan.net/news/CACC/credit-acceptance-announces-completion-of-600-0-million-asset-backed-yx228poe0b96.html",
+   "https://finance.yahoo.com/markets/stocks/articles/could-credit-acceptance-cacc-keep-140445638.html"
+  ]
+ },
+ "SJM": {
+  "decline_short": "FY27指引銷售跌3-4%，6月17日聯儲鷹派點陣圖拖累包裝食品股，同業遭Bernstein降級，7月14日見底",
+  "recovery_short": "8月26日Q1經調整EPS $3.24升71%勝預期$2.22（含關稅退款），全年EPS指引上調至$10.50-11，股價升4.5%創52週新高",
+  "hot": [
+   "Q1經調整EPS $3.24升71%",
+   "全年EPS指引上調至$10.50-11"
+  ],
+  "catalyst": "Q1 EPS升71%",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "http://www.prnewswire.com/news-releases/the-jm-smucker-co-announces-fiscal-year-2027-first-quarter-results-and-updates-full-year-fiscal-2027-outlook-302860443.html",
+   "https://www.fool.com/investing/2026/08/26/why-jm-smucker-stock-is-up-today/",
+   "https://www.benzinga.com/markets/earnings/26/08/61443712/no-coffee-price-cut-yet-j-m-smucker-turns-to-promotions-instead",
+   "https://www.investing.com/news/stock-market-news/jm-smucker-forecasts-upbeat-annual-profit-on-higher-coffee-prices-athome-dining-4732870",
+   "https://www.gurufocus.com/news/8965345/jm-smucker-sjm-boosts-dividend-for-shareholders",
+   "https://markets.financialcontent.com/stocks/article/stockstory-2026-6-17-conagra-general-mills-and-post-shares-are-falling-what-you-need-to-know",
+   "https://stocktwits.com/news-articles/markets/equity/why-kraft-heinz-general-mills-campbells-conagra-stocks-are-falling-today/cZ0jPAKRexK"
+  ]
+ },
+ "VOYA": {
+  "decline_short": "8月4日Q2經調整EPS $1.51遜預期23%（遣散費兼另類投資虧損）；8月6日TOMS發起不信任投票，其後陰跌至8月20日$97.49見低",
+  "recovery_short": "8月18日利率壓力緩解；RBC、KBW目標價升至$110、大摩$105；持股4.5%嘅TOMS Capital施壓推動出售或策略檢討，併購憧憬支撐反彈",
+  "hot": [
+   "TOMS Capital施壓推動出售或策略檢討"
+  ],
+  "catalyst": "TOMS迫售施壓",
+  "ckind": "併購",
+  "confidence": "中",
+  "sources": [
+   "https://finance.yahoo.com/markets/stocks/articles/voya-q2-earnings-miss-weak-171500333.html",
+   "https://ca.investing.com/news/stock-market-news/voya-financial-falls-on-second-quarter-earnings-miss-93CH-4775734",
+   "https://www.voya.com/news/2026/08/voya-financial-announces-second-quarter-2026-results",
+   "https://simplywall.st/stocks/us/diversified-financials/nyse-voya/voya-financial/news/toms-capitals-no-confidence-push-and-strategic-review-demand",
+   "https://www.nasdaq.com/press-release/tcim-comments-voyas-efforts-prevent-shareholder-voices-being-heard-2026-08-10",
+   "https://www.businesswire.com/news/home/20260601331831/en/TCIM-Sends-Letter-to-Voya-Financials-Board-of-Directors-Calling-on-Them-to-Urgently-Initiate-a-Formal-Strategic-Review-and-Engage-with-All-Interested-Parties",
+   "https://stockanalysis.com/stocks/voya/forecast/"
+  ]
+ },
+ "RGA": {
+  "decline_short": "7月17日CFO Axel André離任，加上7月22-23日大市急跌，股價由歷史高位回落；8月4日業績前觀望",
+  "recovery_short": "8月6日Q2經調整EPS $8.89創紀錄，較預期高36.6%，季息加5.4%至$0.98，翌日升2.8%；摩根大通目標價升至$293",
+  "hot": [
+   "Q2經調整EPS $8.89創紀錄",
+   "摩根大通目標價升至$293"
+  ],
+  "catalyst": "Q2 EPS創紀錄",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://investor.rgare.com/news-releases/news-release-details/reinsurance-group-america-reports-second-quarter-results-20",
+   "https://finance.yahoo.com/markets/stocks/articles/rga-q2-earnings-beat-estimates-181500088.html",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-rga-posts-record-q2-2026-profit-shares-rise-93CH-4846998",
+   "https://www.gurufocus.com/news/9018659/reinsurance-group-of-america-inc-rga-shares-surge-42-what-gf-score-of-86-tells-investors",
+   "https://www.marketbeat.com/stocks/NYSE/RGA/forecast/",
+   "https://www.reinsurancene.ws/tag/rga/"
+  ]
+ },
+ "STRA": {
+  "decline_short": "Q1入學人數輕微下跌，市場憂慮Strayer需求疲弱，Truist降級至持有；7月22-23日大市急跌兼業績前觀望",
+  "recovery_short": "7月29日Q2收入$3.373億升4.9%、EPS $1.71（去年$1.37），Sophia訂戶升32%，股價升4.2%至$84.81；8月Signal Labs獲創投支持",
+  "hot": [
+   "Q2收入$3.373億升4.9%"
+  ],
+  "catalyst": "Q2收入勝預期",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.businesswire.com/news/home/20260729002131/en/Strategic-Education-Inc.-Reports-Second-Quarter-2026-Results",
+   "https://www.investing.com/news/company-news/strategic-education-q2-2026-slides-show-margin-gains-ets-strength-93CH-4820899",
+   "https://simplywall.st/stocks/us/consumer-services/nasdaq-stra/strategic-education/news/strategic-education-stra-beats-on-q2-results-is-the-stock-st/amp",
+   "https://m.investing.com/news/earnings/strategic-education-faces-earnings-test-on-enrollment-trends-93CH-4629684?ampMode=1",
+   "https://m.uk.investing.com/news/analyst-ratings/truist-cuts-strategic-education-stock-rating-on-2026-revenue-concerns-93CH-4573783?ampMode=1",
+   "https://simplywall.st/stocks/us/consumer-services/nasdaq-stra/strategic-education/news/how-investors-may-respond-to-strategic-education-stra-expand/amp"
+  ]
+ },
+ "UFCS": {
+  "decline_short": "7月15日Progressive因保費增長放緩急跌9%，市場憂慮財險定價轉軟拖累板塊；7月22日再跌3.8%隨大市回落",
+  "recovery_short": "8月3日Q2淨利潤升45%至$3,340萬，經調整EPS $1.30較預期高88%，綜合成本率95.3%為15年最佳，盤後升4.67%至$54.52",
+  "hot": [
+   "經調整EPS $1.30較預期高88%"
+  ],
+  "catalyst": "Q2盈利勝預期88%",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/08/03/3337853/0/en/united-fire-group-inc-reports-second-quarter-2026-results.html",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-united-fire-group-beats-q2-2026-estimates-as-shares-jump-93CH-4834983",
+   "https://www.gurufocus.com/news/8973269/united-fire-group-inc-ufcs-shares-fall-38-what-gf-score-of-59-tells-investors",
+   "https://eciks.org/14197-20835-insurance-progressive-shares-pricing-pressure",
+   "https://www.globenewswire.com/news-release/2026/08/21/3349300/12138/en/united-fire-group-inc-declares-quarterly-cash-dividend-of-0-20-per-share-and-announces-new-board-appointment.html"
+  ]
+ },
+ "DGICA": {
+  "decline_short": "7月15日Progressive急跌9%引發財險定價轉軟憂慮，小型財險股受壓；7月22日隨大市回落，業績前觀望",
+  "recovery_short": "7月30日Q2淨利潤升32%至$2,230萬，EPS $0.60勝預期$0.07，股價升5.13%；Donegal Mutual 8月7、19、24日連續增持",
+  "hot": [
+   "Q2淨利潤升32%至$2,230萬",
+   "Donegal Mutual 8月7、19、24日連續增持"
+  ],
+  "catalyst": "Q2盈利升32%",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/07/30/3335863/0/en/donegal-group-inc-announces-second-quarter-and-first-half-2026-results.html",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-donegal-group-lifts-q2-2026-profit-as-shares-rise-93CH-4824871",
+   "https://www.dailypolitical.com/2026/07/30/donegal-group-nasdaqdgicb-posts-earnings-results-beats-expectations-by-0-07-eps.html",
+   "https://www.marketbeat.com/instant-alerts/insider-insider-buying-donegal-group-nasdaq-dgica-major-shareholder-acquires-19060000-in-stock-2026-08-25/",
+   "https://m.investing.com/news/insider-trading-news/donegal-mutual-insurance-buys-371194-of-donegal-group-stock-93CH-4867741?ampMode=1",
+   "https://eciks.org/14197-20835-insurance-progressive-shares-pricing-pressure"
+  ]
+ },
+ "BMNR": {
+  "decline_short": "以太幣6月崩跌至$1,512低位，上半年股價瀉51%；6月5日擴大至$2.8億9.5%優先股發行再跌5.6%，6月30日見底",
+  "recovery_short": "以$40億計劃回購2,080萬股；8月19日$14.4億空倉爆倉推動以太幣8月升30%；ETH持倉590萬枚佔供應4.9%，MAVAN質押年收入$3.35億",
+  "hot": [
+   "以太幣8月升30%",
+   "ETH持倉590萬枚佔供應4.9%"
+  ],
+  "catalyst": "$40億回購+ETH反彈",
+  "ckind": "回購",
+  "confidence": "高",
+  "sources": [
+   "https://www.fool.com/investing/2026/07/13/why-bitmine-immersion-stock-collapsed-51-in-the-fi/",
+   "https://finance.yahoo.com/markets/crypto/articles/bitmine-immersion-shares-slip-expanded-142139655.html",
+   "https://www.moneymagpie.com/investment-articles/ethereum-price-update-august-2026-everything-you-need-to-know",
+   "https://www.kucoin.com/news/flash/crypto-market-surges-as-1-44b-short-liquidation-triggers-rally",
+   "https://www.benzinga.com/trading-ideas/movers/26/08/61380457/bitmine-immersion-technologies-stock-climbs-monday-whats-driving-the-action",
+   "https://stockstotrade.com/news/bitmine-immersion-technologies-inc-bmnr-news-2026_08_17/",
+   "https://blockonomi.com/bitmine-bmnr-stock-climbs-4-following-major-share-buyback-and-ethereum-accumulation/",
+   "https://memeburn.com/bitmine-ethereum-treasury-stock-slide/"
+  ]
+ },
+ "BRR": {
+  "decline_short": "比特幣7月1日跌至$57,950創21個月新低，股價折讓約50% NAV，7月10日見底$1.46；8月13日公布上半年淨虧損$1.728億",
+  "recovery_short": "比特幣8月25日空倉擠壓急升至$80,894；公司持5,355枚BTC並以約50% NAV折讓回購；8月13日Tidal申請5隻ETF由ProCap任副顧問",
+  "hot": [
+   "8月25日空倉擠壓急升至$80,894",
+   "Tidal申請5隻ETF由ProCap任副顧問"
+  ],
+  "catalyst": "BTC反彈+折讓回購",
+  "ckind": "回購",
+  "confidence": "中",
+  "sources": [
+   "https://www.moneymagpie.com/investment-articles/bitcoin-price-update-august-2026",
+   "https://fortune.com/article/price-of-bitcoin-08-20-2026/",
+   "https://www.stocktitan.net/sec-filings/BRR/424b3-pro-cap-financial-inc-prospectus-filed-pursuant-to-rule-424-b-3-74073033a91e.html",
+   "https://www.businesswire.com/news/home/20260601237215/en/ProCap-Financial-Sells-Bitcoin-to-Buy-Back-Stock-at-Approximately-50-Discount-to-NAV-Increasing-Bitcoin-Exposure-for-All-Shareholders",
+   "https://stockanalysis.com/stocks/brr/",
+   "https://www.tradingview.com/news/reuters.com,2026:newsml_L1N3ZJ0QD:0-bitcoin-treasury-company-procap-repurchases-shares-after-crypto-slump/"
+  ]
+ },
+ "TXNM": {
+  "decline_short": "7月2日新墨西哥PRC以2比1裁定Blackstone去年$4億入股8百萬股違法須拆倉、罰款$30萬並暫停審批併購，7月8日跌至$56.4。",
+  "recovery_short": "7月17日雙方將併購協議延至2027年5月31日，以$4億定期貸款拆倉，$61.25現金收購價維持，套利價差收窄；NMPRC同NRC審批仍待批，料2027上半年完成。",
+  "hot": [
+   "$61.25現金收購價維持"
+  ],
+  "catalyst": "$61.25私有化延期",
+  "ckind": "併購",
+  "confidence": "中",
+  "sources": [
+   "https://www.abqjournal.com/business/new-mexico-regulators-order-blackstone-txnm-to-unwind-400-million-stock-sale/3075270",
+   "https://www.tipranks.com/news/company-announcements/txnm-energy-pipe-void-halts-blackstone-backed-merger",
+   "https://www.prnewswire.com/news-releases/txnm-energy-and-blackstone-infrastructure-extend-merger-agreement-302828825.html",
+   "https://www.sec.gov/Archives/edgar/data/0001108426/000110842626000042/txnm07172026ex991.htm",
+   "https://sourcenm.com/2026/07/20/pnm-private-equity-firm-extend-merger-deadline-to-mid-2027-after-regulators-deem-stock-sale-illegal/"
+  ]
+ },
+ "NOV": {
+  "decline_short": "美伊6月簽備忘錄後布蘭特油價7月2日跌至$69拖累油服股見7月6日低位；7月28日Q2 EPS $0.31大勝預期但自由現金流-$6,400萬，7月29日跌4.1%至$19.08。",
+  "recovery_short": "Q2後TD Cowen升目標價至$26、Susquehanna至$24，8月20日美銀升至$24；9月1日美軍空襲伊朗革命衛隊令原油飆逾5%至$90，能源股齊升。",
+  "hot": [
+   "原油飆逾5%至$90"
+  ],
+  "catalyst": "",
+  "ckind": "無",
+  "confidence": "高",
+  "sources": [
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-nov-tops-q2-2026-estimates-but-shares-fall-93CH-4821220",
+   "https://www.investing.com/news/company-news/nov-q2-2026-slides-record-margins-offset-by-cash-flow-concerns-93CH-4821247",
+   "https://www.iea.org/reports/oil-market-report-july-2026",
+   "https://stockanalysis.com/stocks/nov/forecast/",
+   "https://www.investing.com/news/stock-market-news/energy-stocks-rally-as-fresh-usiran-attacks-drive-oil-prices-higher-4882320",
+   "https://www.benzinga.com/markets/equities/26/09/61561373/energy-stocks-rally-crude-90-iran-hormuz-strikes"
+  ]
+ },
+ "OWL": {
+  "decline_short": "7月2日兩隻私募信貸基金因$47億贖回要求（OCIC佔資產18.8%）設贖回上限，私募信貸恐慌加上7月22-23日大市急跌，7月22日跌至$9.16。",
+  "recovery_short": "7月30日Q2費用相關盈利升9%至$3.92億勝預期、AUM $3,190億，管理層稱風暴最壞已過；8月6日TD Cowen升目標價至$15；8月28日牽頭Iren $24億算力設備融資。",
+  "hot": [
+   "費用相關盈利升9%至$3.92億勝預期",
+   "牽頭Iren $24億算力設備融資"
+  ],
+  "catalyst": "FRE升9%勝預期",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.bloomberg.com/news/articles/2026-07-02/blue-owl-bdcs-impose-caps-after-facing-19-38-requests-to-exit",
+   "https://www.bloomberg.com/news/articles/2026-07-30/blue-owl-reports-fund-raising-slow-down-amid-credit-pullback",
+   "https://www.benzinga.com/markets/private-markets/26/07/60820159/blue-owl-says-private-credit-turmoil-is-easing-despite-fundraising-slowdown",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-blue-owl-capital-beats-q2-2026-estimates-as-stock-rises-93CH-4843153",
+   "https://stockstotrade.com/news/blue-owl-capital-inc-owl-news-2026_08_07/",
+   "https://www.cnbc.com/quotes/OWL"
+  ]
+ },
+ "OOMA": {
+  "decline_short": "7月內高管多次按10b5-1計劃減持，加上7月22-23日大市急跌，7月23日跌至$19.36；8月中大市回落再試$20.07。",
+  "recovery_short": "7月28日憑AirDial增長預期急升6.5%至$22.14；8月26日Q2收入$8,320萬升25%勝預期，AirDial收入升75%，全年收入指引上調至$3.32-3.335億，7位分析師上調預測。",
+  "hot": [
+   "Q2收入$8,320萬升25%勝預期",
+   "全年收入指引上調至$3.32-3.335億"
+  ],
+  "catalyst": "Q2升25%上調指引",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.tipranks.com/news/insider-trading/ooma-insider-makes-notable-move-with-fresh-stock-sale-insider-trading-news",
+   "https://finance.yahoo.com/markets/stocks/articles/ooma-ooma-soars-6-5-133700690.html",
+   "https://finance.yahoo.com/markets/stocks/articles/ooma-q2-earnings-call-highlights-230419685.html",
+   "https://www.businesswire.com/news/home/20260805662492/en/Ooma-Schedules-Release-of-Second-Quarter-Fiscal-2027-Results",
+   "https://www.investing.com/equities/ooma-inc"
+  ]
+ },
+ "CNO": {
+  "decline_short": "6月大市因高估值、關稅同美伊衝突回調，5月加息派息至$0.18亦無助股價，6月30日跌至$50.98；7月22-23日大市急跌再試$52.6。",
+  "recovery_short": "7月30日Q2營運EPS $1.26升45%大勝預期$0.99，全年EPS指引上調8%至$4.60-4.80，盤後升4.7%；8月3日KBW升目標價至$57。",
+  "hot": [
+   "Q2營運EPS $1.26升45%大勝預期$0.99",
+   "全年EPS指引上調8%至$4.60-4.80"
+  ],
+  "catalyst": "EPS升45%兼升指引",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://cno.mediaroom.com/2026-07-30-CNO-Financial-Group-Reports-Second-Quarter-2026-Results",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-cno-financial-tops-q2-2026-estimates-lifts-outlook-93CH-4828947",
+   "https://www.quiverquant.com/news/CNO+Financial+Group+(CNO)+Stock+Rises+on+Q2+2026+Earnings",
+   "https://www.tipranks.com/news/catalyst/cno-financial-falls-even-after-dividend-hike",
+   "https://finance.yahoo.com/markets/stocks/articles/cno-financial-cno-3-49-160002836.html"
+  ]
+ },
+ "WOLF": {
+  "decline_short": "7月10日淡倉加碼押注現金消耗、7月16日獲Sell評級，7月29日跌至$20.06；8月19日Q4收入$1.496億跌24%兼每股蝕$2.26，8月20日一度瀉15%。",
+  "recovery_short": "8月6日與LITEON合作800VDC AI數據中心電源、8月17日Mizuho指Nvidia Vera Rubin加速量產令功率半導體齊升，WOLF升5.7%至$33.61；財報後AI數據中心收入倍增撐住反彈。",
+  "hot": [
+   "與LITEON合作800VDC AI數據中心電源",
+   "Nvidia Vera Rubin加速量產"
+  ],
+  "catalyst": "AI數據中心收入倍增",
+  "ckind": "AI",
+  "confidence": "中",
+  "sources": [
+   "https://www.foreignpolicyjournal.com/2026/07/10/short-sellers-target-wolfspeed-nyse-wolf-as-cash-burn-and-negative-margins-persist/",
+   "https://seekingalpha.com/article/4922773-wolfspeed-dont-confuse-a-good-market-with-a-good-investment",
+   "https://www.businesswire.com/news/home/20260806927242/en/Wolfspeed-and-LITEON-Partner-to-Support-Hyperscale-AI-Data-Center-Deployments-with-800-VDC-Power-Solutions",
+   "https://247wallst.com/investing/2026/08/17/power-semis-soar-monday-wolfspeed-stmicro-and-on-semiconductor-rally-on-vera-rubin-ramp-signals/",
+   "https://www.fool.com/investing/2026/08/20/why-wolfspeed-stock-crashed-today/",
+   "https://finance.yahoo.com/markets/stocks/articles/wolfspeed-shares-tumble-q4-earnings-100304584.html",
+   "https://www.sec.gov/Archives/edgar/data/0000895419/000089541926000049/ex991q4-26.htm"
   ]
  }
 }

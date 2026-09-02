@@ -96,6 +96,14 @@ if problems:
     print(f"PROBLEMS ({len(problems)}):")
     for p in problems: print("  -", p)
 
+# consistency of the research text against the price series (warnings only; see news_checks.py)
+import sys as _sys; _sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from news_checks import run_checks
+warns = run_checks(out, need, f"{SCRATCH}/{os.environ.get('SERIES', 'series4.pkl')}", scr)
+if warns:
+    print(f"CHECKS ({len(warns)} warning(s) — text vs series / sources / deal prices):")
+    for w in warns: print("  ~", w)
+
 json.dump(out, open(f"{SCRATCH}/news8.json", "w"), ensure_ascii=False, indent=1)
 print("wrote", f"{SCRATCH}/news8.json")
 sys.exit(1 if missing else 0)

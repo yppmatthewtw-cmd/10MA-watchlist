@@ -9,7 +9,7 @@
 
 | 版本 | 內容 |
 |------|------|
-| R8.00 | **批判性審視版**（數據仍為 2026-09-01 收盤）：5 個角度審視 R7 → 修正 4 項數據缺陷（補值日唔再製造底部；成交量不完整日唔入量比／VCP；universe 剔除基金／信託／優先股；S&P 500 改用 GICS 類別），總表 171 → 181 隻；併購釘價目標公司紅色標記＋可一鍵隱藏；跌穿底部改紅字顯示；**所有相對 R7 嘅更新以紅色標示**（新上榜／跌出／排名箭嘴／有變嘅格）並可「只顯示有更新的行」；涉及規則嘅建議（釘價股剔除、PAGE 2 狀態條件、覆蓋度、突破幅度、VCP 跳空、雙類股）列於更新卡由用戶決定 |
+| R8.00 | **批判性審視版**（數據仍為 2026-09-01 收盤）：5 個角度審視 R7 → 修正 4 項數據缺陷（補值日唔再製造底部；成交量不完整日唔入量比／VCP；universe 剔除基金／信託／優先股；S&P 500 改用 GICS 類別），總表 171 → 181 隻；併購釘價目標公司紅色標記＋一鍵隱藏（新聞核實後多咗 **SMTI**——R7 總表 #3 標「跟大市」其實係 MiMedx 約 $35 收購目標——同 BLFS／PSNL 換股、TXNM 延期、VOYA 迫售）；內容層逐行對照序列：13 行盤後／錯日百分比改為收市對收市、過時「現價」用字改寫、MAN／NAVI／SRPT／STEP／NWS 催化劑歸因改正、分析員評級另立「評級」類別、事件日其實下跌嘅 badge 加紅色「事件日 −X%」、信心標籤上限由來源決定、純價格 highlight 移除；總表斜率／MA 統一 MA10；**所有相對 R7 嘅更新以紅色標示**（新上榜／跌出／排名箭嘴／有變嘅格）並可「只顯示有實質更新嘅行」；涉及規則嘅建議（釘價股剔除、確定性三項飽和、PAGE 2 狀態條件、覆蓋度、突破幅度、VCP 跳空、回撤首段、MA 最低升幅、雙類股）列於更新卡由用戶決定 |
 | R7.00 | 數據更新至 **2026-09-01 收盤**（星期二，171 個交易日）：總表 171 隻（23 隻新上榜、30 隻跌出），ITGR 因 KKR $127 全現金收購（溢價 51.8%）躍上前列；`extend_series.py` 改為**按比例重算拆股歷史**而非整隻剔除（兩日共保留 10 隻真拆股，如 RUSHA 3:2、NXL 1拆30），只有唔似拆股嘅 COCHW 剔除；市場背景卡加入 09-01 一節（荷莫茲油輪遇襲、標普跌 0.71%、市寬 70.2% 下跌）|
 | R6.01 | **純深色主題**：調色盤只定義喺 bare `:root`，移除 media query 同 `[data-theme]` 覆蓋，無論瀏覽器／系統設定都保持深色；順手修好 `.slope` 被 `.subsc` 同 specificity 蓋過、斜率一直顯示灰色而非綠色嘅串接衝突 |
 | R6.00 | 數據更新至 **2026-08-31 收盤**（星期一）：容器網絡封鎖所有行情站、鏡像當日未出快照，改由本 repo 的 GitHub Actions runner 抓同源 Nasdaq screener 快照回傳，`extend_series.py` 接駁上序列（5,127 隻反推前收與 08-28 中位偏差 0.000%，8 隻合股股票剔除）；12 子頁＋總表全部重掃，24 隻新上榜逐隻研究，市場背景卡加入 08-31 一節 |
@@ -60,7 +60,9 @@
 
 驗證：重建序列與 20MA R3 報告交叉核對，74/74 上榜股現價完全一致；另經獨立代理人對抗性驗證
 （spec 合規 / 獨立重算合資格集 / VCP·評分數學 / 底部結構）；R8 前另作 5 角度批判性審視（方法論／數據品質／
-內容／排名／可用性），發現及處置記錄於 `data/review8.json` 並顯示於報告更新卡。
+內容／排名／可用性），發現及處置記錄於 `data/review8.json` 並顯示於報告更新卡。內容層由 `scripts/news_checks.py`
+把每段研究文字對照收市序列（日期＋百分比、來源係咪 URL、併購價 vs 現價、「跟大市」但有 ≥8% 單日升幅），
+`merge_news8.py` 每次合併都會列出警告。
 
 限制：快照只有收盤價與成交量（無日內高低價），VCP 以收盤/成交量計算；價格未除息調整；
 外國註冊而非 S&P 500 的美國上市股票（部分 ADR）缺完整歷史，未納入掃描。
@@ -94,9 +96,12 @@ SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
 # R8（審視修正版 + 紅色差異標示）
 python3 scripts/patch_volume.py                          # 以鏡像較完整嘅成交量補齊當日 bar（價格須完全相同）
 SERIES=series4.pkl OUT_JSON=screen_results8.json python3 scripts/screener8.py   # 含 4 項數據修正
-python3 scripts/merge_news8.py                           # 沿用 news7 + 新上榜研究 -> data/news8.json
+python3 scripts/apply_review8.py                         # news7 -> news8 底稿 + review8.json（過時文字、釘價股標記）
+python3 scripts/merge_news8.py                           # 加入新上榜研究；並以 news_checks.py 對照序列列出警告
+python3 scripts/apply_review8b.py                        # 內容／排名審視結果（含 apply_review8_fact.py 嘅網上核實）
 SCREEN_JSON=screen_results8.json NEWS_JSON=news8.json PREV_SCREEN=screen_results7.json PREV_NEWS=news7.json \
   PREV_REV=R7 REV=R8.00 REVIEW_JSON=review8.json python3 scripts/build_report8.py   # 紅色 = 相對 R7 嘅更新
+python3 scripts/news_checks.py news8.json screen_results8.json   # 隨時可獨立跑：文字 vs 序列、來源、併購價
 
 #   （R6.00 為跟隨系統主題的版本：python3 scripts/build_report6.py）
 ```

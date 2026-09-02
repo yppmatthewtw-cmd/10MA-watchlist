@@ -124,14 +124,17 @@ def cat_cell(sym):
     changed = bool(p) and (cat != pcat or kind != pkind)
     flag = (REVIEW.get("ticker_flags") or {}).get(sym)
     flag_html = f'<span class="rflag" title="{esc(flag.get("text", ""))}">{esc(flag["badge"])}</span>' if flag else ""
+    warn = (REVIEW.get("catalyst_warn") or {}).get(sym)
+    warn_html = (f'<span class="cwarn" title="{esc(warn["text"])}">事件日 {warn["ret"]:+.1f}% <i>{esc(warn["day"])}</i></span>'
+                 if warn else "")
     if not cat:
         body = '<span class="nocat">跟大市</span>'
     else:
         low = e.get("confidence") == "低"
-        cls = "catb" + (" chgb" if changed else "") + (" lowc" if low else "")
+        cls = "catb" + (" chgb" if changed else "") + (" lowc" if low else "") + (" soldc" if warn else "")
         ttl = ' title="信心低：未有個股新聞來源"' if low else ""
         body = f'<span class="{cls}"{ttl}><i>{esc(kind)}</i>{esc(cat)}</span>'
-    return body + flag_html
+    return body + warn_html + flag_html
 
 def c7_cells(r, pr):
     def parts(row):
@@ -225,9 +228,15 @@ def tv_url(r):
         return f'https://www.tradingview.com/chart/Q1c5VWwD/?symbol={r["exch"].lower()}%3A{esc(sym)}'
     return f'https://www.tradingview.com/chart/Q1c5VWwD/?symbol={esc(sym)}'
 
+def same_basis(r, pr):
+    """False when the previous revision's row used another MA window (page 1 in R7
+    inherited the first sub-page's window), so MA / slope deltas would be apples
+    to oranges and are not painted red."""
+    return bool(pr) and (pr.get("L"), pr.get("W")) == (r.get("L"), r.get("W"))
+
 def tick_cell(r, pr, L=None):
     sp = '<span class="badge">S&amp;P500</span>' if r["sp500"] else ""
-    warn_now = r["below_ma"]; warn_prev = pr["below_ma"] if pr else warn_now
+    warn_now = r["below_ma"]; warn_prev = pr["below_ma"] if same_basis(r, pr) else warn_now
     warn = (f' <span class="warn{" chg" if warn_now != warn_prev else ""}">⚠低於MA</span>' if warn_now
             else (' <span class="chg">（已重上MA）</span>' if warn_prev else ""))
     ml = f'MA{L}' if L else "MA"
@@ -242,7 +251,7 @@ def tick_cell(r, pr, L=None):
     px_d = ""
     if pr and pr["close"] != r["close"]:
         px_d = f' <span class="chg dlt">({(r["close"] / pr["close"] - 1) * 100:+.1f}%)</span>'
-    ma_d = delta_tag(r["ma"], pr["ma"] if pr else None, fmt="{:+.2f}", eps=0.005)
+    ma_d = delta_tag(r["ma"], pr["ma"] if same_basis(r, pr) else None, fmt="{:+.2f}", eps=0.005)
     return (f'<div class="tk"><a href="{tv_url(r)}" target="_blank" rel="noopener">{esc(r["sym"])}</a>'
             f'<span class="ex">{esc(r["exch"])}</span>{sp}{newb}'
             f'<em title="{esc(nm)}">{esc(nm if len(nm) <= 34 else nm[:33] + "…")}</em>'
@@ -250,7 +259,7 @@ def tick_cell(r, pr, L=None):
             f'{cap}</div>')
 
 def spark_cell(r, pr):
-    sl_chg = bool(pr) and pr["slope"] != r["slope"]
+    sl_chg = same_basis(r, pr) and pr["slope"] != r["slope"]
     return (f'{spark_svg(r["spark"])}'
             f'<div class="subsc nums slope{" chg" if sl_chg else ""}">MA{r["L"]} {r["slope"]:+.2f}% <span class="mut">/{r["W"]}日</span></div>')
 
@@ -261,17 +270,32 @@ def bottoms_chain(hl, prev_hl):
     changed = prev_hl is not None and prev_hl != hl
     return f'<div class="botwrap {chg_cls(changed)}">{pre}{chain}</div>'
 
+MATERIAL_PTS = 2.0   # VCP / certainty / score must move at least this much to count as a row update
+MATERIAL_RANK = 5    # page-1 rank must move at least this many places
+
 def row_changed(r, pr, pid):
-    """Any displayed difference vs the previous revision's row."""
+    """A *material* difference vs the previous revision's row — the criterion
+    behind the 只顯示有實質更新嘅行 toggle and the 有更新 counts.
+
+    A rescan shifts every percentile-based score by a few tenths (median |ΔVCP|
+    0.7, |Δ確定性| 1.2 between R7 and R8), and those small deltas are still
+    painted red in the cell; but a row only counts as updated when something a
+    reader would act on changed: the text / badge / confidence, a review flag,
+    the bottom sequence, the cap bucket, the sector, MA status (same window),
+    a score move of ≥2 points, or a page-1 rank move of ≥5 places."""
     if pr is None: return False
-    e = news_cur(r["sym"]); p = news_prev(r["sym"])
+    sym = r["sym"]
+    e = news_cur(sym); p = news_prev(sym)
     if p and any(e.get(k) != p.get(k) for k in ("decline_short", "recovery_short", "catalyst", "ckind", "confidence", "hot")):
         return True
-    for k in ("close", "ma", "vcp", "cert", "slope", "below_ma", "cap", "hl", "sector_zh", "industry"):
-        if pr.get(k) != r.get(k): return True
-    if pr["cert_c"] != r["cert_c"]: return True
-    if pid == "1" and (pr.get("score") != r.get("score") or pr.get("hits") != r.get("hits") or pr.get("ranks") != r.get("ranks")):
+    if sym in (REVIEW.get("ticker_flags") or {}) or sym in (REVIEW.get("catalyst_warn") or {}):
         return True
+    for k in ("close", "cap", "hl", "sector_zh", "industry"):
+        if pr.get(k) != r.get(k): return True
+    if same_basis(r, pr) and pr.get("below_ma") != r.get("below_ma"): return True
+    if abs(pr["vcp"] - r["vcp"]) >= MATERIAL_PTS or abs(pr["cert"] - r["cert"]) >= MATERIAL_PTS: return True
+    if pid == "1":
+        if pr.get("hits") != r.get("hits") or abs(pr.get("score", 0) - r.get("score", 0)) >= MATERIAL_PTS: return True
     return False
 
 def sector_chips(rows):
@@ -320,10 +344,10 @@ def table_sub(pid):
     for i, r in enumerate(pg["rows"], 1):
         pr_rank, pr = prev_of(pid, r["sym"])
         is_new = PREV is not None and pr is None
-        changed = row_changed(r, pr, pid) or (pr_rank is not None and pr_rank != i)
+        changed = row_changed(r, pr, pid) or (pr_rank is not None and abs(pr_rank - i) >= MATERIAL_RANK)
         n_new += is_new; n_chg += (changed and not is_new)
         rows.append(
-            f'<tr data-rk="{i}" {row_attrs(r, changed, is_new)}>{rank_cell(i, pr_rank)}<td>{tick_cell(r, pr, L)}</td>'
+            f'<tr data-rk="{i}" {row_attrs(r, changed, is_new)}>{rank_cell(i, pr_rank)}<td>{tick_cell(r, pr, r.get("L") or L)}</td>'
             f'<td class="catc">{cat_cell(r["sym"])}</td>'
             f'<td>{meter_cell(r["vcp"], pr["vcp"] if pr else None)}</td>'
             f'<td>{meter_cell(r["cert"], pr["cert"] if pr else None, "certm")}</td>'
@@ -351,7 +375,7 @@ def table_page1():
     for i, r in enumerate(O["page1"], 1):
         pr_rank, pr = prev_of("1", r["sym"])
         is_new = PREV is not None and pr is None
-        changed = row_changed(r, pr, "1") or (pr_rank is not None and pr_rank != i)
+        changed = row_changed(r, pr, "1") or (pr_rank is not None and abs(pr_rank - i) >= MATERIAL_RANK)
         n_new += is_new; n_chg += (changed and not is_new)
         frames = []
         for t, _, _ in TF:
@@ -483,6 +507,9 @@ tr:hover td{background:var(--hl)}
 tr[data-chg="0"].quiet{display:none}
 tr[data-deal="1"].dealhide{display:none}
 .catb.lowc{opacity:.55;border-style:dashed}
+.catb.soldc{border-color:var(--chg);border-style:dashed}
+.cwarn{display:block;margin-top:3px;font-size:9.5px;font-weight:700;color:var(--chg);white-space:nowrap}
+.cwarn i{font-style:normal;font-weight:500;opacity:.8}
 .capb .near{font-style:normal;color:var(--warn);margin-left:4px;font-weight:700}
 .rk{color:var(--mut);font-weight:600;white-space:nowrap}
 .nums{font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -566,7 +593,7 @@ rules_html = f"""
 ⑦ <b>確定性分數（0–100，7 項量化，逐項分欄）</b>：<b>突破</b>（最近兩個底之間高位已被升穿？25%）· <b>回補</b>（收復最後一段跌幅%，10%）· <b>守底</b>（最後一個底已守日數，15 日滿分；曾跌穿×0.25，15%）· <b>量比</b>（近15日跌日/升日成交量比，百分位，越低越好，15%）· <b>遞減</b>（末段÷首段跌幅，百分位，越低越好，10%）· <b>RS</b>（21日回報 − 全體中位數，百分位，10%）· <b>均線</b>（價&gt;20MA ＋ 20MA&gt;50MA ＋ 50MA向上，15%）。<br>
 ⑧ <b>排名</b>：12 個子頁按綜合分數（0.5×VCP ＋ 0.5×確定性）排；PAGE 1 總表 = 12 個名單嘅union，按爆發潛力分數（0.4×VCP ＋ 0.4×確定性 ＋ 0.2×覆蓋度）排。<br>
 ⑨ <b>主要催化劑欄</b>：每隻股票嘅<mark class="hot">市場熱炒 news-driven 主要催化劑</mark>以醒目 badge 精簡標出，並標明類型；純粹跟大市反彈、冇個股新聞嘅標「跟大市」。點欄標題可將有催化劑嘅排最前。<br>
-⑩ <b>操作</b>：頂欄第一行揀時間框、第二行揀市值組別；「按VCP排列／按確定性排列／按催化劑排列／預設排名」對當前頁生效；欄標題可點擊排序（先降後升）；<b>欄寬</b>可拖曳欄標題右邊界調整；<b>「只顯示有更新的行」</b>可隱藏同 {esc(PREV_REV)} 完全相同嘅行。<br>
+⑩ <b>操作</b>：頂欄第一行揀時間框、第二行揀市值組別；「按VCP排列／按確定性排列／按催化劑排列／預設排名」對當前頁生效；欄標題可點擊排序（先降後升）；<b>欄寬</b>可拖曳欄標題右邊界調整；<b>「只顯示有實質更新嘅行」</b>只留低同 {esc(PREV_REV)} 相比有實質分別嘅行（新上榜、文字／badge／信心、審視標記、底部序列、市值組、MA 狀態、VCP／確定性／分數變動 ≥2 分、排名變動 ≥5 位）；分數嘅細微變動仍以紅色小字顯示但唔算「有實質更新」。<br>
 ⑪ <b>下跌 / 回升原因</b>：AI 代理逐隻搜尋（<a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a> 金融新聞索引＋公開網頁）後濃縮；信心：<b>高</b>＝明確個股消息；<b>中</b>＝板塊/部分證據；<b>低</b>＝只反映大市背景。{rule_notes}
 </div>"""
 
@@ -600,7 +627,8 @@ pghead1 = (f'<div class="pghead"><b>總表 · 爆發潛力排名</b>'
            f'<span>12 個子頁名單合共 <b>{len(O["page1"])}</b> 隻不重複股票'
            f'（大型 {cap_n["a"]} · 中型 {cap_n["b"]} · 小型 {cap_n["c"]}）</span>'
            f'<span>排序 = 0.4×VCP + 0.4×確定性 + 0.2×覆蓋度</span>'
-           f'<span>覆蓋度 = 通過該時間框 MA 條件嘅時間框數目（亮起 = 入咗同組市值該頁 top 50）</span>{p1_flags}</div>')
+           f'<span>覆蓋度 = 通過該時間框 MA 條件嘅時間框數目（亮起 = 入咗同組市值該頁 top 50）</span>'
+           f'<span class="chg">斜率／MA 欄統一為 MA10 較 10 日前（R7 沿用各股第一個子頁嘅窗口）</span>{p1_flags}</div>')
 secs.append(f'''<section id="p1">
 {pghead1}{mkt_html}{drop1}{cat_chips(O["page1"])}{sector_chips(O["page1"])}
 <div class="tblwrap"><table><thead>{head1}</thead><tbody>{body1}</tbody></table></div>
@@ -654,7 +682,7 @@ sort_btns = ('<span class="sep"></span><span class="slab">排序：</span>'
              '<button class="sbtn" data-sort="cert">按 確定性 排列</button>'
              '<button class="sbtn" data-sort="cat">按 催化劑 排列</button>'
              '<button class="sbtn" data-sort="rk">預設排名</button>'
-             + (f'<span class="sep"></span><button class="cbtn" id="onlychg">只顯示有更新的行</button>' if PREV else "")
+             + (f'<span class="sep"></span><button class="cbtn" id="onlychg" title="新上榜、文字／badge／信心、審視標記、底部序列、市值組、MA 狀態、分數變動 ≥2、排名變動 ≥5 位">只顯示有實質更新嘅行</button>' if PREV else "")
              + '<button class="cbtn" id="hidedeal" title="隱藏被收購／換股合併釘住價格嘅目標公司（紅色標記者）">隱藏併購釘價股</button>')
 
 foot = f"""

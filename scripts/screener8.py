@@ -467,6 +467,22 @@ listed = {}
 for pid in SUBS:
     for i, r in enumerate(out["pages"][pid]["rows"], 1):
         listed.setdefault(r["sym"], dict(r, ranks={}))["ranks"][pid] = i
+# Page 1 has no timeframe of its own: R7 let each row inherit the slope / MA /
+# below-MA / sparkline-MA of the first sub-page it appeared on (5MA/5d for
+# PAGE 2 names, 10MA/21d or /42d for others), so sorting page 1 by slope
+# compared different windows.  R8 shows one basis for every page-1 row:
+# MA10 versus 10 trading days earlier (the PAGE 3 definition).  Ranking is
+# untouched (score uses VCP / certainty / coverage only).
+P1_L, P1_W = 10, 10
+for s, r in listed.items():
+    if (r["L"], r["W"]) == (P1_L, P1_W): continue
+    fi, cs, vs, ff = SER[s]
+    ma10 = sma_series(cs, P1_L)
+    r["L"], r["W"] = P1_L, P1_W
+    r["ma"] = round(ma10[-1], 2)
+    r["slope"] = round((ma10[-1] / ma10[-1 - P1_W] - 1) * 100, 2)
+    r["below_ma"] = cs[-1] < ma10[-1]
+    r["spark"] = dict(r["spark"], ma=[round(x, 4) if x else None for x in ma10[-60:]])
 p1 = []
 for s, r in listed.items():
     score_raw = 0.4 * r["_vcpr"] + 0.4 * r["_certr"] + 0.2 * (hits[s] / 4 * 100)
