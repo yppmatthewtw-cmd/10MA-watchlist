@@ -53,6 +53,9 @@ def run_checks(news, need, series_path, screen=None):
                 clause = m.group(0); head = clause.rsplit(verb, 1)[0]
                 if METRIC.search(head) or "累" in head or OTHER.search(head):
                     continue  # "收入升11%", "累跌39%", "原油飆5%" are not this stock's daily move
+                # a clause that documents the mirror gap explains its own offset
+                if "鏡像無快照" in e[fld][m.end():m.end() + 60]:
+                    continue
                 i = day_index(mo, dd)
                 if i is None: continue
                 sign = -1 if verb in "瀉挫跌插" else 1
