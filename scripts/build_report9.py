@@ -735,6 +735,7 @@ if PREV:
 <div class="ul">{date_line}。<br>
 新上榜 <span class="k">{totals["new"]}</span> 行 · 跌出 <span class="k">{totals["dropped"]}</span> 行 · 其他有更新 <span class="k">{totals["chg"]}</span> 行（跨 13 頁合計；同一股票喺多頁出現會重複計）。
 {("<br><b>批判性審視結論：</b>" + esc(headline)) if headline else ""}
+{("<br><b>獨立覆核：</b>" + esc(REVIEW["review_summary"])) if REVIEW.get("review_summary") else ""}
 {("<ul>" + notes_html + "</ul>") if notes_html else ""}</div></div>'''
 
 tf_btns = '<button data-t="1" class="on">PAGE 1 · 總表<span class="s">爆發潛力排名</span></button>' + "".join(

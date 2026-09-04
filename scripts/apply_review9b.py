@@ -108,6 +108,37 @@ if any(k in log for k in []) or True:
          "FBLA 嘅「$15.74」已更新為現價水平。另外 6 行標「無個股催化」嘅，全部都冇出現過 ≥8% 嘅單日升幅，同「跟大市」講法一致。",
          ["WK", "FBLA", "NIQ"])
 
+# ---- 3a2. how much does the derived 09-02 bar actually carry? ---------------
+import math
+PAGES = {"2": (5, 5), "3": (10, 10), "4": (10, 21), "5": (10, 42)}
+
+
+def _sma(cs, L):
+    o = [None] * len(cs)
+    for i in range(L - 1, len(cs)):
+        o[i] = math.fsum(cs[i - L + 1:i + 1]) / L
+    return o
+
+
+dep = 0
+for r in scr["page1"]:
+    fi, cs, vs, ff = SER[r["sym"]]
+    cs2 = cs[:-2] + [cs[-1]]                     # same series without the derived bar
+    keep = False
+    for pid in r["ranks"]:
+        L, W = PAGES[pid[0]]
+        ma = _sma(cs2, L)
+        if ma[-1] > ma[-1 - W] and ma[-1] > ma[-2] > ma[-3] and \
+           sum(1 for k in range(1, W + 1) if ma[-k] > ma[-k - 1]) / W >= 0.70:
+            keep = True; break
+    dep += (not keep)
+for n in review["notes"]:
+    if n["title"].startswith("[已修正] 09-02"):
+        marker = "敏感度："
+        if marker not in n["text"]:
+            n["text"] += (f" 敏感度：如果索性剝走 09-02 呢個 bar，{dep}/{len(scr['page1'])} 隻上榜股就唔會通過 MA 條件 —— "
+                          "所以個 bar 有份托住成個名單，唯一理由係佢嘅收市價本身係官方 net-change 反推、精確到仙，唔係估出嚟。")
+
 # ---- 3b. re-measure the open ranking issues on THIS revision's numbers ------
 top = scr["page1"][:50]
 pinned = [r["sym"] for r in top if r["sym"] in review["ticker_flags"]]
