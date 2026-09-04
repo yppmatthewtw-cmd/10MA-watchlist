@@ -174,7 +174,10 @@ def c7_cells(r, pr):
         else: retr_s = f"{retr:.0f}%"
         maf = sum(c["ma_flags"])
         return {
-            "brk": ('<span class="cok">✓突破</span>' if c["broke"] else '<span class="cno">未突破</span>'),
+            "brk": (('<span class="cok">✓突破</span>'
+                     + ('<i class="novol" title="突破當日（{}）冇成交量記錄（鏡像當日無快照，收市價由翌日 net-change 反推），所以呢個高位冇成交量佐證">·無量</i>'.format(c.get("peak_day", "")[5:])
+                        if c.get("peak_no_vol") else ""))
+                    if c["broke"] else '<span class="cno">未突破</span>'),
             "retr": retr_s,
             "held": f'{c["d_held"]}日' + ('<span class="cwarn">⚠曾破</span>' if c["undercut"] else ""),
             "dvr": (f'{c["dv_ratio"]:.2f}', c["dv_ratio"] < 0.85),
@@ -609,6 +612,7 @@ tr[data-deal="1"].dealhide{display:none}
 .c7 .cok{color:var(--good);font-weight:600}
 .c7 .cno{color:var(--flag)}
 .c7 .cwarn{color:var(--warn);font-size:9.5px;margin-left:3px}
+.c7 .novol{font-style:normal;color:var(--mut);font-size:9px;margin-left:3px;font-weight:400}
 .c7.cokt{color:var(--good);font-weight:600}
 .bots{max-width:190px}
 .botwrap{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 4px;max-width:190px}

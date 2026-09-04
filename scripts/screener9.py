@@ -317,6 +317,12 @@ for s in syms:
     bL, pL = hl[-1]
     H_mid = max(cs[bP:bL])                      # intermediate high between last two bottoms
     post_high = max(cs[bL + 1:])                # bottoms exist only at i <= n-4
+    # a high (or a bottom) dated on a day with no volume record can never be
+    # confirmed by turnover, so the row says so rather than leaving the reader
+    # to assume the breakout was bought
+    _peak_j = bL + 1 + cs[bL + 1:].index(post_high)
+    peak_no_vol = (fi + _peak_j) in NO_VOL_DAYS
+    bottom_no_vol = (fi + bL) in NO_VOL_DAYS
     C = cs[-1]
     broke = post_high > H_mid
     progress = (C - pL) / (H_mid - pL) if H_mid > pL else 1.0
@@ -341,6 +347,8 @@ for s in syms:
     contr_vals[s] = contr
     struct[s] = {"bP": bP, "pP": pP, "bL": bL, "pL": pL, "H_mid": H_mid,
                  "post_high": post_high, "broke": broke, "retrace": retrace,
+                 "peak_day": CAL[fi + _peak_j], "peak_no_vol": peak_no_vol,
+                 "bottom_no_vol": bottom_no_vol,
                  "d_held": d_held, "undercut": undercut, "contr": contr,
                  "s_break": s_break, "s_retr": s_retr, "s_time": s_time,
                  "hl": hl, "bots": bots}
@@ -425,6 +433,8 @@ def row(sym, q):
         "cert_c": {
             "broke": st["broke"], "H_mid": round(st["H_mid"], 2), "pL": round(st["pL"], 4),
             "post_high": round(st["post_high"], 2),
+            "peak_day": st["peak_day"], "peak_no_vol": st["peak_no_vol"],
+            "bottom_no_vol": st["bottom_no_vol"],
             "retrace_pct": round(st["retrace"] * 100, 1),
             "d_held": st["d_held"], "undercut": st["undercut"],
             "dv_ratio": round(u["dv_ratio"], 2),

@@ -99,7 +99,7 @@ print(f"snapshot {DATE}: {len(snap)} priced symbols · mirror pivot {ref[:8]} ({
 n_old = len(CAL)
 CAL += [GAP_DATE, DATE]
 kept = rescaled = missing = stale = nopivot = 0
-rescale_syms, big_moves, missing_syms = [], [], []
+rescale_syms, big_moves, missing_syms, unchecked, fractional = [], [], [], [], []
 out = {}
 for sym, (fi, cs, vs, ff) in SER.items():
     if fi + len(cs) != n_old:
@@ -114,7 +114,11 @@ for sym, (fi, cs, vs, ff) in SER.items():
     if p2 <= 0 or prev <= 0:
         out[sym] = (fi, cs, vs, ff); missing += 1; continue
     mp = pivot.get(sym)
-    listable = prev >= MIN_PX and statistics.median([c * v for c, v in zip(cs[-20:], vs[-20:])]) >= MIN_DV
+    # the screener measures liquidity over the last 20 days that carry a volume
+    # figure; measuring it over raw calendar days here would put names either
+    # side of the $1M line depending on which script you asked
+    _gv = [j for j in range(len(cs)) if vs[j] > 0][-20:]
+    listable = prev >= MIN_PX and _gv and statistics.median([cs[j] * vs[j] for j in _gv]) >= MIN_DV
     factor = 1.0
     if mp and listable:
         for leg in ((mp / prev), (p2 / mp)):
@@ -128,8 +132,19 @@ for sym, (fi, cs, vs, ff) in SER.items():
                                  round(prev, 2), round(mp, 2), round(p2, 2)))
         elif max(abs(mp / prev - 1), abs(p2 / mp - 1)) > REVIEW_TOL:
             big_moves.append((sym, round(prev, 3), round(mp, 3), round(p2, 3)))
+            for lab, leg in (("09-02", mp / prev), ("09-03", p2 / mp)):
+                for fr in (Fraction(3, 2), Fraction(2, 3), Fraction(4, 3), Fraction(3, 4),
+                           Fraction(5, 4), Fraction(4, 5), Fraction(5, 3), Fraction(3, 5)):
+                    if abs(float(fr) - leg) / leg <= 0.012:
+                        fractional.append((sym, lab, f"{fr}", round(leg, 4)))
     elif not mp:
         nopivot += 1
+        if listable and abs(p2 / prev - 1) > 0.25:
+            unchecked.append((sym, round(prev, 3), round(p2, 3), round((p2 / prev - 1) * 100, 1)))
+    if factor != 1.0 and sym in mcap:
+        # the vendor halves the price on a split but keeps the pre-split share
+        # count, so its market cap moves with the price; undo that
+        mcap[sym] = mcap[sym] / factor
     out[sym] = (fi, cs + [p2, p3], vs + [0.0, v3], ff)
     kept += 1
 
@@ -140,6 +155,12 @@ if big_moves:
     print(f"  listable names with a >{REVIEW_TOL:.0%} leg, kept on their real prices "
           f"(sym, 09-01 close, mirror 09-02 intraday, 09-02 close):")
     for b in sorted(big_moves, key=lambda x: -abs(x[3] / x[1] - 1))[:20]: print("   ", b)
+if unchecked:
+    print("  NO CORPORATE-ACTION CHECK POSSIBLE (listable, no mirror pivot, >25% over two days):")
+    for u in unchecked: print("   !", u)
+if fractional:
+    print("  fractional-ratio candidates — NOT rescaled, verify by hand if a split is announced:")
+    for x in fractional: print("   ?", x)
 if missing_syms: print("  sample without a quote:", missing_syms)
 
 pickle.dump({"cal": CAL, "series": out}, open(f"{SCRATCH}/{OUT_SERIES}", "wb"))
