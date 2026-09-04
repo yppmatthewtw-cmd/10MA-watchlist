@@ -148,7 +148,9 @@ def cat_line_cell(sym):
     line = (e.get("cat_line") or "").strip()
     if not line:
         return '<div class="catl none">—</div>'
-    changed = bool(p) and line != (p.get("cat_line") or "").strip()
+    # the column is new in R9: a previous revision that never carried cat_line is
+    # not evidence that the line "changed", so those rows render as normal text
+    changed = bool(p) and bool((p.get("cat_line") or "").strip()) and line != p["cat_line"].strip()
     none_cls = " none" if line.startswith("無個股催化") else ""
     m = CATL_DATE.match(line)
     date_html = f'<i class="dt">{esc(m.group(1))}</i>' if m else ""
@@ -301,8 +303,13 @@ def bottoms_chain(hl, prev_hl):
 # Revisions that add trading days move every close and nudge every percentile;
 # only a revision built on the same data date can treat those as updates.
 NEW_TRADING_DAY = bool(PREV) and PREV["meta"]["last_date"] != M["last_date"]
-MATERIAL_PTS = 2.0   # VCP / certainty / score must move at least this much to count as a row update
-MATERIAL_RANK = 5    # page-1 rank must move at least this many places
+# What counts as an "update" depends on what the revision did. A revision built
+# on the SAME data date should move almost nothing, so a 2-point score shift is
+# news. A revision that adds trading days moves everything — between R8 and R9
+# the median row shifted 5.2 VCP points and 2.65 certainty points on two
+# sessions — so the bar rises to a move that stands out from that background.
+MATERIAL_PTS = 8.0 if NEW_TRADING_DAY else 2.0
+MATERIAL_RANK = 10 if NEW_TRADING_DAY else 5
 
 def row_changed(r, pr, pid):
     """A *material* difference vs the previous revision's row — the criterion
@@ -652,7 +659,7 @@ rules_html = f"""
 ⑧ <b>排名</b>：12 個子頁按綜合分數（0.5×VCP ＋ 0.5×確定性）排；PAGE 1 總表 = 12 個名單嘅union，按爆發潛力分數（0.4×VCP ＋ 0.4×確定性 ＋ 0.2×覆蓋度）排。<br>
 ⑨ <b>主要催化劑欄</b>：每隻股票嘅<mark class="hot">市場熱炒 news-driven 主要催化劑</mark>以醒目 badge 精簡標出，並標明類型；純粹跟大市反彈、冇個股新聞嘅標「跟大市」。點欄標題可將有催化劑嘅排最前。<br>
 ⑨b <b>催化欄（新）</b>：一句講清楚「<b>喺咩催化之下，隻股先至由底回升</b>」——日期 · 事件 · 效果，例如「8/5 Q2收入升11%、EPS勝預期 → 業績後累升12%」；純粹跟大市嘅寫「無個股催化 · 隨大市／板塊回升」。內容全部由該股嘅新聞研究濃縮，唔會憑空生成。<br>
-⑩ <b>操作</b>：頂欄第一行揀時間框、第二行揀市值組別；「按VCP排列／按確定性排列／按催化劑排列／預設排名」對當前頁生效；欄標題可點擊排序（先降後升）；<b>欄寬</b>可拖曳欄標題右邊界調整；<b>「只顯示有實質更新嘅行」</b>只留低同 {esc(PREV_REV)} 相比有實質分別嘅行（新上榜、文字／badge／信心、審視標記、底部序列、市值組、MA 狀態、VCP／確定性／分數變動 ≥2 分、排名變動 ≥5 位）；分數嘅細微變動仍以灰色小字顯示但唔算「有實質更新」。<b>「淺色／深色」</b>掣可切換主題，選擇會記喺瀏覽器（唔揀就跟系統設定）。<br>
+⑩ <b>操作</b>：頂欄第一行揀時間框、第二行揀市值組別；「按VCP排列／按確定性排列／按催化劑排列／預設排名」對當前頁生效；欄標題可點擊排序（先降後升）；<b>欄寬</b>可拖曳欄標題右邊界調整；<b>「只顯示有實質更新嘅行」</b>只留低同 {esc(PREV_REV)} 相比有實質分別嘅行（新上榜、文字／badge／信心、審視標記、底部序列、市值組、MA 狀態、VCP／確定性／分數變動 ≥{MATERIAL_PTS:.0f} 分、排名變動 ≥{MATERIAL_RANK} 位{"；本版加咗兩個交易日，門檻按大市自然波動調高" if NEW_TRADING_DAY else ""}）；分數嘅細微變動仍以灰色小字顯示但唔算「有實質更新」。<b>「淺色／深色」</b>掣可切換主題，選擇會記喺瀏覽器（唔揀就跟系統設定）。<br>
 ⑪ <b>下跌 / 回升原因</b>：AI 代理逐隻搜尋（<a href="https://bigdata.com" target="_blank" rel="noopener">Bigdata.com</a> 金融新聞索引＋公開網頁）後濃縮；信心：<b>高</b>＝明確個股消息；<b>中</b>＝板塊/部分證據；<b>低</b>＝只反映大市背景。{rule_notes}
 </div>"""
 
@@ -687,7 +694,7 @@ pghead1 = (f'<div class="pghead"><b>總表 · 爆發潛力排名</b>'
            f'（大型 {cap_n["a"]} · 中型 {cap_n["b"]} · 小型 {cap_n["c"]}）</span>'
            f'<span>排序 = 0.4×VCP + 0.4×確定性 + 0.2×覆蓋度</span>'
            f'<span>覆蓋度 = 通過該時間框 MA 條件嘅時間框數目（亮起 = 入咗同組市值該頁 top 50）</span>'
-           f'<span>斜率／MA 欄統一為 MA10 較 10 日前（同 PAGE 3 一致）</span>{p1_flags}</div>')
+           f'<span>斜率／MA 欄統一為 MA10 較 10 日前（顯示口徑，唔一定係佢通過嘅時間框）</span>{p1_flags}</div>')
 secs.append(f'''<section id="p1">
 {pghead1}{mkt_html}{drop1}{cat_chips(O["page1"])}{sector_chips(O["page1"])}
 <div class="tblwrap"><table><thead>{head1}</thead><tbody>{body1}</tbody></table></div>
@@ -742,7 +749,7 @@ sort_btns = ('<span class="sep"></span><span class="slab">排序：</span>'
              '<button class="sbtn" data-sort="cat">按 催化劑 排列</button>'
              '<button class="sbtn" data-sort="catl">有催化先排</button>'
              '<button class="sbtn" data-sort="rk">預設排名</button>'
-             + (f'<span class="sep"></span><button class="cbtn" id="onlychg" title="新上榜、文字／badge／信心、審視標記、底部序列、市值組、MA 狀態、分數變動 ≥2、排名變動 ≥5 位">只顯示有實質更新嘅行</button>' if PREV else "")
+             + (f'<span class="sep"></span><button class="cbtn" id="onlychg" title="新上榜、文字／badge／信心、審視標記、底部序列、市值組、MA 狀態、分數變動 ≥{MATERIAL_PTS:.0f} 分、排名變動 ≥{MATERIAL_RANK} 位">只顯示有實質更新嘅行</button>' if PREV else "")
              + '<button class="cbtn" id="hidedeal" title="隱藏被收購／換股合併釘住價格嘅目標公司">隱藏併購釘價股</button>'
              + '<span class="sep"></span><button class="cbtn" id="theme" title="淺色／深色主題（記住你嘅選擇）">深色</button>')
 

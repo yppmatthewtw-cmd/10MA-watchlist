@@ -4416,5 +4416,866 @@
    "https://finance.yahoo.com/markets/stocks/articles/wolfspeed-shares-tumble-q4-earnings-100304584.html",
    "https://www.sec.gov/Archives/edgar/data/0000895419/000089541926000049/ex991q4-26.htm"
   ]
+ },
+ "AVTR": {
+  "decline_short": "生命科學需求弱，2026指引收入續跌、EPS僅0.77–0.83美元；Wolfe降至跑輸大巿、目標價7美元，7/8見底9.76美元。",
+  "recovery_short": "7/29公布Q2：收入16.9億美元勝預期16.1億、EPS 0.21勝0.19；VWR分銷有機增長轉正至+1.7%，上調全年EPS指引至0.80–0.83。",
+  "hot": [
+   "7/29公布Q2：收入16.9億美元勝預期16.1億",
+   "VWR分銷有機增長轉正至+1.7%"
+  ],
+  "catalyst": "Q2勝預期兼上調指引",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-avantor-tops-q2-2026-estimates-shares-jump-15-93CH-4820383",
+   "https://www.investing.com/news/company-news/avantor-q2-2026-presentation-vwr-returns-to-growth-shares-surge-93CH-4820448",
+   "https://www.theglobeandmail.com/investing/markets/stocks/AVTR/pressreleases/3523181/avantor-nyseavtr-delivers-impressive-q2-cy2026-stock-soars/",
+   "https://finance.yahoo.com/markets/stocks/articles/avantor-avtr-slid-lower-expected-130905496.html"
+  ],
+  "cat_line": "7/29 Q2勝預期、VWR轉增長 → 上調指引"
+ },
+ "CART": {
+  "decline_short": "雜貨配送競爭劇烈，亞馬遜等對手搶客；Kroger 16.5億美元購Giant Eagle令股價挫5.7%，7/24跌至42.21美元。",
+  "recovery_short": "8/6收巿後公布Q2：GTV升14%至103.5億美元、收入升14%、EBITDA升19%，自由現金流增156%，Q3指引勝預期。",
+  "hot": [
+   "8/6收巿後公布Q2：GTV升14%至103.5億美元",
+   "自由現金流增156%"
+  ],
+  "catalyst": "Q2 GTV升14%勝預期",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://ca.investing.com/news/transcripts/earnings-call-transcript-instacart-q2-2026-results-send-shares-up-93-93CH-4784890",
+   "https://www.investing.com/news/company-news/instacart-q2-2026-slides-revenue-up-14-cash-flow-surges-156-93CH-4844880",
+   "https://investors.instacart.com/news-releases/news-release-details/instacart-announces-second-quarter-2026-financial-results",
+   "https://www.barchart.com/story/news/3085282/why-instacart-cart-shares-are-plunging-today"
+  ],
+  "cat_line": "8/6 GTV升14%、Q3指引勝預期 → 股價回升"
+ },
+ "LBRX": {
+  "decline_short": "無明顯個股利淡消息；仍屬零收入臨床期公司，Q2經營虧損5390萬美元，股價於30美元附近反覆整固，7/16見底30.59美元。",
+  "recovery_short": "7/29公布1.5億美元私募配售（每股34.94美元、高於巿價）；8/11季報指NOVA-2三期招募快過預期、數據提前至2027上半年，大行升目標價至60美元。",
+  "hot": [
+   "7/29公布1.5億美元私募配售",
+   "NOVA-2三期招募快過預期"
+  ],
+  "catalyst": "私募兼三期招募加快",
+  "ckind": "臨床",
+  "confidence": "高",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/07/29/3335173/0/en/LB-Pharmaceuticals-Announces-150-Million-Private-Placement.html",
+   "https://www.biospace.com/press-releases/lb-pharmaceuticals-reports-second-quarter-2026-financial-results",
+   "https://www.investing.com/news/analyst-ratings/hc-wainwright-raises-lb-pharmaceuticals-price-target-to-60-93CH-4873314",
+   "https://www.stocktitan.net/sec-filings/LBRX/8-k-lb-pharmaceuticals-inc-reports-material-event-79669823bca3.html"
+  ],
+  "cat_line": "7/29 私募1.5億＋招募加快 → 目標價升至60"
+ },
+ "HSIC": {
+  "decline_short": "並無重大個股壞消息；美國牙醫延遲資本開支、牙科設備銷售跌1.1%，股價6月升勢喘定，7/8回落至83.22美元。",
+  "recovery_short": "7/31公布Q2並上調全年指引：銷售升6.7%至34.6億美元、EPS 1.27美元勝1.24，全年EPS指引升至5.29–5.39美元，季內回購2億美元。",
+  "hot": [
+   "7/31公布Q2並上調全年指引",
+   "銷售升6.7%至34.6億美元"
+  ],
+  "catalyst": "Q2勝預期兼上調指引",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.businesswire.com/news/home/20260731616019/en/Henry-Schein-Reports-Strong-Second-Quarter-2026-Financial-Results-and-Raises-FY2026-Guidance",
+   "https://www.investing.com/news/earnings/henry-schein-beats-q2-estimates-raises-fullyear-guidance-93CH-4833587",
+   "https://www.fool.com/earnings/call-transcripts/2026/08/11/henry-schein-hsic-q2-2026-earnings-call-transcript/",
+   "https://www.tipranks.com/news/catalyst/henry-schein-tumbles-as-dental-jitters-hit-wall-street"
+  ],
+  "cat_line": "7/31 Q2銷售升6.7%勝預期 → 上調全年指引"
+ },
+ "EOLS": {
+  "decline_short": "美容肉毒巿場放緩、復甦慢，2026指引偏軟兼下調長期目標，多家行削目標價；無突發消息下持續尋底，7/20跌至5.545美元。",
+  "recovery_short": "8/5公布Q2：淨收入8410萬美元升21%、勝預期8189萬，連續三季經調整EBITDA為正兼上調全年指引；8/31創52週新高9.15美元。",
+  "hot": [
+   "8/5公布Q2：淨收入8410萬美元升21%",
+   "連續三季經調整EBITDA為正兼上調全年指引"
+  ],
+  "catalyst": "Q2收入升21%上調指引",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.investing.com/news/company-news/evolus-q2-2026-slides-revenue-growth-accelerates-guidance-raised-93CH-4839557",
+   "https://www.investing.com/news/company-news/evolus-q2-2026-slides-profitability-streak-continues-guidance-raised-93CH-4839586",
+   "https://www.quiverquant.com/news/Evolus+(EOLS)+Releases+Q2+2026+Earnings:+Revenue+Growth+and+Narrower+Losses",
+   "https://www.thecerbatgem.com/2026/08/31/evolus-nasdaqeols-reaches-new-1-year-high-heres-why.html"
+  ],
+  "cat_line": "8/5 Q2收入升21%、上調指引 → 創52週新高"
+ },
+ "ELV": {
+  "decline_short": "7/15 Q2雖勝預期，但Medicaid拖累經營利潤率由5.0%跌至3.6%，股價單日挫約8.5%，7/16見底372.85美元。",
+  "recovery_short": "全年EPS指引上調至最少27美元；投資者日後RBC升評級至Outperform、目標價由523升至572美元，德銀升至買入（目標498美元），股價8月回升。",
+  "hot": [
+   "投資者日後RBC升評級至Outperform、目標價由523升至572美元",
+   "全年EPS指引上調至最少27美元"
+  ],
+  "catalyst": "RBC德銀升評級",
+  "ckind": "評級",
+  "confidence": "中",
+  "sources": [
+   "https://www.tipranks.com/news/the-fly/rbc-upgrades-elevance-health-on-building-carelon-momentum",
+   "https://www.elevancehealth.com/newsroom/elv-quarterly-earnings-q2-2026",
+   "https://www.investing.com/news/earnings/elevance-health-beats-estimates-but-shares-fall-on-margin-concerns-4792719",
+   "https://finance.yahoo.com/markets/stocks/articles/elevance-health-elv-soars-investors-141933883.html"
+  ],
+  "cat_line": "8月 RBC、德銀接連升評級 → 自底部回升11%"
+ },
+ "BIO": {
+  "decline_short": "4月底Q1轉虧：Sartorius持股非現金蝕7.382億美元、下調2026收入指引，股價單日挫10.2%，7/8跌至283.86美元。",
+  "recovery_short": "Elliott 5/18入股施壓、促檢視逾50億美元Sartorius持倉；8/4公布Q2收入6.51億美元勝預期6.239億、EPS勝0.81美元，翌日大漲。",
+  "hot": [
+   "Elliott 5/18入股施壓、促檢視逾50億美元Sartorius持倉",
+   "8/4公布Q2收入6.51億美元勝預期6.239億"
+  ],
+  "catalyst": "Q2勝預期兼維權股東",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.investing.com/news/company-news/biorad-q2-2026-slides-earnings-beat-masks-ongoing-challenges-93CH-4836231",
+   "https://www.biospace.com/press-releases/bio-rad-reports-second-quarter-2026-financial-results",
+   "https://www.hedgeweek.com/elliott-takes-activist-stake-in-bio-rad/",
+   "https://www.quiverquant.com/news/Bio-Rad+drops+10.2%25+as+guidance+cut+and+Sartorius+valuation+hit+overshadow+Q1+results"
+  ],
+  "cat_line": "8/4 Q2勝預期＋Elliott施壓 → 股價抽升"
+ },
+ "PAG": {
+  "decline_short": "查不到重大個股壞消息；關稅推高成本令汽車零售毛利受壓、盈利轉弱，加上巿場憂美國新車需求，7/21回落至195.19美元。",
+  "recovery_short": "7/22 Penske Corp與三井物產提每股210美元私有化建議（溢價19.3%）；7/29 Q2收入85.1億美元、EPS 3.62美元勝預期3.45。",
+  "hot": [
+   "7/22 Penske Corp與三井物產提每股210美元私有化建議",
+   "7/29 Q2收入85.1億美元、EPS 3.62美元勝預期3.45"
+  ],
+  "catalyst": "210美元私有化建議",
+  "ckind": "併購",
+  "confidence": "高",
+  "sources": [
+   "https://www.sec.gov/Archives/edgar/data/0001019849/000162828026049230/pag-20260722.htm",
+   "https://www.investing.com/news/stock-market-news/penske-mitsui-bid-210-per-share-to-take-penske-automotive-group-private-4806485",
+   "https://www.mitsui.com/jp/en/release/2026/1253834_15351.html",
+   "https://www.stocktitan.net/news/PAG/penske-automotive-group-reports-quarterly-g490h8k86a6f.html"
+  ],
+  "cat_line": "7/22 三井提210美元私有化 → 股價升逾12%"
+ },
+ "FMAO": {
+  "decline_short": "查不到個股利淡消息；4.8億美元巿值細價區域銀行，成交疏落、隨小型銀行股回落，7/8跌至29.485美元。",
+  "recovery_short": "7/27公布Q2：純利升53.0%至1180萬美元、每股0.86美元，為129年來最賺錢一季；淨息差擴闊26基點至3.48%，存款升5.9%。",
+  "hot": [
+   "7/27公布Q2：純利升53.0%至1180萬美元",
+   "淨息差擴闊26基點至3.48%"
+  ],
+  "catalyst": "Q2純利升53%創新高",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/07/27/3333894/0/en/farmers-merchants-bancorp-inc-reports-2026-second-quarter-and-year-to-date-financial-results.html",
+   "https://www.stocktitan.net/news/FMAO/farmers-merchants-bancorp-inc-reports-2026-second-quarter-and-year-8gsjvgyo9zxm.html",
+   "https://finance.yahoo.com/markets/stocks/articles/farmers-merchants-bancorp-inc-reports-203000518.html"
+  ],
+  "cat_line": "7/27 Q2純利升53%破紀錄 → 回升19%"
+ },
+ "NUTX": {
+  "decline_short": "急升後獲利回吐；巿場憂盈利主要靠仲裁費用一次性下降而非核心增長，7月底無新催化下遭沽壓，7/29回落至140.49美元。",
+  "recovery_short": "8/6公布Q2：攤薄EPS 9.38美元遠勝預期4.88、純利6580萬美元；與HaloMD重議協議令仲裁開支減5230萬美元，8/10股價再升近21%。",
+  "hot": [
+   "8/6公布Q2：攤薄EPS 9.38美元遠勝預期4.88",
+   "與HaloMD重議協議令仲裁開支減5230萬美元"
+  ],
+  "catalyst": "Q2 EPS遠勝預期",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-nutex-health-tops-q2-2026-profit-estimates-93CH-4847159",
+   "https://www.stocktitan.net/news/NUTX/nutex-health-reports-second-quarter-2026-financial-kfjs13g8ir8t.html",
+   "https://seekingalpha.com/news/4629970-nutex-health-jumps-21-continuing-post-earnings-run",
+   "https://www.aaii.com/investingideas/article/529481-why-nutex-health-inc8217s-nutx-stock-is-down-1463"
+  ],
+  "cat_line": "8/6 Q2 EPS遠勝預期 → 單日再升21%"
+ },
+ "FRD": {
+  "decline_short": "查不到個股利淡消息；6/11公布FY26全年業績後獲利回吐，鋼材加工股由高位整固，7/7回落至32.39美元。",
+  "recovery_short": "8/6公布FY27首季：銷售2.40億美元升78%、攤薄EPS 1.79美元（去年0.71）、EBITDA 1930萬美元；銷量升28%至20.6萬噸。",
+  "hot": [
+   "8/6公布FY27首季：銷售2.40億美元升78%",
+   "銷量升28%至20.6萬噸"
+  ],
+  "catalyst": "首季銷售升78%盈利飆",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/08/06/3340829/0/en/friedman-industries-incorporated-announces-first-quarter-results.html",
+   "https://www.sec.gov/Archives/edgar/data/0000039092/000143774926020332/ex_975928.htm",
+   "https://www.globenewswire.com/news-release/2026/06/11/3310809/0/en/Friedman-Industries-Incorporated-Announces-Fourth-Quarter-and-Fiscal-Year-2026-Results.html"
+  ],
+  "cat_line": "8/6 首季銷售升78%、盈利倍增 → 股價升四成"
+ },
+ "TARS": {
+  "decline_short": "7月首席商務官Mottiwala離職轉任他公司CEO，巿場憂XDEMVY銷售執行受影響；生科板塊同期回吐，7/14跌至56.11美元。",
+  "recovery_short": "8/6公布Q2：XDEMVY淨銷售創新高1.739億美元、升逾69%，全年指引上調至6.85–7.05億；同日宣布4.5億美元收購Alkeus。",
+  "hot": [
+   "8/6公布Q2：XDEMVY淨銷售創新高1.739億美元、升逾69%",
+   "同日宣布4.5億美元收購Alkeus"
+  ],
+  "catalyst": "Q2銷售升69%兼併購",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.sec.gov/Archives/edgar/data/0001819790/000181979026000063/exhibit991tarsus862026.htm",
+   "https://ir.tarsusrx.com/news-releases/news-release-details/tarsus-pharmaceuticals-acquire-alkeus-pharmaceuticals-and",
+   "https://www.biospace.com/press-releases/tarsus-pharmaceuticals-to-acquire-alkeus-pharmaceuticals-and-advance-eye-care-leadership-position",
+   "https://finance.yahoo.com/healthcare/articles/tarsus-pharmaceuticals-inc-tars-q2-190211100.html"
+  ],
+  "cat_line": "8/6 銷售升69%、收購Alkeus → 升五成"
+ },
+ "SBAC": {
+  "decline_short": "7月塔式REIT偏弱，市場憂慮營運商資本開支放緩、租戶流失率高及國際業務承壓；加上早前收購憧憬降溫，7/27低見172.61美元。",
+  "recovery_short": "8/3 公布Q2：FFO每股3.05美元，上調全年AFFO每股指引至11.95–12.40美元，並宣布下半年重啟股份回購；翌日收市升4.7%，自底累升11%。",
+  "hot": [
+   "上調全年AFFO每股指引至11.95–12.40美元",
+   "宣布下半年重啟股份回購"
+  ],
+  "catalyst": "Q2上調全年AFFO指引",
+  "ckind": "指引",
+  "confidence": "中",
+  "sources": [
+   "https://www.fool.com/earnings/call-transcripts/2026/08/10/sba-communications-sbac-q2-2026-earnings-call-transcript/",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-sba-communications-posts-small-q2-2026-beat-93CH-4832477",
+   "https://finance.biggo.com/news/US_SBAC_2026-08-03",
+   "https://www.quiverquant.com/news/SBAC+jumps+as+tower+REIT+strength+and+improving+sentiment+lift+shares"
+  ],
+  "cat_line": "8/3 Q2上調全年AFFO指引 → 翌日升4.7%"
+ },
+ "TMUS": {
+  "decline_short": "7/22 公布Q2：後付費帳戶淨增按年跌13%，並指Q3因改價致流失率上升、淨增僅約25萬，7/23收市挫10.75%至170.42美元。",
+  "recovery_short": "9/2 彭博報道 Elliott 入股德國電訊並反對約3000億美元全面合併、要求加大回購，TMUS 當日收市升2.8%，自7/23底累升10.3%。",
+  "hot": [
+   "Elliott 入股德國電訊並反對約3000億美元全面合併"
+  ],
+  "catalyst": "Elliott反對合併",
+  "ckind": "併購",
+  "confidence": "高",
+  "sources": [
+   "https://www.bloomberg.com/news/articles/2026-09-02/elliott-builds-deutsche-telekom-stake-opposes-t-mobile-merger",
+   "https://finance.yahoo.com/markets/stocks/articles/elliott-targets-deutsche-telekom-opposes-202022452.html",
+   "https://www.hedgeweek.com/elliott-takes-stake-in-deutsche-telekom-and-pushes-back-on-t-mobile-us-merger/",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-tmobile-posts-q2-2026-eps-beat-shares-fall-premarket-93CH-4808922"
+  ],
+  "cat_line": "9/2 Elliott反對合併案 → 收市升2.8%"
+ },
+ "RIGL": {
+  "decline_short": "生物科技板塊6-7月回吐，RIGL自高位一度回落約35%；業績前觀望，7/24前連跌6日、10日累跌13.65%，收報36.74美元。",
+  "recovery_short": "8/4 Q2業績勝預期、TAVALISSE銷售創新高；8/11 VEPPANU在美正式上市，定價29,400美元；大行上調目標價至85美元，自底累升32%。",
+  "hot": [
+   "8/4 Q2業績勝預期、TAVALISSE銷售創新高",
+   "8/11 VEPPANU在美正式上市"
+  ],
+  "catalyst": "新藥上市+業績勝預期",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.prnewswire.com/news-releases/rigel-reports-second-quarter-2026-financial-results-302842822.html",
+   "https://www.investing.com/news/company-news/rigel-q2-2026-slides-veppanu-launch-to-transform-portfolio-93CH-4836120",
+   "https://www.stocktitan.net/news/RIGL/rigel-announces-availability-of-veppanutm-vepdegestrant-for-patients-6tdsxvwtdw59.html",
+   "https://finance.yahoo.com/markets/stocks/articles/rigel-pharmaceuticals-rigl-stock-sees-050858751.html"
+  ],
+  "cat_line": "8/4 Q2勝預期、8/11新藥上市 → 累升32%"
+ },
+ "ROKU": {
+  "decline_short": "6/15 Fox 提出每股160美元收購Roku後，Fox股價急挫16%，加上反壟斷審查憂慮，折讓擴闊，7/8低見139.25美元。",
+  "recovery_short": "8/6 Q2收入升22%至13.5億美元，純利創季度新高1.642億美元、EPS 1.08美元約為預期兩倍；Fox股價回升，收購折讓由逾13%收窄至約2%。",
+  "hot": [
+   "8/6 Q2收入升22%至13.5億美元",
+   "純利創季度新高1.642億美元"
+  ],
+  "catalyst": "Q2純利創新高",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://variety.com/2026/tv/news/roku-q2-2026-earnings-beat-fox-corp-deal-1236829314/",
+   "https://deadline.com/2026/08/roku-q2-2026-earnings-fox-deal-platform-revenue-1237028085/",
+   "https://www.stocktitan.net/sec-filings/ROKU/defm14a-roku-inc-merger-proxy-statement-0bac2ef56d80.html",
+   "https://www.tikr.com/blog/roku-trades-16-below-foxs-160-buyout-price-is-the-deal-spread-a-buy-in-2026"
+  ],
+  "cat_line": "8/6 Q2收入升22%、純利創新高 → 折讓收窄"
+ },
+ "PBF": {
+  "decline_short": "股價年初至7月已累升逾一倍，7月下旬美伊局勢緩和令油價由高位回落，煉油股獲利回吐；業績公布前，7/28低見61.00美元。",
+  "recovery_short": "7/30 Q2純利9.064億美元、每股6.22美元遠勝預期，Martinez煉油廠全面復產；8月3-2-1裂解價差升至近69美元，8/17收市升5.2%。",
+  "hot": [
+   "7/30 Q2純利9.064億美元、每股6.22美元遠勝預期",
+   "Martinez煉油廠全面復產"
+  ],
+  "catalyst": "Q2大勝+裂解價差升",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.prnewswire.com/news-releases/pbf-energy-announces-second-quarter-2026-results-declares-dividend-of-0-275-per-share-302838917.html",
+   "https://www.tipranks.com/news/catalyst/why-pbf-energy-shares-are-quietly-surging-higher",
+   "https://www.quiverquant.com/news/PBF+Energy+Gains+as+Investors+Continue+to+Digest+Strong+Q2+Results+and+Favorable+Refining+Conditions",
+   "https://seekingalpha.com/article/4922795-pbf-energy-refining-boom-appears-stronger-than-ever"
+  ],
+  "cat_line": "7/30 Q2大勝+裂解價差飆 → 累升23.5%"
+ },
+ "INFU": {
+  "decline_short": "5/7 Q1收入3,368萬美元遜預期（重組GE合約令收入少約160萬），業績後挫約8%；其後小型醫療股受壓，7/23低見8.89美元。",
+  "recovery_short": "8/4 Q2收入創季度新高3,690萬美元、調整後EPS 0.15美元勝預期；腫瘤科收入首破2,000萬，傷口護理收入急升154%；業績後收市升15.84%。",
+  "hot": [
+   "8/4 Q2收入創季度新高3,690萬美元",
+   "傷口護理收入急升154%"
+  ],
+  "catalyst": "Q2收入創新高",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-infusystem-tops-q2-2026-profit-forecasts-as-shares-jump-93CH-4834686",
+   "https://www.stocktitan.net/news/INFU/infu-system-announces-financial-results-for-second-quarter-v96ptnk0vn0v.html",
+   "https://www.fool.com/earnings/call-transcripts/2026/08/11/infusystem-infu-q2-2026-earnings-call-transcript/",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-infusystems-q1-2026-beats-eps-forecast-stock-drops-93CH-4668914"
+  ],
+  "cat_line": "8/4 Q2收入創新高勝預期 → 單日升15.8%"
+ },
+ "HP": {
+  "decline_short": "北美陸上鑽井活動放緩，加上收購KCA Deutag後負債高企需去槓桿；7月初美伊停火令油價回落、能源股受壓，HP 7/6低見30.53美元。",
+  "recovery_short": "8/6 公布FQ3：收入10.35億美元勝預期約5%、三大分部全部超指引，調整後EBITDA 2.36億美元，積壓訂單61億美元，自底累升47.5%。",
+  "hot": [
+   "收入10.35億美元勝預期約5%",
+   "三大分部全部超指引"
+  ],
+  "catalyst": "FQ3全面超指引",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://ca.investing.com/news/transcripts/earnings-call-transcript-helmerich--payne-tops-revenue-in-q3-2026-shares-jump-13-93CH-4783267",
+   "https://www.stocktitan.net/sec-filings/HP/10-q-helmerich-payne-inc-quarterly-earnings-report-36a3ad2dc723.html",
+   "https://finance.yahoo.com/markets/stocks/articles/helmerich-payne-q3-earnings-call-130403649.html",
+   "https://seekingalpha.com/article/4942048-helmerich-and-payne-a-real-recovery-the-market-hasnt-confirmed-yet"
+  ],
+  "cat_line": "8/6 FQ3勝預期、分部超指引 → 累升47.5%"
+ },
+ "BKR": {
+  "decline_short": "7月初美伊停火令油價跌回戰前水平，油服股跟跌；市場亦憂慮2026年上游勘探開發開支下滑，BKR 7/2低見52.78美元。",
+  "recovery_short": "7/27 公布Q2：EPS 0.64美元勝預期0.49，總訂單105億美元按年升49%，IET訂單創紀錄71億美元，上調全年IET訂單指引，自底累升20.6%。",
+  "hot": [
+   "總訂單105億美元按年升49%",
+   "IET訂單創紀錄71億美元"
+  ],
+  "catalyst": "Q2訂單創紀錄",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.stocktitan.net/news/BKR/baker-hughes-announces-second-quarter-2026-b7dluzasxj14.html",
+   "https://energiesmedia.com/baker-hughes-q2-2026-orders-energies-billion/",
+   "https://finance.yahoo.com/energy/articles/baker-hughes-raises-outlook-record-020112770.html",
+   "https://finance.biggo.com/news/US_BKR_2026-07-27"
+  ],
+  "cat_line": "7/27 Q2訂單創紀錄105億 → 累升21%"
+ },
+ "RWAY": {
+  "decline_short": "BDC板塊估值受壓，市場憂慮減息及信貸轉差；Q1不良貸款上升、每股NAV下跌，大行預期盈利續受壓或再削派息，7/9低見5.27美元。",
+  "recovery_short": "8/6 公布Q2：淨投資收入1,820萬美元（每股0.43），投資組合因併購SWK按年升35%至12億美元，並宣派Q3股息0.33美元；8/7收市升12.7%。",
+  "hot": [
+   "淨投資收入1,820萬美元（每股0.43）",
+   "投資組合因併購SWK按年升35%至12億美元"
+  ],
+  "catalyst": "Q2淨投資收入勝預期",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/08/06/3340758/0/en/runway-growth-finance-corp-reports-second-quarter-2026-financial-results.html",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-runway-growth-finance-beats-q2-2026-estimates-shares-rise-93CH-4846996",
+   "https://finance.yahoo.com/markets/stocks/articles/runway-growth-finance-corp-reports-200500029.html"
+  ],
+  "cat_line": "8/6 Q2淨投資收入勝預期 → 翌日升12.7%"
+ },
+ "DFIN": {
+  "decline_short": "5/5 Q1業績遜預期後急挫，資本市場交投淡靜、IPO及併購申報量少，拖累交易性收入，首季股價已累跌近20%；7/8低見44.14美元。",
+  "recovery_short": "7/30 Q2收入及EPS 1.76美元勝預期，但EBITDA遜預期令當日急挫逾13%；其後靠新增1.5億美元回購授權及SaaS雙位數增長支撐，緩慢回升。",
+  "hot": [
+   "新增1.5億美元回購授權",
+   "SaaS雙位數增長"
+  ],
+  "catalyst": "Q2勝預期+加碼回購",
+  "ckind": "回購",
+  "confidence": "中",
+  "sources": [
+   "https://markets.financialcontent.com/stocks/article/stockstory-2026-7-30-why-donnelley-financial-solutions-dfin-stock-is-falling-today",
+   "https://simplywall.st/stocks/us/diversified-financials/nyse-dfin/donnelley-financial-solutions/news/donnelley-financial-solutions-dfin-is-up-70-after-q2-beat-bu",
+   "https://www.sahmcapital.com/news/content/does-dfins-q2-earnings-jump-and-buyback-shift-the-bull-case-for-donnelley-financial-solutions-dfin-2026-08-07"
+  ],
+  "cat_line": "7/30 Q2勝預期、加碼回購 → 自底升11%"
+ },
+ "ASMB": {
+  "decline_short": "7月生物科技板塊回吐，加上期內完成1.15億美元配股融資帶來攤薄憂慮，7/20低見25.06美元；未見單一明確個股跌因。",
+  "recovery_short": "8/13 公布Q2：Gilead合作收入升至1,340萬美元，淨虧損由1,020萬收窄至390萬美元，並完成1.15億美元融資；當日股價升約10%。",
+  "hot": [
+   "Gilead合作收入升至1,340萬美元",
+   "淨虧損由1,020萬收窄至390萬美元"
+  ],
+  "catalyst": "Q2虧損大幅收窄",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/08/13/3344875/16259/en/assembly-biosciences-reports-second-quarter-2026-financial-results-and-recent-updates.html",
+   "https://simplywall.st/stocks/us/pharmaceuticals-biotech/nasdaq-asmb/assembly-biosciences/news/assembly-biosciences-asmb-stock-jumps-as-losses-shrink-and-r",
+   "https://finance.yahoo.com/healthcare/articles/assembly-biosciences-asmb-reports-q2-211502649.html",
+   "https://allsci.com/news/funding/assembly-follows-gilead-option-exercise-with-usd-115m-share-offering/"
+  ],
+  "cat_line": "8/13 Q2虧損大幅收窄 → 自底累升44%"
+ },
+ "MIRM": {
+  "decline_short": "8/5 公布Q2後，8/6 披露FDA要求volixibat（PSC）加做一個三期試驗、項目延誤，股價當日急挫15%，低見94.12美元。",
+  "recovery_short": "未見單一重大新催化，主要靠8/5 Q2上調全年產品銷售指引至6.8–7.0億美元，及zilurgisertib獲FDA優先審評、PDUFA 9/26臨近。",
+  "hot": [
+   "8/5 Q2上調全年產品銷售指引至6.8–7.0億美元",
+   "zilurgisertib獲FDA優先審評"
+  ],
+  "catalyst": "上調全年銷售指引",
+  "ckind": "指引",
+  "confidence": "中",
+  "sources": [
+   "https://www.businesswire.com/news/home/20260805277342/en/Mirum-Pharmaceuticals-Reports-Second-Quarter-2026-Financial-Results",
+   "https://stocktwits.com/news-articles/markets/equity/citizens-mirum-unexpected-fda-request-clouds-near-term-outlook-200dma-cracked/cZoJzFZRJ7u",
+   "https://www.quiverquant.com/news/Mirum+Pharmaceuticals+Slides+as+FDA+Feedback+Clouds+Volixibat+Timeline",
+   "https://www.stocktitan.net/news/MIRM/mirum-pharmaceuticals-reports-second-quarter-2026-financial-results-4c8jm4n6a18c.html"
+  ],
+  "cat_line": "8/5 Q2上調全年銷售指引 → 自底反彈6.9%"
+ },
+ "IDYA": {
+  "decline_short": "6月宣布3億美元增發攤薄，2026年收入預測由5,090萬降至3,830萬美元；NDA遞交前無新數據，生技板塊資金流出。",
+  "recovery_short": "8/4 Q2更新：OptimUM-02達主要終點（PFS 6.9對3.1個月），darovasertib NDA經FDA RTOR遞交中；生技板塊隨減息回暖。",
+  "hot": [
+   "OptimUM-02達主要終點（PFS 6.9對3.1個月）",
+   "darovasertib NDA經FDA RTOR遞交中"
+  ],
+  "catalyst": "Q2更新+NDA遞交中",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.biospace.com/press-releases/ideaya-biosciences-reports-second-quarter-2026-financial-results-and-provides-business-update",
+   "https://media.ideayabio.com/2026-08-04-IDEAYA-Biosciences-Reports-Second-Quarter-2026-Financial-Results-and-Provides-Business-Update",
+   "https://www.investing.com/news/stock-market-news/ideaya-biosciences-stock-falls-on-300m-stock-offering-plan-93CH-4731467",
+   "https://ir.ideayabio.com/2026-07-17-IDEAYA-Biosciences-Announces-ESMO-2026-Presentations-for-Darovasertib-and-IDE849-Clinical-Programs"
+  ],
+  "cat_line": "8/4 Q2更新+NDA遞交 → 累升14%"
+ },
+ "BEAM": {
+  "decline_short": "7月連跌9日、累跌30.6%，市值蒸發約12億美元；無個股壞消息，主因虧損擴大（經營利潤率-226.6%）及基因編輯板塊沽壓。",
+  "recovery_short": "8/4 Q2更新：BEAM-302關鍵隊列首名病人已給藥；數據排入9/8 ERS late-breaking口頭報告。",
+  "hot": [
+   "BEAM-302關鍵隊列首名病人已給藥",
+   "9/8 ERS late-breaking口頭報告"
+  ],
+  "catalyst": "BEAM-302關鍵給藥",
+  "ckind": "臨床",
+  "confidence": "中",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/08/04/3338130/0/en/beam-therapeutics-reports-second-quarter-2026-financial-results-and-announces-first-patient-dosed-in-global-pivotal-cohort-of-beam-302-trial-in-alpha-1-antitrypsin-deficiency-aatd.html",
+   "https://investors.beamtx.com/news-releases/news-release-details/beam-therapeutics-present-updated-data-phase-12-trial-beam-302/",
+   "https://www.trefis.com/stock/beam/articles-v3/608181/9-red-days-in-a-row-beam-therapeutics-stock-is-down-31/2026-07-21",
+   "https://finance.yahoo.com/healthcare/articles/beams-q2-loss-wider-expected-151000742.html"
+  ],
+  "cat_line": "8/4 BEAM-302關鍵給藥 → 升17.5%"
+ },
+ "CZNC": {
+  "decline_short": "Q1受大額貸款撇賬拖累，純利跌至27.3萬美元、每股0.02美元（去年0.41美元）；7月初社區銀行股獲利回吐。",
+  "recovery_short": "7/23 Q2純利1,406萬美元、每股0.79美元，勝預期0.63美元（去年0.40美元），息差擴闊兼貸款回收多過撇賬，同日派息0.28美元。",
+  "hot": [
+   "7/23 Q2純利1,406萬美元、每股0.79美元，勝預期0.63美元",
+   "息差擴闊兼貸款回收多過撇賬"
+  ],
+  "catalyst": "Q2 EPS大勝預期",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.aol.com/articles/citizens-northern-q2-earnings-snapshot-160335000.html",
+   "https://www.stocktitan.net/sec-filings/CZNC/8-k-citizens-northern-corp-reports-material-event-9e5e7a3838d8.html",
+   "https://www.cnbankpa.com/About/Explore-C-N/Press-Releases/2026-Q2/2026-Q1-Unaudited-Financial-Results",
+   "https://www.stocktitan.net/sec-filings/CZNC/10-q-citizens-northern-corp-quarterly-earnings-report-5fcae770201c.html"
+  ],
+  "cat_line": "7/23 Q2 EPS勝預期 → 累升13.8%"
+ },
+ "GAIN": {
+  "decline_short": "找不到明確個股跌因。7月底部主要反映BDC板塊在減息預期下息差收窄憂慮，以及小型股在強勁上半年後獲利回吐。",
+  "recovery_short": "無明顯個股催化。8/7季績每股淨投資收益0.40美元，但每股資產淨值由16.78跌至16.24美元；升幅細，基本跟隨BDC板塊。",
+  "hot": [],
+  "catalyst": "",
+  "ckind": "無",
+  "confidence": "中",
+  "sources": [
+   "https://www.gladstoneinvestment.com/newsroom/press-releases/detail/441/gladstone-investment-announces-monthly-cash-distributions",
+   "https://www.stocktitan.net/sec-filings/GAIN/8-k-gladstone-investment-corporation-de-reports-material-event-b2d5a941b7cb.html",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-gladstone-investment-tops-q1-2026-estimates-93CH-4846641"
+  ],
+  "cat_line": "無個股催化 · 隨大市／板塊回升"
+ },
+ "PPHC": {
+  "decline_short": "年初至今曾累跌約45%；市場質疑Tancredi等連環收購的整合成本與回報，有機增長放緩，分析員大幅下調目標價約31%。",
+  "recovery_short": "8/10 H1收入按年升16.3%、有機增長4.4%，並上調2026全年指引；8/1完成收購佛州The Advocacy Partners。",
+  "hot": [
+   "8/10 H1收入按年升16.3%、有機增長4.4%，並上調2026全年指引",
+   "8/1完成收購佛州The Advocacy Partners"
+  ],
+  "catalyst": "H1收入升16.3%",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/08/10/3342234/0/en/public-policy-holding-company-inc-announces-q2-2026-financial-results.html",
+   "https://investors.pphcompany.com/news-releases/news-release-details/public-policy-holding-company-inc-announces-q2-2026-financial",
+   "https://www.quiverquant.com/news/Public+Policy+Holding+Company+Reports+H1+2026+Revenue+Growth+and+Raises+Full-Year+Guidance+on+Acquisition+Momentum",
+   "https://www.stockopedia.com/share-prices/public-policy-holding-inc-LON:PPHC/"
+  ],
+  "cat_line": "8/10收入升16.3%、上調指引 → 升36.9%"
+ },
+ "MTW": {
+  "decline_short": "5/6 Q1經調整每股虧損0.13美元遜預期，關稅多蝕200萬美元；市場憂北美起重機需求同關稅成本，股價自高位累跌約兩成。",
+  "recovery_short": "8/6 Q2訂單升56%至7.09億美元、積壓訂單首破10億美元，EPS 0.46勝預期0.11並上調指引；8/7收升31%。",
+  "hot": [
+   "8/6 Q2訂單升56%至7.09億美元、積壓訂單首破10億美元",
+   "EPS 0.46勝預期0.11並上調指引"
+  ],
+  "catalyst": "Q2訂單升56%·上調指引",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.businesswire.com/news/home/20260806670348/en/The-Manitowoc-Company-Reports-Strong-Second-Quarter-2026-Results-Backlog-Over-$1.0-Billion-Adjusted-EBITDA-Improved-85.9-From-the-Prior-Year-and-Full-Year-Guidance-Raised",
+   "https://www.investing.com/news/company-news/manitowoc-q2-2026-slides-orders-surge-56-guidance-raised-on-ai-gains-93CH-4846989",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-manitowoc-q2-2026-profit-beats-as-stock-jumps-32-93CH-4846966",
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-manitowoc-q1-2026-misses-eps-forecast-stock-drops-93CH-4664366"
+  ],
+  "cat_line": "8/6 訂單升56%、上調指引 → 升31%"
+ },
+ "MVBF": {
+  "decline_short": "未見重大個股利淡消息；Q1盈利明顯遜於其後的Q2，加上7月初社區銀行股在強勁上半年後獲利回吐、資金流出小型股。",
+  "recovery_short": "7/28 Q2純利1,230萬美元、攤薄每股0.93美元，按年按季均大升；淨息差按季擴闊43個基點，貸款按季升3.0%、存款升7.4%。",
+  "hot": [
+   "7/28 Q2純利1,230萬美元、攤薄每股0.93美元",
+   "淨息差按季擴闊43個基點"
+  ],
+  "catalyst": "Q2淨息差擴43點子",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.businesswire.com/news/home/20260728945706/en/MVB-Financial-Corp.-Announces-Second-Quarter-2026-Results",
+   "https://ir.mvbbanking.com/news/news-details/2026/MVB-Financial-Corp--Announces-Second-Quarter-2026-Results/",
+   "https://lasvegassun.com/news/2026/jul/28/mvb-financial-corp-announces-second-quarter-2026-r/",
+   "https://www.nasdaq.com/press-release/mvb-financial-corp-announces-second-quarter-2026-results-2026-07-28"
+  ],
+  "cat_line": "7/28 息差擴43點子 → 累升10.4%"
+ },
+ "ATLO": {
+  "decline_short": "未見個股利淡消息；7月初社區銀行股在強勁上半年後獲利回吐、資金轉出小型股，ATLO於7/8低見28.84美元。",
+  "recovery_short": "7/17 Q2純利590萬美元、每股0.67美元（去年0.51美元），淨利息收入1,640萬美元按年升21.7%；8/12宣派季度股息每股0.24美元。",
+  "hot": [
+   "7/17 Q2純利590萬美元、每股0.67美元",
+   "淨利息收入1,640萬美元按年升21.7%"
+  ],
+  "catalyst": "Q2淨息收入升21.7%",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.sec.gov/Archives/edgar/data/0001132651/000143774926023763/ex_965112.htm",
+   "https://www.stocktitan.net/sec-filings/ATLO/8-k-ames-national-corp-reports-material-event-f4e231c0f867.html",
+   "https://simplywall.st/stocks/us/banks/nasdaq-atlo/ames-national/news/ames-national-atlo-stock-highlights-stronger-net-interest-ma",
+   "https://mercercapital.com/insights/newsletters/bank-watch-newsletter/2026/july-2026-banks-join-the-risk-on-trade/"
+  ],
+  "cat_line": "7/17 淨息收入升21.7% → 升11.1%"
+ },
+ "RBCAA": {
+  "decline_short": "上半年盈利按年偏軟（Q2只升4%），加上7月初社區銀行股在強勁上半年後獲利回吐；未見重大個股利淡消息。",
+  "recovery_short": "7/24 Q2純利3,290萬美元、每股1.68美元按年升4%，為歷來最強第二季；核心銀行純利升22%至2,280萬美元，淨息差擴30個基點至4.02%。",
+  "hot": [
+   "7/24 Q2純利3,290萬美元、每股1.68美元按年升4%",
+   "核心銀行純利升22%至2,280萬美元"
+  ],
+  "catalyst": "Q2核心銀行盈利升22%",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.sec.gov/Archives/edgar/data/0000921557/000110465926086487/rbcaa-20260724xex99d1.htm",
+   "https://finance.yahoo.com/markets/stocks/articles/republic-bancorp-reports-solid-second-120000792.html",
+   "https://www.gurufocus.com/news/8977606/is-republic-bancorp-inc-rbcaa-overvalued-after-q2-earnings-beat-eps-at-168-gf-score-67100",
+   "https://mercercapital.com/insights/newsletters/bank-watch-newsletter/2026/july-2026-banks-join-the-risk-on-trade/"
+  ],
+  "cat_line": "7/24 核心銀行盈利升22% → 升8.9%"
+ },
+ "DG": {
+  "decline_short": "由2/26高位158.23美元累跌逾30%，憂低收入客群消費受壓、油價升穿4美元/加侖，密大消費者信心48.2創1952年新低，兼遭降評級。",
+  "recovery_short": "8/27 Q2同店銷售升3.5%、EPS 2.48美元勝預期2.01，並上調全年EPS指引至7.80–8.00美元；當日收市升5%至128.90美元。",
+  "hot": [
+   "8/27 Q2同店銷售升3.5%、EPS 2.48美元勝預期2.01",
+   "上調全年EPS指引至7.80–8.00美元"
+  ],
+  "catalyst": "Q2勝預期·上調指引",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://247wallst.com/investing/2026/08/27/dollar-general-advances-5-on-a-raised-full-year-outlook-dollar-tree-slips-3/",
+   "https://qz.com/dollar-general-earnings-forecast-raised-q2-2026-082726",
+   "https://www.investing.com/news/earnings/dollar-general-stock-jumps-on-earnings-beat-and-raised-guidance-4878897",
+   "https://www.tikr.com/blog/dollar-general-stock-is-down-over-30-in-3-months-is-it-still-a-buy-in-2026"
+  ],
+  "cat_line": "8/27 Q2勝預期、上調指引 → 當日升5%"
+ },
+ "OII": {
+  "decline_short": "美伊6月達成備忘錄後，布蘭特油價7/2一度跌至每桶69美元，能源服務股急挫；加上Q1經調整每股盈利0.30美元遜預期0.35美元。",
+  "recovery_short": "7/22 Q2收入7.68億美元升10%、EPS 0.65勝預期0.46，經調整EBITDA 1.15億美元超指引上限；7/23收市升8.9%至49.01美元。",
+  "hot": [
+   "7/22 Q2收入7.68億美元升10%、EPS 0.65勝預期0.46",
+   "經調整EBITDA 1.15億美元超指引上限"
+  ],
+  "catalyst": "Q2 EBITDA十年新高",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.stocktitan.net/news/OII/oceaneering-reports-second-quarter-2026-sow1tc4k56h3.html",
+   "https://www.quiverquant.com/news/Oceaneering+International+(OII)+Stock+Rises+on+Q2+2026+Earnings",
+   "https://stockstotrade.com/news/oceaneering-international-inc-oii-news-2026_07_23/",
+   "https://www.chartmill.com/news/OII/Chartmill-51437-Oceaneering-NYSEOII-Soars-on-Strong-Earnings-Beat-Offshore-Growth-Driving-Quality-Stock-Momentum",
+   "https://fortune.com/article/price-of-oil-07-06-2026/"
+  ],
+  "cat_line": "7/22 Q2勝預期 → 7/23收升8.9%"
+ },
+ "TDW": {
+  "decline_short": "7月下旬伊朗暫停襲擊、地緣溢價消散，布蘭特單日跌8.7%至88.36美元、WTI跌7.5%至82.61美元，海工支援船股同步捱沽。",
+  "recovery_short": "8/4 Q2收入3.42億美元勝預期4.8%、EBITDA 1.34億美元高預期10.4%，領先日租按季升7.5%；翌日收升10.7%至79.48美元。",
+  "hot": [
+   "8/4 Q2收入3.42億美元勝預期4.8%、EBITDA 1.34億美元高預期10.4%",
+   "領先日租按季升7.5%"
+  ],
+  "catalyst": "Q2勝預期·日租升7.5%",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://stockstory.org/us/stocks/nyse/tdw/news/earnings/tidewater-nysetdw-beats-expectations-in-strong-q2-cy2026-stock-soars",
+   "https://www.investing.com/news/company-news/tidewater-august-2026-slides-tight-osv-market-drives-outlook-93CH-4835150",
+   "https://www.quiverquant.com/news/Tidewater+Inc.+%28TDW%29+Releases+Q2+2026+Earnings%3A+Revenue+Beats%2C+Profitability+Declines",
+   "https://www.cnbc.com/2026/07/27/oil-price-wti-brent-slide-as-iran-reportedly-may-halt-attacks.html"
+  ],
+  "cat_line": "8/4 日租升7.5% → 翌日升10.7%"
+ },
+ "WTBA": {
+  "decline_short": "7/8 跌至26.00美元見底；期間無個股利淡消息，主要係Q2業績前細價區域銀行隨板塊回吐，大行僅維持中性評級、目標價27美元。",
+  "recovery_short": "7/23 公佈Q2純利1,110萬美元、每股0.64美元（按年升39%），季度股息加至0.26美元創新高；其後大行上調目標價至30美元。",
+  "hot": [
+   "公佈Q2純利1,110萬美元、每股0.64美元",
+   "季度股息加至0.26美元創新高"
+  ],
+  "catalyst": "Q2純利升39%兼加息",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/07/23/3332127/0/en/west-bancorporation-inc-announces-second-quarter-2026-financial-results-and-declares-increased-quarterly-dividend.html",
+   "https://www.stocktitan.net/news/WTBA/west-bancorporation-inc-announces-second-quarter-2026-financial-u3xtsw6o5qqw.html",
+   "https://www.investing.com/news/company-news/west-bancorporation-q2-2026-slides-margin-expansion-fuels-earnings-93CH-4809826",
+   "https://www.sahmcapital.com/news/content/piper-sandler-maintains-neutral-on-west-bancorp-raises-price-target-to-27-2026-06-26"
+  ],
+  "cat_line": "7/23 Q2純利升39%兼加息 → 升11.6%"
+ },
+ "WFRD": {
+  "decline_short": "中東（伊朗局勢）業務中斷，Q2收入按年跌8%、中東收入跌15%，EPS 0.55美元遠遜預期0.90；7/20 見底78.20美元。",
+  "recovery_short": "7/22 業績後單日升11.6%：調整後自由現金流1.39億美元、轉換率62.3%，並上調全年自由現金流轉換率指引；9/1完成收購NCS Multistage。",
+  "hot": [
+   "調整後自由現金流1.39億美元、轉換率62.3%",
+   "9/1完成收購NCS Multistage"
+  ],
+  "catalyst": "自由現金流勝預期",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.sec.gov/Archives/edgar/data/0001603923/000160392326000082/a2026-q2ex991earningsrelea.htm",
+   "https://www.investing.com/news/company-news/weatherford-q226-slides-cash-flow-surges-despite-revenue-decline-93CH-4806203",
+   "https://www.tradingview.com/news/zacks:60ce122d6094b:0-weatherford-q2-earnings-miss-estimates-on-middle-east-disruptions/",
+   "https://stockstotrade.com/news/weatherford-international-plc-wfrd-news-2026_07_22/",
+   "https://www.globenewswire.com/news-release/2026/09/01/3354171/0/en/weatherford-completes-acquisition-of-ncs-multistage.html"
+  ],
+  "cat_line": "7/22 自由現金流勝預期 → 單日升11.6%"
+ },
+ "SWKS": {
+  "decline_short": "Apple為iPhone 17射頻雙源採購，削減公司內容20-25%，流動收入按年少逾3.8億美元；加上大行降級，7/14見底56.58。",
+  "recovery_short": "7/28 Q3 EPS 1.08美元勝預期，宣佈20億美元新回購；8/3 與Qorvo合併獲美國HSR反壟斷放行，數據中心帶動廣泛市場收入按年升8%。",
+  "hot": [
+   "宣佈20億美元新回購",
+   "與Qorvo合併獲美國HSR反壟斷放行"
+  ],
+  "catalyst": "Qorvo合併過反壟斷",
+  "ckind": "併購",
+  "confidence": "高",
+  "sources": [
+   "https://investors.skyworksinc.com/news-releases/news-release-details/skyworks-delivers-solid-third-quarter-fiscal-year-2026-results",
+   "https://www.mlex.com/mlex/articles/2508765/skyworks-clears-us-antitrust-review-for-qorvo-deal-china-and-korea-still-pending",
+   "https://www.stocktitan.net/news/SWKS/skyworks-delivers-solid-third-quarter-fiscal-year-2026-results-bqbdtamqlepd.html",
+   "https://www.tipranks.com/news/swks-stock-plummets-23-as-apple-aapl-reduces-its-content-reliance-for-iphone-17",
+   "https://www.semiconductor-today.com/news_items/2026/aug/skyworks-060826.shtml"
+  ],
+  "cat_line": "8/3 Qorvo合併過反壟斷關 → 累升26%"
+ },
+ "ASH": {
+  "decline_short": "5月初財季Q2遜預期、單日插7.7%：Hopewell廠爬坡受阻，EBITDA指引降至3.85-4.00億美元，7/8見底63.70。",
+  "recovery_short": "7/28 公佈財季Q3銷售按年升7%，並重申全年經調整EBITDA 3.85-4.00億美元指引；股價由66.38美元升至8/5的71.70美元。",
+  "hot": [
+   "公佈財季Q3銷售按年升7%",
+   "重申全年經調整EBITDA 3.85-4.00億美元指引"
+  ],
+  "catalyst": "Q3銷售升7%兼重申指引",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/07/28/3334808/0/en/Ashland-reports-third-quarter-2026-results-and-reaffirms-full-year-sales-Adjusted-EBITDA-outlook.html",
+   "https://www.stocktitan.net/news/ASH/ashland-reports-third-quarter-2026-results-and-reaffirms-full-year-4tv2zeonojwe.html",
+   "https://ca.investing.com/news/stock-market-news/ashland-lowers-2026-outlook-on-hopewell-productivity-issues-93CH-4593115",
+   "https://simplywall.st/stocks/us/materials/nyse-ash/ashland/news/ashland-ash-is-down-77-after-tightening-2026-outlook-and-det"
+  ],
+  "cat_line": "7/28 Q3銷售升7%兼重申指引 → 累升15%"
+ },
+ "IRD": {
+  "decline_short": "7/9 公佈BEST1數據時間表後，7/15起進入靜默期、缺乏催化；小型生科弱勢下由4.10美元跌至7/23的2.92美元。",
+  "recovery_short": "9/2 公佈9/9網絡會議發布OPGx-BEST1首組三個月頂線數據；老花適應症10/17 PDUFA在即，股價由3.62升至4.60美元。",
+  "hot": [
+   "公佈9/9網絡會議發布OPGx-BEST1首組三個月頂線數據",
+   "老花適應症10/17 PDUFA在即"
+  ],
+  "catalyst": "BEST1數據9/9公佈",
+  "ckind": "臨床",
+  "confidence": "中",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/09/02/3354959/0/en/Opus-Genetics-to-Present-OPGx-BEST1-Cohort-1-Clinical-Data-in-Investor-Webcast-and-at-Upcoming-Leading-Ophthalmology-Conferences.html",
+   "https://www.stocktitan.net/news/IRD/opus-genetics-to-present-op-gx-best1-cohort-1-clinical-data-in-tzpo5flko1bc.html",
+   "https://www.globenewswire.com/news-release/2026/07/09/3324678/0/en/Opus-Genetics-Provides-BEST1-Program-Update-with-Detailed-Timeline-for-OPGx-BEST1-Results.html",
+   "https://www.stocktitan.net/news/IRD/opus-genetics-announces-financial-results-for-second-quarter-2026-ut6t3b23vogz.html",
+   "https://www.investing.com/news/company-news/fda-accepts-opus-genetics-presbyopia-treatment-application-93CH-4523892"
+  ],
+  "cat_line": "9/2 BEST1數據9/9公佈 → 3日升27%"
+ },
+ "LXU": {
+  "decline_short": "Q2（8/6公佈）調整後每股蝕0.09美元，遠遜預期賺0.28美元，主因El Dorado及Pryor大修拖累，股價8/7見底9.62美元。",
+  "recovery_short": "未見明確個股催化：大修基本完成、下半年可全速生產，8月Tampa氨價結算635美元/公噸企穩，股價由9.62回升至11.23美元。",
+  "hot": [
+   "8月Tampa氨價結算635美元/公噸企穩"
+  ],
+  "catalyst": "",
+  "ckind": "無",
+  "confidence": "中",
+  "sources": [
+   "https://www.investing.com/news/transcripts/earnings-call-transcript-lsb-industries-posts-q2-2026-profit-miss-revenue-beats-93CH-4825249",
+   "https://www.fool.com/earnings/call-transcripts/2026/08/07/lsb-industries-lxu-q2-2026-earnings-call-transcript/",
+   "https://www.chartmill.com/news/LXU/Chartmill-52142-LSB-Industries-NYSELXU-Reports-Mixed-Q2-Results-as-Turnaround-Costs-Weigh-on-Earnings",
+   "https://simplywall.st/stocks/us/materials/nyse-lxu/lsb-industries/news/lsb-industries-lxu-stock-grapples-with-a-sharp-profit-reset"
+  ],
+  "cat_line": "無個股催化 · 隨大市／板塊回升"
+ },
+ "NKSH": {
+  "decline_short": "7/2 披露證券組合重組，沽出1.3187億美元、息率1.80%債券，錄稅前虧損655萬美元計入Q2，7/8見底35.55美元。",
+  "recovery_short": "7/23 公佈Q2每股賺0.79美元、淨息差升至3.0%（去年同期2.56%），貸款增長強勁，重組虧損由出售會籍權益收益抵銷。",
+  "hot": [
+   "公佈Q2每股賺0.79美元、淨息差升至3.0%",
+   "重組虧損由出售會籍權益收益抵銷"
+  ],
+  "catalyst": "Q2淨息差升至3.0%",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://wtop.com/news/2026/07/national-bankshares-q2-earnings-snapshot/",
+   "https://www.tradingview.com/news/tradingview:20a050664197d:0-national-bankshares-inc-q2-2026-revenue-19-45m-net-income-5-03m-eps-0-79-10-q-summary/",
+   "https://www.sec.gov/Archives/edgar/data/0000796534/000119312526294550/nksh-20260702.htm",
+   "https://www.stocktitan.net/sec-filings/NKSH/8-k-national-bankshares-inc-reports-material-event-4bf5fb468349.html"
+  ],
+  "cat_line": "7/23 Q2淨息差升至3.0% → 累升17.7%"
+ },
+ "ADM": {
+  "decline_short": "8/4 Q2收入226.1億美元遜預期228.3億美元，業績日升2.3%後遭獲利回吐；美豆對華出口前景未明，8/7回落至76.59美元見底。",
+  "recovery_short": "8/4 Q2調整後每股盈利1.84美元勝預期1.37美元，全年指引上調至5.15-5.60美元；8月中國恢復採購美國新作物大豆680萬公噸。",
+  "hot": [
+   "Q2調整後每股盈利1.84美元勝預期1.37美元，全年指引上調至5.15-5.60美元",
+   "8月中國恢復採購美國新作物大豆680萬公噸"
+  ],
+  "catalyst": "Q2勝預期兼上調指引",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://www.sec.gov/Archives/edgar/data/0000007084/000000708426000040/adm-ex991_20260630xq2.htm",
+   "https://ng.investing.com/news/earnings/archerdanielsmidland-earnings-beat-by-047-revenue-fell-short-of-estimates-2635870",
+   "https://www.marketbeat.com/instant-alerts/archer-daniels-midland-q2-earnings-call-highlights-2026-08-04/",
+   "https://www.admis.com/ag-market-view-for-aug-31-2026/",
+   "https://www.quiverquant.com/news/ADM+slips+as+investors+appear+to+take+profits+after+earnings-driven+rally"
+  ],
+  "cat_line": "8/4 Q2勝預期、上調全年指引 → 升10.2%"
+ },
+ "CENX": {
+  "decline_short": "7/17 見底41.50美元前查無公司特定壞消息：LME鋁價及原材料板塊調整，加上股本按年攤薄近5%令估值受壓，股價由7月初高位回落。",
+  "recovery_short": "7/20 特朗普行政命令將原鋁進口稅率由50%降至25%，利好Inola新冶煉廠；Q2每股賺2.52美元勝預期17%；8月UBS首予買入評級。",
+  "hot": [
+   "7/20 特朗普行政命令將原鋁進口稅率由50%降至25%",
+   "8月UBS首予買入評級"
+  ],
+  "catalyst": "鋁關稅行政命令",
+  "ckind": "監管",
+  "confidence": "高",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/07/20/3330148/0/en/Century-Aluminum-Applauds-President-Trump-s-Action-to-Spur-Domestic-Aluminum-Production.html",
+   "https://www.stocktitan.net/news/CENX/century-aluminum-applauds-president-trump-s-action-to-spur-domestic-8n3v6iscsoa6.html",
+   "https://www.investing.com/news/company-news/century-aluminum-q2-2026-presentation-cash-exceeds-debt-new-smelter-93CH-4844798",
+   "https://seekingalpha.com/article/4926244-century-aluminum-stands-to-benefit-very-well-from-revised-tariff-policies"
+  ],
+  "cat_line": "7/20 鋁關稅行政命令 → 累升14.5%"
+ },
+ "BG": {
+  "decline_short": "7/29 Q2每股盈利2.00美元勝預期、上調全年指引，惟市場憂壓榨毛利及中國需求，業績後回落，7/30見底105.07美元。",
+  "recovery_short": "無個股催化：8月中國新作物美豆採購達680萬公噸，11月大豆期貨8月升1.00美元/蒲式耳，為2013年以來最大8月升幅，壓榨股全面造好。",
+  "hot": [
+   "8月中國新作物美豆採購達680萬公噸",
+   "11月大豆期貨8月升1.00美元/蒲式耳，為2013年以來最大8月升幅"
+  ],
+  "catalyst": "",
+  "ckind": "無",
+  "confidence": "中",
+  "sources": [
+   "https://investors.bunge.com/news-and-events/press-releases/2026/07-29-2026-110050034",
+   "https://bunge.com/press-releases/bunge-reports-second-quarter-2026-results",
+   "https://www.admis.com/ag-market-view-for-aug-31-2026/",
+   "https://seekingalpha.com/news/4537130-china-buys-more-u-s-soybeans-but-grains-rally-fades"
+  ],
+  "cat_line": "無個股催化 · 隨大市／板塊回升"
+ },
+ "ABAT": {
+  "decline_short": "7/29 單日插17.0%、7/30見底2.04美元：持續集資攤薄（一年內約40%），收入細、虧損重，市場憂再融資，未見特定利淡公告。",
+  "recovery_short": "8/20 公佈回收業務毛利按年升86%、能源部5,700萬美元撥款獲恢復；8/31 接待能源部助理部長到Reno廠參觀，股價由2.04升至2.72美元。",
+  "hot": [
+   "公佈回收業務毛利按年升86%、能源部5,700萬美元撥款獲恢復",
+   "8/31 接待能源部助理部長到Reno廠參觀"
+  ],
+  "catalyst": "毛利升86%、撥款復活",
+  "ckind": "業績",
+  "confidence": "中",
+  "sources": [
+   "https://www.globenewswire.com/news-release/2026/08/31/3353307/0/en/american-battery-technology-company-hosts-doe-leadership-to-showcase-commercial-technologies-strengthening-u-s-critical-minerals-supply-chains.html",
+   "https://www.tradingview.com/news/reuters.com,2026:newsml_FWN42G01O:0-american-battery-technology-company-wins-appeal-and-has-us-department-of-energy-grant-reinstated-for-115-million-project-for-commercial-scale-critical-mineral-lithium-refinery/",
+   "https://www.sec.gov/Archives/edgar/data/0001576873/000149315226039500/ex99-1.htm",
+   "https://www.aaii.com/investingideas/article/322724-why-american-battery-technology-company8217s-abat-stock-is-down-1701",
+   "https://seekingalpha.com/article/4929890-american-battery-technology-commercial-progress-cant-outrun-dilution-yet"
+  ],
+  "cat_line": "8/20 毛利升86%兼撥款復活 → 累升33%"
+ },
+ "KURA": {
+  "decline_short": "市場憂ziftomenib對Syndax revumenib差異化不足，BTIG曾降至中性，7/29見底8.93美元。",
+  "recovery_short": "8/12 Q2 KOMZIFTI淨產品收入910萬美元、按季升57%，新症啟動升35%；CEO於8月增持10萬股（約124萬美元）。",
+  "hot": [
+   "Q2 KOMZIFTI淨產品收入910萬美元、按季升57%",
+   "CEO於8月增持10萬股（約124萬美元）"
+  ],
+  "catalyst": "Q2藥物收入升57%",
+  "ckind": "業績",
+  "confidence": "高",
+  "sources": [
+   "https://ir.kuraoncology.com/news-releases/news-release-details/kura-oncology-reports-second-quarter-2026-financial-results",
+   "https://www.gurufocus.com/news/9039262/kura-oncology-inc-kura-q2-2026-earnings-call-highlights-komzifti-launch-surges-with-majority-npm1-market-share",
+   "https://ca.finance.yahoo.com/news/kura-stock-gains-37-6-130500476.html",
+   "https://www.inkl.com/news/the-1-24-billion-reason-why-kura-oncology-stock-is-up-today",
+   "https://www.tipranks.com/news/the-fly/kura-oncology-downgraded-to-neutral-from-buy-at-btig"
+  ],
+  "cat_line": "8/12 Q2藥物收入按季升57% → 累升47%"
  }
 }
