@@ -55,23 +55,29 @@ for sym in listed:
         c = listed[sym]["close"]; off = OFFERS[sym]
         gap = (off / c - 1) * 100
         flags[sym] = {
+            "deal": True,
             "badge": (f"套利釘價 · 距作價{gap:+.1f}%" if gap >= 0 else f"高於作價 {abs(gap):.1f}%"),
             "text": (f"現金作價 ${off:g}，現價 ${c:g}（{'剩餘升幅只有 ' + format(gap, '+.1f') + '%' if gap >= 0 else '已高於作價 ' + format(abs(gap), '.1f') + '%'}）；"
                      "波幅收縮係交易釘價所致，唔係蓄勢突破，VCP／確定性高分屬機械假象。"),
         }
     elif sym in STOCK_DEALS:
-        flags[sym] = {"badge": "換股併購目標", "text": STOCK_DEALS[sym]}
+        flags[sym] = {"deal": True, "badge": "換股併購目標", "text": STOCK_DEALS[sym]}
     elif sym in RUMOURS:
-        flags[sym] = {"badge": "併購傳聞", "text": RUMOURS[sym]}
+        flags[sym] = {"deal": True, "badge": "併購傳聞", "text": RUMOURS[sym]}
     elif sym not in flags:
         # an acquirer is not pinned; only tag rows whose own text says the company is the target
         t = (e.get("decline_short", "") + e.get("recovery_short", "") + e.get("catalyst", ""))
         if re.search(r"被收購|收購價|私有化|獲.{0,6}收購|要約|合併獲通過|換股收購", t):
-            flags[sym] = {"badge": "併購目標",
-                          "text": "研究文字顯示本身係被收購／私有化目標：股價受作價牽制，突破指標會失真。"}
+            c = listed[sym]["close"]
+            flags[sym] = {"deal": True, "badge": "併購目標",
+                          "text": f"研究文字顯示本身係被收購／私有化目標（現價 ${c:g}）：走勢受交易進度牽制，"
+                                  "突破同收縮指標量度緊價差而唔係基本面；如果現價已高於作價，市場係喺度賭加價。"}
 for sym in RUMOURS:
     if sym in listed and sym not in flags:
-        flags[sym] = {"badge": "併購傳聞", "text": RUMOURS[sym]}
+        flags[sym] = {"deal": True, "badge": "併購傳聞", "text": RUMOURS[sym]}
+for sym, fl in flags.items():          # flags carried from the previous revision
+    if "deal" not in fl:
+        fl["deal"] = any(k in fl.get("badge", "") for k in ("釘價", "併購", "合併", "作價"))
 
 warns = {}
 for sym, w in (prev.get("catalyst_warn") or {}).items():
@@ -114,7 +120,8 @@ r9_notes = [
              "只有「至少減半／翻倍 + 合乎 n:1 比例 + 本身夠流動性上榜」先自動重算歷史 —— 今次只有 APH 一隻。FCUV 等 20–50% 嘅一日波幅視為真實走勢，唔會當拆股改寫歷史。"},
     {"title": f"[本版數據] 更新至 {last} 收盤",
      "text": f"新增 09-02、09-03 兩個交易日（合共 {scr['meta']['n_days']} 日）。總表 {len(listed)} 隻：{n_new} 隻新上榜、{n_out} 隻跌出。"
-             "9月2–3日聯儲官員暗示可以按兵不動、10年期息率由 4.818% 高位回落，資金重返高 beta 同細價股，所以新上榜偏向油服、銀行、農產同生技。"},
+             "新上榜嘅板塊分佈：醫療保健 15、金融 11、非必需消費 9、工業 8、能源 4；市值分佈：細價 31、大型 15、中型 15；"
+             "催化劑 43 隻係季績。跌出嘅 57 隻全部係市場原因（55 隻 MA 條件唔再成立、2 隻一底高於一底破咗），冇一隻因為數據問題。"},
     {"title": "[備註] R8 修正繼續生效",
      "text": "補值日唔製造底部、成交量不完整日唔入量比／VCP、universe 剔除基金／信託／優先股、S&P 500 用 GICS 類別、總表斜率統一 MA10、"
              "分析員評級另立「評級」類別、信心標籤上限由來源決定、催化劑事件日下跌者加標記 —— 全部照舊。"},
@@ -123,8 +130,10 @@ r9_notes = [
 review = {
     "headline": (
         f"R9 建基於 {last} 收盤（新增 09-02、09-03 兩日）。呢兩日聯儲 Waller 暗示 9 月可以按兵不動、10 年期息率由 4.818% 回落，"
-        f"標普兩日累升 1.5%，資金由防守股轉入高 beta：總表 {n_new} 隻新上榜（油服 HP／BKR／OII／TDW／WFRD、銀行 CZNC／WTBA／NKSH／RBCAA、"
-        f"農產 ADM／BG、生技 BEAM／KURA／IDYA），{n_out} 隻跌出（多數係 8 月尾嘅軟件同醫療反彈股走完）。"
+        f"標普兩日累升 1.5%。總表 {n_new} 隻新上榜、{n_out} 隻跌出，跌出嘅 55 隻係四個時間框嘅 MA 條件全部唔再成立、2 隻一底高於一底破咗，冇一隻因為數據問題。"
+        "新上榜以醫療保健（15）、金融（11）、非必需消費（9）同工業（8）為主，能源得 4 隻，六成係細價股；"
+        "催化劑 43/61 係季績。呢批新股 09-02 至 09-03 兩日中位數升 2.0%（全體合資格股中位數 +0.6%），"
+        "但唔好當成「資金轉入油服」——被點名嘅油服股嗰兩日其實回吐（HP −2.6%、TDW −1.6%、BKR 0.0%），佢哋上榜靠嘅係 7–8 月嗰段升幅。"
         "介面方面，所有更新標示改為灰色小字（唔再用紅色高亮）、加咗淺色／深色掣，同埋加咗「催化」欄一句講清楚每隻股票係喺咩事件下先至由底回升。"
         "數據方面最需要留意：09-02 冇收市快照，收市價由 09-03 嘅 net-change 反推（真實），但當日成交量完全缺失（唔入任何成交量指標）。"),
     "notes": r9_notes + open_notes,

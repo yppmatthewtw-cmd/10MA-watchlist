@@ -323,6 +323,9 @@ for s in syms:
     _peak_j = bL + 1 + cs[bL + 1:].index(post_high)
     peak_no_vol = (fi + _peak_j) in NO_VOL_DAYS
     bottom_no_vol = (fi + bL) in NO_VOL_DAYS
+    # a bottom is only a bottom once three later sessions confirm it; when one of
+    # those three is the price-only day, the structure rests on a bar we derived
+    bottom_dep_no_vol = any((fi + bL + k) in NO_VOL_DAYS for k in (1, 2, 3))
     C = cs[-1]
     broke = post_high > H_mid
     progress = (C - pL) / (H_mid - pL) if H_mid > pL else 1.0
@@ -348,7 +351,7 @@ for s in syms:
     struct[s] = {"bP": bP, "pP": pP, "bL": bL, "pL": pL, "H_mid": H_mid,
                  "post_high": post_high, "broke": broke, "retrace": retrace,
                  "peak_day": CAL[fi + _peak_j], "peak_no_vol": peak_no_vol,
-                 "bottom_no_vol": bottom_no_vol,
+                 "bottom_no_vol": bottom_no_vol, "bottom_dep_no_vol": bottom_dep_no_vol,
                  "d_held": d_held, "undercut": undercut, "contr": contr,
                  "s_break": s_break, "s_retr": s_retr, "s_time": s_time,
                  "hl": hl, "bots": bots}
@@ -434,7 +437,7 @@ def row(sym, q):
             "broke": st["broke"], "H_mid": round(st["H_mid"], 2), "pL": round(st["pL"], 4),
             "post_high": round(st["post_high"], 2),
             "peak_day": st["peak_day"], "peak_no_vol": st["peak_no_vol"],
-            "bottom_no_vol": st["bottom_no_vol"],
+            "bottom_no_vol": st["bottom_no_vol"], "bottom_dep_no_vol": st["bottom_dep_no_vol"],
             "retrace_pct": round(st["retrace"] * 100, 1),
             "d_held": st["d_held"], "undercut": st["undercut"],
             "dv_ratio": round(u["dv_ratio"], 2),

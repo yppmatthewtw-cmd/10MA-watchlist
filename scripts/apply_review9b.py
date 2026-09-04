@@ -83,7 +83,11 @@ if os.path.exists(AGENT):
             continue
         if not fl.get("badge") or not fl.get("text"):
             problems.append(f"{sym}: flag rejected (incomplete)"); continue
-        review["ticker_flags"][sym] = {"badge": fl["badge"][:14], "text": fl["text"]}
+        review["ticker_flags"][sym] = {
+            "badge": fl["badge"][:14], "text": fl["text"],
+            # a deal-pinned row must also be hidden by the "hide deal-pinned" button
+            "deal": bool(fl.get("deal") or any(k in fl["badge"] for k in ("釘價", "併購", "合併", "作價"))),
+        }
         log.append(f"{sym}: flag added by the review — {fl['badge']}")
     for f in (a.get("findings") or []):
         if f.get("severity") in ("major", "minor"):
@@ -101,12 +105,57 @@ def note(title, text, tickers=None):
     cut = next((i for i, x in enumerate(review["notes"]) if x["title"].startswith(("[已標記 · 待你決定]", "[待你決定]"))), len(review["notes"]))
     review["notes"].insert(cut, n)
 
-if any(k in log for k in []) or True:
+# --- catalyst lines: audit them here rather than trusting a hand count -------
+_CATL = re.compile(r"^(\d{1,2})/(\d{1,2})\s")
+IDX = {c: i for i, c in enumerate(CAL)}
+COPIED = {IDX[x] for x in scr["meta"]["copied_days"]}
+
+
+def _ret(sym, i):
+    fi, cs, vs, ff = SER[sym]; j = i - fi
+    return (cs[j] / cs[j - 1] - 1) * 100 if 0 < j < len(cs) else None
+
+
+down_days, flat_days, dated, undated = [], [], 0, 0
+for sym in listed:
+    line = (news.get(sym) or {}).get("cat_line", "").strip()
+    if not line or line.startswith("無個股催化"):
+        continue
+    m = _CATL.match(line)
+    if not m:
+        undated += 1; continue
+    dated += 1
+    key = f"2026-{int(m.group(1)):02d}-{int(m.group(2)):02d}"
+    i = IDX.get(key) or next((k for k, c in enumerate(CAL) if c > key), None)
+    if i is None or i in COPIED:
+        continue
+    r = _ret(sym, i)
+    if r is None:
+        continue
+    if r < -1.0: down_days.append((sym, CAL[i][5:], round(r, 1)))
+    elif abs(r) <= 1.0: flat_days.append(sym)
+
+# every row whose catalyst day closed down gets the marker the R8 review
+# introduced for badges — generated from the series, not hand-picked
+review.setdefault("catalyst_warn", {})
+for sym, day, r in down_days:
+    if sym in review["catalyst_warn"]:
+        continue
+    review["catalyst_warn"][sym] = {
+        "day": day.replace("-", "/"), "ret": r,
+        "text": f"催化欄所指嘅 {day.replace('-', '/')} 收市跌 {abs(r):.1f}%：事件當日被市場沽售，回升係其後嘅事，"
+                "所以呢一句解釋唔到由底回升嘅起點。",
+    }
+
+if True:
     note("[已修正] 催化欄逐行對照序列",
-         "新欄嘅每一句都用日期回帶去序列核對：185 行入面 5 行嘅日期當日冇明顯波動，其中 3 行係併購釘價股（股東通過／延期本來就唔會郁），"
-         "另外 2 行已改正 —— WK 原文話 8月4日「單日升8.9%」，序列顯示嗰日只係 +0.1%，真正嘅 +9.6% 喺 8月13日（8月11–12日鏡像無快照，反應順延）；"
-         "FBLA 嘅「$15.74」已更新為現價水平。另外 6 行標「無個股催化」嘅，全部都冇出現過 ≥8% 嘅單日升幅，同「跟大市」講法一致。",
-         ["WK", "FBLA", "NIQ"])
+         f"（本節數字由程式即時計算，之前手動點算嘅版本低估咗一個數量級。）{dated} 句有日期、{undated} 句冇日期（原文本身冇提日期，唔憑空補）。"
+         f"其中 {len(down_days)} 句所指嗰日收市係跌市（最誇張：" + "、".join(f"{s} {r:+.1f}%" for s, _, r in sorted(down_days, key=lambda x: x[2])[:6]) + "）——"
+         f"呢啲事件係造成低位嘅原因多過回升嘅原因，全部已自動加「事件日 −X%」標記；另有 {len(flat_days)} 句所指嗰日波幅喺 ±1% 之內"
+         "（多數係併購釘價股，股東通過／延期本來就唔會郁）。獨立覆核另外改正咗 30 句嘅升幅數字（例如 TDW「翌日升10.7%」實為當日 +17.8%、"
+         "INFU「15.8%」實為 +33.6%、WFRD「11.6%」實為 +4.5%），連同 WK、FBLA、NIQ 三句一併更新。"
+         "檢查程式亦已補漏：news_checks.py 之前完全冇睇催化欄，而且只認「M月D日」寫法，令 33 行用「M/D」嘅句子避開晒檢查。",
+         ["TDW", "INFU", "WFRD", "WK", "NIQ"])
 
 # ---- 3a2. how much does the derived 09-02 bar actually carry? ---------------
 import math
@@ -159,6 +208,24 @@ note("[已修正] 拆股股票嘅市值同覆蓋盲點",
      "餘下限制照實講：3:2、4:3、5:4 呢類拆股同真實走勢喺開市中途價上分唔開，程式唔會自動改寫歷史，只會列出候選（今次只有 FCUV 一隻，屬真實走勢）。",
      ["APH", "FCUV"])
 
+dep_bottom = [r["sym"] for r in scr["page1"] if r["cert_c"].get("bottom_dep_no_vol")]
+hl_thin = [r["sym"] for r in scr["page1"]
+           if len(r["hl"]) >= 2 and r["hl"][-1][1] / r["hl"][-2][1] - 1 < 0.01]
+note("[已加標記] 靠 09-02 先成立嘅結構",
+     f"「底」要有三個之後嘅交易日確認，而 09-02 就係其中一日 —— 總表 {len(dep_bottom)} 行嘅最後一個底（多數喺 08-31）"
+     "係靠呢個反推出嚟嘅 bar 先算數，包括 ITGR、PAG、DBRG、IRD。價格本身可信（同鏡像開市中途價對得上），"
+     "但同一日對「結構」計足一日、對「成交量」完全冇數，兩邊唔對稱，係本版最需要留意嘅數據限制。",
+     dep_bottom[:10])
+note("[待你決定] 部分行嘅「一底高於一底」只高過上一個底不足 1%",
+     f"總表 {len(hl_thin)}/185 行（top 50 有 9 行）嘅最後一個底只高過上一個底 <1%："
+     "DFIN +0.02%、FBLA +0.06%、ITGR +0.14%、PAG +0.18%、IRD +0.28%。"
+     "規則④⑤ 冇設最低幅度，所以呢啲行嘅「遞升」其實喺捨入誤差範圍。建議：底部遞升需 ≥1% 先算數 —— 會改規則，由你決定。",
+     hl_thin[:8])
+note("[備註] 市場背景卡嘅數字",
+     "獨立覆核抽查市場背景卡 14 個個股數字，13 個同序列完全對得上；唯一對唔上嘅係 DELL 09-02（文字 +13%、序列 +15.81%），"
+     "而 09-02 正正係冇快照嗰日。市寬數字亦有約 2 個百分點出入（09-03 實際 63.9% 上升、中位 +0.47%，文字寫 66.0%／+0.51%）。"
+     "呢啲係外部媒體數字同本掃描口徑嘅差異，唔影響篩選。")
+
 # ---- 3b. re-measure the open ranking issues on THIS revision's numbers ------
 top = scr["page1"][:50]
 pinned = [r["sym"] for r in top if r["sym"] in review["ticker_flags"]]
@@ -178,6 +245,14 @@ note("[待你決定] 確定性飽和同釘價股仍然主導榜首（本版重�
 for i, f in enumerate(agent_notes[:6], 1):
     tag = "[已修正]" if f.get("severity") == "major" and not f.get("changes_user_spec") else "[備註]"
     note(f"{tag} {f.get('title', '')[:60]}", (f.get("evidence", "")[:400] + " → " + f.get("proposed_fix", "")[:200]).strip())
+
+STALE_MARK = "（下列數字係 R7／R8 時期嘅量度，例子股票部分已經跌出名單；建議本身仍然成立）"
+for n in review["notes"]:
+    if n["title"].startswith(("[待你決定]", "[已標記 · 待你決定]")) and "本版重新量度" not in n["title"] \
+            and STALE_MARK not in n["text"] and ("171" in n["text"] or "總表 top 20" in n["text"] or "5–8 月樣本" in n["text"]
+                                                 or "64 隻合資格" in n["text"] or "0.63" in n["text"] or "57/171" in n["text"]):
+        n["text"] = STALE_MARK + n["text"]
+        n["tickers"] = [t for t in (n.get("tickers") or []) if t in listed]
 
 json.dump(news, open(f"{SCRATCH}/news9.json", "w"), ensure_ascii=False, indent=1)
 json.dump(review, open(f"{SCRATCH}/review9.json", "w"), ensure_ascii=False, indent=1)

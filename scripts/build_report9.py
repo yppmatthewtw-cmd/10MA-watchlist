@@ -213,7 +213,10 @@ def row_attrs(r, changed, is_new, extra=""):
     catl = (e.get("cat_line") or "").strip()
     has_catl = 0 if (not catl or catl.startswith("無個股催化")) else 1
     flag = (REVIEW.get("ticker_flags") or {}).get(r["sym"]) or {}
-    deal = 1 if ("釘價" in flag.get("badge", "") or "併購目標" in flag.get("badge", "") or "合併目標" in flag.get("badge", "")) else 0
+    # the review layer says outright whether a row is deal-driven; matching on the
+    # badge wording let differently-worded flags (rumours, activist pressure)
+    # escape the "hide deal-pinned rows" button
+    deal = 1 if flag.get("deal") else 0
     newcls = ' class="rownew"' if is_new else ""
     return (f'data-vcp="{r["vcp"]}" data-cert="{r["cert"]}" data-brk="{s["break"]}"'
             f' data-retr="{c["retrace_pct"]}" data-held="{c["d_held"]}" data-dvr="{c["dv_ratio"]}"'
