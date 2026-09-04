@@ -9,6 +9,7 @@
 
 | 版本 | 內容 |
 |------|------|
+| R9.00 | 數據更新至 **2026-09-03 收盤**（173 個交易日）：總表 185 隻（61 隻新上榜、57 隻跌出）；**介面三項改動** —— (1) 頂欄加**淺色／深色主題掣**（記喺瀏覽器，未揀就跟系統）；(2) **更新內容唔再高亮**：相對上一版嘅改動一律改用灰色小字（▲▼、+x%），全份報告冇紅色，剩低嘅顏色只有綠色（達標）同琥珀色（警示）；(3) 新增**催化欄**，一句講清楚「喺咩催化之下先至由底回升」（日期·事件·效果），可按有無催化排序；**數據** —— 9月2日冇收市快照（鏡像 commit 喺開市中途），收市價由 9月3日快照嘅官方 net-change 反推（真實），但當日成交量完全缺失，自動歸類為 price-only 日並排除喺量比／VCP 成交量項／流動性中位數之外；APH 1 拆 2 以鏡像開市中途價做支點確認後重算歷史 |
 | R8.00 | **批判性審視版**（數據仍為 2026-09-01 收盤）：5 個角度審視 R7 → 修正 4 項數據缺陷（補值日唔再製造底部；成交量不完整日唔入量比／VCP；universe 剔除基金／信託／優先股；S&P 500 改用 GICS 類別），總表 171 → 181 隻；併購釘價目標公司紅色標記＋一鍵隱藏（新聞核實後多咗 **SMTI**——R7 總表 #3 標「跟大市」其實係 MiMedx 約 $35 收購目標——同 BLFS／PSNL 換股、TXNM 延期、VOYA 迫售）；內容層逐行對照序列：13 行盤後／錯日百分比改為收市對收市、過時「現價」用字改寫、MAN／NAVI／SRPT／STEP／NWS 催化劑歸因改正、分析員評級另立「評級」類別、事件日其實下跌嘅 badge 加紅色「事件日 −X%」、信心標籤上限由來源決定、純價格 highlight 移除；總表斜率／MA 統一 MA10；**所有相對 R7 嘅更新以紅色標示**（新上榜／跌出／排名箭嘴／有變嘅格）並可「只顯示有實質更新嘅行」；涉及規則嘅建議（釘價股剔除、確定性三項飽和、PAGE 2 狀態條件、覆蓋度、突破幅度、VCP 跳空、回撤首段、MA 最低升幅、雙類股）列於更新卡由用戶決定 |
 | R7.00 | 數據更新至 **2026-09-01 收盤**（星期二，171 個交易日）：總表 171 隻（23 隻新上榜、30 隻跌出），ITGR 因 KKR $127 全現金收購（溢價 51.8%）躍上前列；`extend_series.py` 改為**按比例重算拆股歷史**而非整隻剔除（兩日共保留 10 隻真拆股，如 RUSHA 3:2、NXL 1拆30），只有唔似拆股嘅 COCHW 剔除；市場背景卡加入 09-01 一節（荷莫茲油輪遇襲、標普跌 0.71%、市寬 70.2% 下跌）|
 | R6.01 | **純深色主題**：調色盤只定義喺 bare `:root`，移除 media query 同 `[data-theme]` 覆蓋，無論瀏覽器／系統設定都保持深色；順手修好 `.slope` 被 `.subsc` 同 specificity 蓋過、斜率一直顯示灰色而非綠色嘅串接衝突 |
@@ -17,7 +18,7 @@
 | R2.00 | R1 基礎上改為**分欄排序版**：VCP／確定性分開兩欄（綜合分數只留 PAGE 1）、確定性 7 項證據分 7 欄，全部欄標題可點擊排序（先降後升），頂欄加「按VCP排列／按確定性排列／預設排名」；下跌／回升原因分兩欄濃縮，市場熱炒 news-driven 催化劑以 highlight 標示；所有欄寬可拖曳調整 |
 | R1.00 | 全美掃描 · 5 頁：總覽（爆發潛力分數）＋ 1星期(5MA)/2星期/1個月/2個月(10MA) 四個時間框，各頁按綜合分數（0.5×VCP＋0.5×確定性）取 top 50；含底部確定性 7 項量化、下跌→回升原因欄（[Bigdata.com](https://bigdata.com) 新聞索引＋公開網頁）、2026年6–8月市場背景卡；Ticker 連結開 TradingView chart layout |
 
-報告為獨立 HTML，直接用瀏覽器開啟；頁面切換內建。R6.01 起為純深色主題（R6.00 及之前跟隨瀏覽器 light/dark 設定）。
+報告為獨立 HTML，直接用瀏覽器開啟；頁面切換內建。R9.00 起頂欄有**淺色／深色主題掣**（選擇記喺瀏覽器，未揀過就跟系統設定）；R6.01–R8 為純深色，R6.00 及之前跟隨瀏覽器設定。
 
 ## 篩選規則（10MA R1）
 
@@ -92,6 +93,16 @@ SERIES=series4.pkl OUT_JSON=screen_results7.json \
 python3 scripts/merge_news7.py                           # 沿用 news6 + 新上榜研究 -> data/news7.json
 SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
   python3 scripts/build_report6_dark.py                  # -> data/10MA_uptrend_watchlistGit_R7.00_*.html
+
+# R9（最新交易日 + 淺色／深色 + 催化欄）
+#   09-02 冇收市快照：由 09-03 快照嘅 net-change 反推收市價，成交量當缺失
+IN_SERIES=series4.pkl OUT_SERIES=series5.pkl GAP_DATE=2026-09-02 TRADE_DATE=2026-09-03 \
+  python3 scripts/extend_series_gap.py                     # -> data/series5.pkl（173 日）
+SERIES=series5.pkl OUT_JSON=screen_results9.json python3 scripts/screener9.py
+python3 scripts/merge_news9.py                             # news8 + 新上榜研究 + 催化欄一句 -> news9.json
+python3 scripts/apply_review9.py                           # 審視層帶到 R9（重算釘價價差、保留未決事項）
+SCREEN_JSON=screen_results9.json NEWS_JSON=news9.json PREV_SCREEN=screen_results8.json PREV_NEWS=news8.json \
+  PREV_REV=R8 REV=R9.00 REVIEW_JSON=review9.json python3 scripts/build_report9.py
 
 # R8（審視修正版 + 紅色差異標示）
 python3 scripts/patch_volume.py                          # 以鏡像較完整嘅成交量補齊當日 bar（價格須完全相同）
