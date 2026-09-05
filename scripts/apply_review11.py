@@ -373,8 +373,11 @@ notes = [
              f"呢啲事件係造成低位嘅原因多過回升嘅原因，全部自動加「事件日 −X%」標記"
              f"{'（' + J(after_close, 4) + ' 係盤後公布、句子本身指住翌日，標記改為講明公布前跌幅同翌日反應）' if after_close else ''}；"
              f"另有 {len(flat_days)} 句所指嗰日波幅喺 ±1% 之內（{sum(1 for x in flat_days if flags.get(x, {}).get('deal'))} 句係併購釘價股，其餘多數係盤後公布、反應落喺翌日）。"
-             f"新上榜嘅 30 句由獨立覆核逐句對照序列，{n_fixed} 句嘅效果數字改正（例如 WTTR「翌日約10%」實為 +20.3%、IOVA 嘅 +43% 係當日而非翌日、"
-             "SGHT 嘅 +27.7% 係 8/6 業績而非 8/4 FDA）；news_checks.py 嘅容差（±35%、唔分單日／翌日）放晒佢哋過，係下一步要收窄嘅檢查。",
+             + (f"新上榜嘅 30 句由獨立覆核逐句對照序列，{n_fixed} 句嘅效果數字改正（例如 WTTR「翌日約10%」實為 +20.3%、IOVA 嘅 +43% 係當日而非翌日、"
+                "SGHT 嘅 +27.7% 係 8/6 業績而非 8/4 FDA）；news_checks.py 嘅容差（±35%、唔分單日／翌日）放晒佢哋過，係下一步要收窄嘅檢查。"
+                if REVISION != "R12" else
+                "R11 覆核改正嘅 8 句已帶入；本版新增嘅 5 句（HPQ、IMMX、SEIC、MAN、PAYC）逐句對照補完嘅序列：HPQ 8/28 +3.0%、SEIC 7/24 +2.6%、MAN 7/16 +32.4% 對得上，"
+                "PAYC 原句用「盤後急升逾10%」改為序列嘅翌日 +23.6%；補回真實數據後所有舊句子嘅事件日回報亦重新計過。"),
      "tickers": [s for s, _, _ in sorted(down_days, key=lambda x: x[2])[:6]]},
     {"title": "[已加標記] 突破高位落喺冇成交量嗰日",
      "text": f"總表 {len(novol_peak)}/{len(listed)} 行嘅「底部後最高位」仍然落喺 09-02（有價無量嗰日），「突破」項旁邊顯示「·無量」。"
@@ -486,7 +489,7 @@ if REVISION == "R12":
                  f"補回：鏡像補值嘅 {len(copied)} 日（{'、'.join(c[5:] for c in copied)}）改用 Yahoo 嘅真實收市價同成交量，共 {fsum(copied, 'close_and_volume')} 隻·日"
                  f"（{n_still_copied} 隻·日冇 Yahoo 數據或前後日對唔上而保留補值，全部係唔合資格嘅股票）；"
                  f"有價無量嘅 {'、'.join(c[5:] for c in novol)} 補回成交量 {fsum(novol, 'volume_only')} 隻；"
-                 f"成交量不完整嘅 {'、'.join(c[5:] for c in partial)} 改用 Yahoo 成交量 {fsum(partial, 'volume_only')} 隻。"
+                 f"快照未收齊嘅 {'、'.join(c[5:] for c in partial)}（02-25 嘅收市價本身亦係開市中途價，中位差 0.43%）改用 Yahoo 收市價同成交量 {fsum(partial, 'close_and_volume')} 隻·日。"
                  f"另外對照揭發 {len(x['splits_rescaled'])} 隻股票喺序列建立時已經拆股／合股但歷史從未重算（BKNG 25 拆 1、KLAC 10 拆 1、CRWD 4 拆 1、MNST 2 拆 1、BYND 30 合 1 等），"
                  f"已按 Yahoo 嘅拆股回溯比例重算歷史（價÷比例、量×比例），當中冇一隻喺榜；"
                  f"{len(x['unclean_tickers'])} 隻兩邊差 >2% 但唔係整齊拆股比例（SPGI、HON、FDX、MIDD 等分拆子公司，Yahoo 回溯調整咗、本序列保留實際成交價），只對照不改動，"
@@ -494,8 +497,9 @@ if REVISION == "R12":
                  f"正常日子兩邊差超過 0.5% 嘅剩低 {x['tickers_off_on_real_days']} 隻（最大：{worst}），全部只係對照、冇改動。"
                  f"未合資格嘅約 2,300 隻股票冇拉 Yahoo，補值日仍然係補值 —— 佢哋唔入任何頁面，但如果將來變成合資格就要補拉。"
                  f"補完之後重新掃描：總表 {len(listed)} 隻，相對 R11 有 {n_new} 隻新上榜、{n_out} 隻跌出"
-                 f"（{len(broke)} 隻補回真實數據後收市低過最後一個底、{len(struct_lower) + len(struct_aged)} 隻結構斷咗或過咗窗口、{len(ma_only)} 隻 MA 條件唔再成立），"
-                 "全部係因為補值日變成真實數據，唔係新交易日。"),
+                 f"（{len(broke)} 隻補回真實數據後收市低過最後一個底、{len(struct_lower) + len(struct_aged)} 隻 MA 仍然達標但「一底高於一底」序列喺真實數據上唔再成立"
+                 f"——補值日本來係平盤、而家有真實嘅高低位，底部序列整個重新計；{len(ma_only)} 隻 MA 條件唔再成立），"
+                 f"全部係因為補值日變成真實數據，唔係新交易日。跌出：{J(out_syms, 28)}。新上榜：{J(new_syms, 6)}。"),
         "tickers": new_syms[:10]}
     for n in notes:
         if n["title"].startswith("[已加標記] 突破高位落喺冇成交量嗰日"):
@@ -507,9 +511,10 @@ if REVISION == "R12":
                          f"而家有成交量佐證；如果索性剝走 09-02，{dep}/{len(listed)} 隻上榜股就唔會通過 MA 條件 —— 呢個敏感度唔會因為補數而消失，係守底 3 日呢條規則本身嘅特性。")
     headline = (
         f"R12 同 R11 一樣建基於 {last}（周五）收盤，分別係冇數據嘅日子已用 Yahoo Finance 交叉核對並補回：鏡像補值嘅 {len(copied)} 日改用真實收市價同成交量"
-        f"（{fsum(copied, 'close_and_volume')} 隻·日）、09-02 補回成交量（{fsum(novol, 'volume_only')} 隻）、{'、'.join(c[5:] for c in partial)} 兩個成交量不完整日改用 Yahoo 成交量；"
+        f"（{fsum(copied, 'close_and_volume')} 隻·日）、09-02 補回成交量（{fsum(novol, 'volume_only')} 隻）、{'、'.join(c[5:] for c in partial)} 兩個快照未收齊嘅日子改用 Yahoo 收市價同成交量；"
+        f"另外 {len(x['splits_rescaled'])} 隻從未重算嘅拆股歷史已按 Yahoo 比例重算（冇一隻在榜）。"
         f"{last} 嘅收市價同 Yahoo 對照 {d0904.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內（中位差 {d0904.get('med_abs_pct', 0):.3f}%），正常日子中位差 {med_real:.3f}%。"
-        f"補完重新掃描：總表 {len(listed)} 隻，相對 R11 {n_new} 隻新上榜、{n_out} 隻跌出，全部係補值日變成真實數據所致。"
+        f"補完重新掃描：總表 {len(listed)} 隻，相對 R11 {n_new} 隻新上榜、{n_out} 隻跌出（{len(broke)} 隻跌穿最後一個底、{len(struct_lower) + len(struct_aged)} 隻底部序列喺真實數據上唔再成立），全部係補值日變成真實數據所致。"
         f"當日市況同 R11：非農遠勝預期、加息機率回升至 58%，名單中位數 {p1_med:+.2f}%、{len(p1_down)} 隻跌超過 1%、top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
         f"審視層全部按補完嘅序列重新量度：釘價股 {len(deal_all)} 隻有標記、催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
     review_rule = (f"R12（唔改規則）：鏡像補值日、有價無量日同成交量不完整日改用 Yahoo Finance 日線（{x['yahoo_symbols']} 隻），其餘日子只對照不改動；"
