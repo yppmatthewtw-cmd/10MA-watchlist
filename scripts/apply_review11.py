@@ -30,6 +30,11 @@ AGENT = os.environ.get("REVIEW_JSON", "/tmp/claude-0/-home-user-10MA-watchlist/"
                        "1821eb3b-7002-5041-b904-77ace4d47850/scratchpad/r11_review.json")
 VERIFY = os.environ.get("VERIFY_JSON", "/tmp/claude-0/-home-user-10MA-watchlist/"
                         "1821eb3b-7002-5041-b904-77ace4d47850/scratchpad/r11_verify.json")
+# R11: the 09-04 close appended. R12: the same close with the data-less days
+# filled from Yahoo Finance (scripts/yahoo_crosscheck.py); the data note and the
+# headline describe that instead, everything else is re-measured the same way.
+REVISION = os.environ.get("REVISION", "R11")
+XCHK = os.environ.get("XCHK_JSON", "yahoo_crosscheck.json")
 
 scr = json.load(open(f"{SCRATCH}/{SCREEN}"))
 pscr = json.load(open(f"{SCRATCH}/{PREV_SCREEN}"))
@@ -458,12 +463,60 @@ headline = (
     f"審視層全部重新量度：釘價股 {len(deal_all)} 隻有標記、催化欄 {len(down_days)} 句事件日係跌市已加標記、{len(novol_peak)} 行嘅高位仍落喺有價無量嘅 09-02。"
     "版面同 R10 一樣（一打開就係表，說明喺最底）。")
 
+if REVISION == "R12":
+    x = json.load(open(f"{SCRATCH}/{XCHK}"))
+    ds = x["day_stats"]; real = [v for v in ds.values() if v["cls"] == "real"]
+    med_real = statistics.median(v["med_abs_pct"] for v in real)
+    within_real = statistics.median(v["within_tol_pct"] for v in real)
+    d0904 = ds.get(last, {})
+    fl = x["fills"]
+    copied = [d for d, c in x["fill_days"].items() if c == "copied"]
+    def fsum(days, key): return sum(fl[d][key] for d in days)
+    novol = [d for d, c in x["fill_days"].items() if c == "price_only"]
+    partial = [d for d, c in x["fill_days"].items() if c == "partial_vol"]
+    # leavers/joiners here are caused by the fills, not by a new trading day
+    n_still_copied = fsum(copied, "no_yahoo") + fsum(copied, "skipped_basis")
+    worst = "、".join(f"{w['sym']} {w['max_abs_pct']:+.1f}%" for w in x["worst"][:5])
+    notes[0] = {
+        "title": f"[本版數據] 同一個 {last} 收盤，冇數據嘅日子用 Yahoo Finance 交叉核對並補回",
+        "text": (f"由 GitHub Actions runner 拉 Yahoo Finance 日線（{x['yahoo_symbols']} 隻：全部合資格股 + 所有上榜股，{x['yahoo_file']}），"
+                 f"同 Nasdaq screener 序列逐日逐隻對照：正常交易日兩邊收市價中位差 {med_real:.3f}%、{within_real:.1f}% 嘅股票喺 0.5% 之內"
+                 f"（拆股後嘅 APH 亦一致，因為 Yahoo 嘅原始收市價同樣按拆股回溯）；{last}（本來只有一個來源）"
+                 f"{d0904.get('n', 0)} 隻對照，中位差 {d0904.get('med_abs_pct', 0):.3f}%、{d0904.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內，成交量中位比 {d0904.get('vol_med_ratio')}。"
+                 f"補回：鏡像補值嘅 {len(copied)} 日（{'、'.join(c[5:] for c in copied)}）改用 Yahoo 嘅真實收市價同成交量，共 {fsum(copied, 'close_and_volume')} 隻·日"
+                 f"（{n_still_copied} 隻·日冇 Yahoo 數據或前後日對唔上而保留補值，全部係唔合資格嘅股票）；"
+                 f"有價無量嘅 {'、'.join(c[5:] for c in novol)} 補回成交量 {fsum(novol, 'volume_only')} 隻；"
+                 f"成交量不完整嘅 {'、'.join(c[5:] for c in partial)} 改用 Yahoo 成交量 {fsum(partial, 'volume_only')} 隻。"
+                 f"正常日子兩邊差超過 0.5% 嘅有 {x['tickers_off_on_real_days']} 隻（最大：{worst}），全部只係對照、冇改動。"
+                 f"補完之後重新掃描：總表 {len(listed)} 隻，相對 R11 有 {n_new} 隻新上榜、{n_out} 隻跌出"
+                 f"（{len(broke)} 隻補回真實數據後收市低過最後一個底、{len(struct_lower) + len(struct_aged)} 隻結構斷咗或過咗窗口、{len(ma_only)} 隻 MA 條件唔再成立），"
+                 "全部係因為補值日變成真實數據，唔係新交易日。"),
+        "tickers": new_syms[:10]}
+    for n in notes:
+        if n["title"].startswith("[已加標記] 突破高位落喺冇成交量嗰日"):
+            n["text"] = (f"09-02 嘅成交量已由 Yahoo 補回，所以「高位落喺無量日」呢個標記本版已經冇對象（{len(novol_peak)} 行）；"
+                         "「·無量」符號只會喺仍然冇成交量數據嘅日子出現。")
+        if n["title"].startswith("[已加標記] 靠 09-02 先成立嘅結構"):
+            n["text"] = (f"09-02 嘅收市價本來就係官方 net-change 反推（精確到仙），本版再經 Yahoo 對照，成交量亦已補回，所以 09-02 唔再係「有價無量」日：靠佢確認嘅底"
+                         f"（總表 {len(bot_0901)} 行最後一個底喺 09-01、守底剛好 3 日，top 50 有 {len(bot_0901_top50)} 行：{J(bot_0901_top50, 8)}）"
+                         f"而家有成交量佐證；如果索性剝走 09-02，{dep}/{len(listed)} 隻上榜股就唔會通過 MA 條件 —— 呢個敏感度唔會因為補數而消失，係守底 3 日呢條規則本身嘅特性。")
+    headline = (
+        f"R12 同 R11 一樣建基於 {last}（周五）收盤，分別係冇數據嘅日子已用 Yahoo Finance 交叉核對並補回：鏡像補值嘅 {len(copied)} 日改用真實收市價同成交量"
+        f"（{fsum(copied, 'close_and_volume')} 隻·日）、09-02 補回成交量（{fsum(novol, 'volume_only')} 隻）、{'、'.join(c[5:] for c in partial)} 兩個成交量不完整日改用 Yahoo 成交量；"
+        f"{last} 嘅收市價同 Yahoo 對照 {d0904.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內（中位差 {d0904.get('med_abs_pct', 0):.3f}%），正常日子中位差 {med_real:.3f}%。"
+        f"補完重新掃描：總表 {len(listed)} 隻，相對 R11 {n_new} 隻新上榜、{n_out} 隻跌出，全部係補值日變成真實數據所致。"
+        f"當日市況同 R11：非農遠勝預期、加息機率回升至 58%，名單中位數 {p1_med:+.2f}%、{len(p1_down)} 隻跌超過 1%、top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
+        f"審視層全部按補完嘅序列重新量度：釘價股 {len(deal_all)} 隻有標記、催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
+    review_rule = (f"R12（唔改規則）：鏡像補值日、有價無量日同成交量不完整日改用 Yahoo Finance 日線（{x['yahoo_symbols']} 隻），其餘日子只對照不改動；"
+                   f"{last} 收市價經 Yahoo 交叉核對。")
+else:
+    review_rule = f"R11（唔改規則）：數據更新至 {last} 收盤，09-04 快照同 09-03 序列反推對賬中位偏差 0.000%，冇拆股；審視層所有數字按本版重新量度。"
+
 review = {
     "headline": headline,
     "notes": notes,
-    "rule_notes": [
-        f"R11（唔改規則）：數據更新至 {last} 收盤，09-04 快照同 09-03 序列反推對賬中位偏差 0.000%，冇拆股；審視層所有數字按本版重新量度。",
-    ] + [r for r in (prev.get("rule_notes") or []) if "待你決定" in r],
+    "rule_notes": [review_rule] + [r for r in (prev.get("rule_notes") or []) if "待你決定" in r and not r.startswith(("R11", "R12"))]
+                  + ([r for r in (prev.get("rule_notes") or []) if r.startswith("R11")] if REVISION == "R12" else []),
     "ticker_flags": flags,
     "catalyst_warn": warns,
 }
