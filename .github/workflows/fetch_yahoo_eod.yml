@@ -41,4 +41,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/yahoo
           git commit -m "data: Yahoo daily bars $START -> $END" || { echo "nothing to commit"; exit 0; }
+          # the branch may have moved while the fetch ran; replay this commit on top
+          git pull --rebase --quiet origin "${GITHUB_REF_NAME}"
           git push

@@ -68,4 +68,6 @@ jobs:
           git add data/snapshots
           git commit -m "data: Nasdaq screener snapshot for $TRADE_DATE" || {
             echo "nothing to commit"; exit 0; }
+          # the branch may have moved while the fetch ran; replay this commit on top
+          git pull --rebase --quiet origin "${GITHUB_REF_NAME}"
           git push
