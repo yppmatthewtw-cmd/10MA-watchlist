@@ -9,6 +9,7 @@
 
 | 版本 | 內容 |
 |------|------|
+| R12.00 | **同一個 2026-09-04 收盤，冇數據嘅日子用 Yahoo Finance 交叉核對並補回**：新增 `fetch_yahoo_eod.yml`（runner 拉 Yahoo 日線，2,758 隻＝全部合資格股＋所有上榜股）同 `yahoo_crosscheck.py`；正常交易日兩邊收市價中位差 0.000%、99.6% 喺 0.5% 之內，**09-04 收市價 100% 對得上**（成交量中位比 1.00）；鏡像補值嘅 4 日（03-18、08-11、08-12、08-26）改用真實收市價同成交量（各約 2,700 隻）、09-02 補回成交量、02-25／08-27 兩個不完整快照日改用 Yahoo 收市價同成交量；另揭發 36 隻股票序列建立時已拆股／合股但歷史從未重算（BKNG 25拆1、KLAC 10拆1、CRWD 4拆1、BYND 30合1…），已按 Yahoo 回溯比例重算（冇一隻在榜）；補完重新掃描：總表 158 隻（相對 R11：6 隻新上榜、28 隻跌出，全部係補值日變成真實數據所致），獨立重算 158 行逐格一致；版面同 R10 |
 | R11.00 | 數據更新至 **2026-09-04 收盤**（周五，174 個交易日；09-04 快照由 GitHub Actions 抓 Nasdaq screener，5,094 隻反推前收同 09-03 序列對賬中位偏差 0.000%，冇拆股）：總表 180 隻（30 隻新上榜、35 隻跌出 —— 4 隻跌穿最後一個底、30 隻 MA 條件唔再成立、APGE 已冇報價）；當日 8 月非農遠勝預期令加息機率回升，名單中位數 −0.44%（$10 億以上股份中位 0.00%）、64 隻跌逾 1%；16 隻新上榜逐隻研究（TECH 係 Merck $73 現金收購目標，已加釘價標記）、14 隻補催化欄；**審視層全部按本版重新量度**（`apply_review11.py`：釘價價差、催化事件日回報、無量高位、靠 09-02 先成立嘅結構、<1% 遞升、確定性飽和、市值近界），獨立重算（由規則另行實作）同篩選器輸出 180 行逐格一致；版面同 R10 |
 | R10.00 | **版面重做**（數據同 R9 一樣，2026-09-03 收盤，185 隻）：(1) **一打開就見表** —— 標題→頂欄→總表，所有說明（本版更新／市場背景／篩選規則／數據來源）連同每頁嘅統計 chips、跌出名單同圖例全部搬到表下面；(2) **收窄欄位** —— 突破／回補／守底／量比／遞減／RS／均線七欄由兩行標題（最闊 110px）縮到 34–44px（單位上標題、解釋入 tooltip 同底部圖例），Ticker 欄 180px → 124px，取消「底部序列」同「類別」兩欄（底部序列改喺走勢圖 tooltip、類別收入 Ticker 格內小標籤）；(3) **整體 compact** —— 字級 12.5→11.5px、內距 8→4px、走勢圖 150×40→100×30、原因欄預設三行（有「展開全文」掣），行高 100→79px；13 頁全部喺 1400px 視窗內一次過睇曬，唔使向右捲，螢幕再闊時兩欄原因會自動食埋剩餘闊度 |
 | R9.00 | 數據更新至 **2026-09-03 收盤**（173 個交易日）：總表 185 隻（61 隻新上榜、57 隻跌出）；**介面三項改動** —— (1) 頂欄加**淺色／深色主題掣**（記喺瀏覽器，未揀就跟系統）；(2) **更新內容唔再高亮**：相對上一版嘅改動一律改用灰色小字（▲▼、+x%），全份報告冇紅色，剩低嘅顏色只有綠色（達標）同琥珀色（警示）；(3) 新增**催化欄**，一句講清楚「喺咩催化之下先至由底回升」（日期·事件·效果），可按有無催化排序；**數據** —— 9月2日冇收市快照（鏡像 commit 喺開市中途），收市價由 9月3日快照嘅官方 net-change 反推（真實），但當日成交量完全缺失，自動歸類為 price-only 日並排除喺量比／VCP 成交量項／流動性中位數之外；APH 1 拆 2 以鏡像開市中途價做支點確認後重算歷史 |
@@ -95,6 +96,17 @@ SERIES=series4.pkl OUT_JSON=screen_results7.json \
 python3 scripts/merge_news7.py                           # 沿用 news6 + 新上榜研究 -> data/news7.json
 SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
   python3 scripts/build_report6_dark.py                  # -> data/10MA_uptrend_watchlistGit_R7.00_*.html
+
+# R12（同一收盤；Yahoo Finance 交叉核對 + 補回冇數據嘅日子）
+#   先喺 GitHub Actions 跑 fetch_yahoo_eod.yml（start=2025-12-26, end=2026-09-05）-> data/yahoo/eod_*.csv.gz
+IN_SERIES=series6.pkl OUT_SERIES=series7.pkl python3 scripts/yahoo_crosscheck.py   # 對照 + 補回 + 拆股重算 -> series7.pkl, yahoo_crosscheck.json
+SERIES=series7.pkl OUT_JSON=screen_results12.json python3 scripts/screener9.py
+PREV_NEWS=news11.json OUT_NEWS=news12.json SCREEN_JSON=screen_results12.json SERIES=series7.pkl AGENT_PREFIX=r12 \
+  python3 scripts/merge_news9.py
+REVISION=R12 SCREEN_JSON=screen_results12.json PREV_SCREEN=screen_results11.json NEWS_JSON=news12.json PREV_REVIEW=review11.json \
+  OUT_REVIEW=review12.json SERIES=series7.pkl python3 scripts/apply_review11.py
+SCREEN_JSON=screen_results12.json NEWS_JSON=news12.json PREV_SCREEN=screen_results11.json PREV_NEWS=news11.json \
+  PREV_REV=R11 REV=R12.00 REVIEW_JSON=review12.json MODEL_TAG=claudefable51xhigh python3 scripts/build_report_r10.py
 
 # R11（最新交易日 2026-09-04；審視層重新量度）
 TRADE_DATE=2026-09-04 IN_SERIES=series5.pkl OUT_SERIES=series6.pkl \

@@ -487,7 +487,12 @@ if REVISION == "R12":
                  f"（{n_still_copied} 隻·日冇 Yahoo 數據或前後日對唔上而保留補值，全部係唔合資格嘅股票）；"
                  f"有價無量嘅 {'、'.join(c[5:] for c in novol)} 補回成交量 {fsum(novol, 'volume_only')} 隻；"
                  f"成交量不完整嘅 {'、'.join(c[5:] for c in partial)} 改用 Yahoo 成交量 {fsum(partial, 'volume_only')} 隻。"
-                 f"正常日子兩邊差超過 0.5% 嘅有 {x['tickers_off_on_real_days']} 隻（最大：{worst}），全部只係對照、冇改動。"
+                 f"另外對照揭發 {len(x['splits_rescaled'])} 隻股票喺序列建立時已經拆股／合股但歷史從未重算（BKNG 25 拆 1、KLAC 10 拆 1、CRWD 4 拆 1、MNST 2 拆 1、BYND 30 合 1 等），"
+                 f"已按 Yahoo 嘅拆股回溯比例重算歷史（價÷比例、量×比例），當中冇一隻喺榜；"
+                 f"{len(x['unclean_tickers'])} 隻兩邊差 >2% 但唔係整齊拆股比例（SPGI、HON、FDX、MIDD 等分拆子公司，Yahoo 回溯調整咗、本序列保留實際成交價），只對照不改動，"
+                 f"上榜嘅只有 LILAK（基準變動喺 06-17，喺所有時間框同 45 日底部窗口之外）。"
+                 f"正常日子兩邊差超過 0.5% 嘅剩低 {x['tickers_off_on_real_days']} 隻（最大：{worst}），全部只係對照、冇改動。"
+                 f"未合資格嘅約 2,300 隻股票冇拉 Yahoo，補值日仍然係補值 —— 佢哋唔入任何頁面，但如果將來變成合資格就要補拉。"
                  f"補完之後重新掃描：總表 {len(listed)} 隻，相對 R11 有 {n_new} 隻新上榜、{n_out} 隻跌出"
                  f"（{len(broke)} 隻補回真實數據後收市低過最後一個底、{len(struct_lower) + len(struct_aged)} 隻結構斷咗或過咗窗口、{len(ma_only)} 隻 MA 條件唔再成立），"
                  "全部係因為補值日變成真實數據，唔係新交易日。"),

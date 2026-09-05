@@ -10,9 +10,15 @@ agree with ours, so both sources are on the same share basis):
                     is kept (it is exact) and only the volume is filled;
   * partial-volume days — the snapshot was taken before the tape was complete:
                     the volume is replaced, the close kept.
-Every other day is compared, never changed: the report lists how well the two
-sources agree, per day and per ticker, and the 09-04 close — which has no
-second snapshot of its own — is checked the same way.
+  * partial-volume days — the snapshot was taken before the tape was complete:
+                    close and volume both replaced (the close was intraday too).
+Splits the original series build never rescaled show up as a run of days where
+our close is a clean multiple (25, 10, 4, 2, 1/40 ...) of Yahoo's split-adjusted
+close: those days are put onto the current share basis the same way
+extend_series.py does (price / factor, volume x factor). Every other day is
+compared, never changed: the report lists how well the two sources agree, per
+day and per ticker, and the 09-04 close — which has no second snapshot of its
+own — is checked the same way.
 
 Yahoo's unadjusted close is split-adjusted (its history is restated onto the
 current share basis, as ours is after extend_series.py's rescale) but not
@@ -23,6 +29,7 @@ scripts/fetch_yahoo.py), OUT_SERIES (series7.pkl), OUT_REPORT
 (yahoo_crosscheck.json). Day classes are detected the same way screener9 does.
 """
 import csv, gzip, json, os, pickle, statistics, sys
+from fractions import Fraction
 
 SCRATCH = os.environ.get("WORK_DIR", "./data")
 IN_SERIES = os.environ.get("IN_SERIES", "series6.pkl")
@@ -31,6 +38,21 @@ OUT_REPORT = os.environ.get("OUT_REPORT", "yahoo_crosscheck.json")
 YAHOO = os.environ.get("YAHOO", "")
 CLOSE_TOL = 0.005        # closes agree when within 0.5%
 BASIS_TOL = 0.01         # ... and a fill needs the neighbouring days within 1%
+SPLIT_MIN = 0.02         # a ratio this far from 1 is a share-basis change ...
+SPLIT_FIT = 0.005        # ... when it sits within 0.5% of a clean split ratio
+SPLIT_RUN = 3            # ... on at least this many consecutive days
+
+
+def split_factor(ratio):
+    """The clean split ratio near `ratio` (one side <= 5, other <= 40), or None."""
+    if ratio <= 0:
+        return None
+    f = Fraction(ratio).limit_denominator(40)
+    lo, hi = sorted((f.numerator, f.denominator))
+    if lo == 0 or lo > 5 or hi > 40:
+        return None
+    exact = f.numerator / f.denominator
+    return exact if abs(exact - ratio) / ratio <= SPLIT_FIT else None
 
 d = pickle.load(open(f"{SCRATCH}/{IN_SERIES}", "rb"))
 CAL, SER = list(d["cal"]), d["series"]
@@ -79,6 +101,48 @@ print("copied:", [CAL[k] for k in sorted(SYN)], "| price-only:", [CAL[k] for k i
       "| partial-volume:", [CAL[k] for k in sorted(PARTIAL)])
 FILL_DAYS = SYN | NOVOL | PARTIAL
 
+# ---- share basis: rescale the days our series never adjusted for a split ---
+splits = {}          # sym -> [(first_day, last_day, factor, n_days)]
+unclean = {}         # sym -> n days off by >2% that fit no split ratio
+for s in cur:
+    m = Y.get(s)
+    if not m: continue
+    fi, cs, vs, ff = SER[s]
+    fac = []
+    for j in range(len(cs)):
+        day = CAL[fi + j]
+        if day in m and (fi + j) not in FILL_DAYS:
+            r = cs[j] / m[day][0]
+            fac.append(split_factor(r) if abs(r - 1) > SPLIT_MIN else 1.0)
+        else:
+            fac.append(None)
+    # copied days inherit the basis of the day before (their close is that copy)
+    for j in range(len(fac)):
+        if fac[j] is None and j > 0 and (fi + j) in SYN:
+            fac[j] = fac[j - 1]
+    # runs of a constant factor != 1 of at least SPLIT_RUN days
+    j = 0; runs = []
+    while j < len(fac):
+        f = fac[j]
+        if f in (None, 1.0):
+            j += 1; continue
+        k = j
+        while k + 1 < len(fac) and fac[k + 1] == f: k += 1
+        if k - j + 1 >= SPLIT_RUN:
+            runs.append((j, k, f))
+        j = k + 1
+    if runs:
+        cs, vs = list(cs), list(vs)
+        for a, b, f in runs:
+            for jj in range(a, b + 1):
+                cs[jj] = round(cs[jj] / f, 4); vs[jj] = vs[jj] * f
+        SER[s] = (fi, cs, vs, ff)
+        splits[s] = [(CAL[fi + a], CAL[fi + b], f, b - a + 1) for a, b, f in runs]
+    n_unclean = sum(1 for j in range(len(cs)) if fac[j] is None and CAL[fi + j] in m and (fi + j) not in FILL_DAYS)
+    if n_unclean: unclean[s] = n_unclean
+print(f"share basis: {len(splits)} tickers rescaled for a split the series never adjusted "
+      f"(e.g. {[(s, v[0][2], v[0][1]) for s, v in list(splits.items())[:6]]}); {len(unclean)} with unclean >2% differences")
+
 # ---- compare, day by day ---------------------------------------------------
 day_stats = {}          # date -> {n, med_abs_pct, within_tol_pct, vol_med_ratio}
 tick_bad = {}           # sym -> [(date, ours, yahoo, pct)] for closes off by > tol on real days
@@ -123,9 +187,9 @@ for s, (fi, cs, vs, ff) in SER.items():
                 if abs(cs[jj] / m[CAL[kk]][0] - 1) > BASIS_TOL: ok = False
         if not ok:
             rec["skipped_basis"] += 1; continue
-        if k in SYN:
+        if k in SYN or k in PARTIAL:            # copied, or an intraday snapshot
             cs[j] = round(yc, 4); vs[j] = yv; rec["close_and_volume"] += 1
-        else:                                   # price-only / partial: the close stands
+        else:                                   # price-only: the derived close stands
             if yv > 0:
                 vs[j] = yv; rec["volume_only"] += 1
         filled_syms.add(s)
@@ -140,6 +204,8 @@ report = {
     "fill_days": {CAL[k]: ("copied" if k in SYN else "price_only" if k in NOVOL else "partial_vol") for k in sorted(FILL_DAYS)},
     "fills": fills, "filled_symbols": len(filled_syms),
     "day_stats": day_stats,
+    "splits_rescaled": {s: [{"from": a, "to": b, "factor": f, "days": n} for a, b, f, n in v] for s, v in splits.items()},
+    "unclean_tickers": unclean,
     "tickers_off_on_real_days": len(tick_bad),
     "worst": [{"sym": s, "max_abs_pct": round(mx, 2), "days": n, "sample": tick_bad[s][:3]} for s, mx, n in worst[:25]],
     "calendar_only_ours": cal_only, "calendar_only_yahoo": yahoo_only,
