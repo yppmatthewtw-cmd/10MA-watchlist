@@ -9,6 +9,7 @@
 
 | 版本 | 內容 |
 |------|------|
+| R11.00 | 數據更新至 **2026-09-04 收盤**（周五，174 個交易日；09-04 快照由 GitHub Actions 抓 Nasdaq screener，5,094 隻反推前收同 09-03 序列對賬中位偏差 0.000%，冇拆股）：總表 180 隻（30 隻新上榜、35 隻跌出 —— 4 隻跌穿最後一個底、30 隻 MA 條件唔再成立、APGE 已冇報價）；當日 8 月非農遠勝預期令加息機率回升，名單中位數 −0.44%（$10 億以上股份中位 0.00%）、64 隻跌逾 1%；16 隻新上榜逐隻研究（TECH 係 Merck $73 現金收購目標，已加釘價標記）、14 隻補催化欄；**審視層全部按本版重新量度**（`apply_review11.py`：釘價價差、催化事件日回報、無量高位、靠 09-02 先成立嘅結構、<1% 遞升、確定性飽和、市值近界），獨立重算（由規則另行實作）同篩選器輸出 180 行逐格一致；版面同 R10 |
 | R10.00 | **版面重做**（數據同 R9 一樣，2026-09-03 收盤，185 隻）：(1) **一打開就見表** —— 標題→頂欄→總表，所有說明（本版更新／市場背景／篩選規則／數據來源）連同每頁嘅統計 chips、跌出名單同圖例全部搬到表下面；(2) **收窄欄位** —— 突破／回補／守底／量比／遞減／RS／均線七欄由兩行標題（最闊 110px）縮到 34–44px（單位上標題、解釋入 tooltip 同底部圖例），Ticker 欄 180px → 124px，取消「底部序列」同「類別」兩欄（底部序列改喺走勢圖 tooltip、類別收入 Ticker 格內小標籤）；(3) **整體 compact** —— 字級 12.5→11.5px、內距 8→4px、走勢圖 150×40→100×30、原因欄預設三行（有「展開全文」掣），行高 100→79px；13 頁全部喺 1400px 視窗內一次過睇曬，唔使向右捲，螢幕再闊時兩欄原因會自動食埋剩餘闊度 |
 | R9.00 | 數據更新至 **2026-09-03 收盤**（173 個交易日）：總表 185 隻（61 隻新上榜、57 隻跌出）；**介面三項改動** —— (1) 頂欄加**淺色／深色主題掣**（記喺瀏覽器，未揀就跟系統）；(2) **更新內容唔再高亮**：相對上一版嘅改動一律改用灰色小字（▲▼、+x%），全份報告冇紅色，剩低嘅顏色只有綠色（達標）同琥珀色（警示）；(3) 新增**催化欄**，一句講清楚「喺咩催化之下先至由底回升」（日期·事件·效果），可按有無催化排序；**數據** —— 9月2日冇收市快照（鏡像 commit 喺開市中途），收市價由 9月3日快照嘅官方 net-change 反推（真實），但當日成交量完全缺失，自動歸類為 price-only 日並排除喺量比／VCP 成交量項／流動性中位數之外；APH 1 拆 2 以鏡像開市中途價做支點確認後重算歷史 |
 | R8.00 | **批判性審視版**（數據仍為 2026-09-01 收盤）：5 個角度審視 R7 → 修正 4 項數據缺陷（補值日唔再製造底部；成交量不完整日唔入量比／VCP；universe 剔除基金／信託／優先股；S&P 500 改用 GICS 類別），總表 171 → 181 隻；併購釘價目標公司紅色標記＋一鍵隱藏（新聞核實後多咗 **SMTI**——R7 總表 #3 標「跟大市」其實係 MiMedx 約 $35 收購目標——同 BLFS／PSNL 換股、TXNM 延期、VOYA 迫售）；內容層逐行對照序列：13 行盤後／錯日百分比改為收市對收市、過時「現價」用字改寫、MAN／NAVI／SRPT／STEP／NWS 催化劑歸因改正、分析員評級另立「評級」類別、事件日其實下跌嘅 badge 加紅色「事件日 −X%」、信心標籤上限由來源決定、純價格 highlight 移除；總表斜率／MA 統一 MA10；**所有相對 R7 嘅更新以紅色標示**（新上榜／跌出／排名箭嘴／有變嘅格）並可「只顯示有實質更新嘅行」；涉及規則嘅建議（釘價股剔除、確定性三項飽和、PAGE 2 狀態條件、覆蓋度、突破幅度、VCP 跳空、回撤首段、MA 最低升幅、雙類股）列於更新卡由用戶決定 |
@@ -94,6 +95,16 @@ SERIES=series4.pkl OUT_JSON=screen_results7.json \
 python3 scripts/merge_news7.py                           # 沿用 news6 + 新上榜研究 -> data/news7.json
 SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
   python3 scripts/build_report6_dark.py                  # -> data/10MA_uptrend_watchlistGit_R7.00_*.html
+
+# R11（最新交易日 2026-09-04；審視層重新量度）
+TRADE_DATE=2026-09-04 IN_SERIES=series5.pkl OUT_SERIES=series6.pkl \
+  python3 scripts/extend_series.py                       # -> data/series6.pkl（174 日）
+SERIES=series6.pkl OUT_JSON=screen_results11.json python3 scripts/screener9.py
+PREV_NEWS=news9.json OUT_NEWS=news11.json SCREEN_JSON=screen_results11.json SERIES=series6.pkl AGENT_PREFIX=r11 \
+  python3 scripts/merge_news9.py                         # news9 + 新上榜研究 + 催化欄一句 -> news11.json
+python3 scripts/apply_review11.py                        # 審視層帶到 R11（所有數字按 09-04 序列重新量度）-> review11.json
+SCREEN_JSON=screen_results11.json NEWS_JSON=news11.json PREV_SCREEN=screen_results9.json PREV_NEWS=news9.json \
+  PREV_REV=R10 REV=R11.00 REVIEW_JSON=review11.json MODEL_TAG=claudefable51xhigh python3 scripts/build_report_r10.py
 
 # R10（版面重做：說明搬到最底、欄位收窄、一屏睇曬）
 #   數據同 R9 一樣，只換 renderer

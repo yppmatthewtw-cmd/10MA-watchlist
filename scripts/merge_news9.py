@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Build data/news9.json: news8 carried forward + the R9 additions.
+"""Build data/news9.json: news8 carried forward + the R9 additions (later
+revisions reuse it with PREV_NEWS / OUT_NEWS / SCREEN_JSON / SERIES / AGENT_PREFIX).
 
 Two kinds of input from the research agents in the session scratchpad:
   r9_res_*.json    full entries for tickers new to the R9 lists (with cat_line)
@@ -20,6 +21,8 @@ AGENT_DIR = os.environ.get("AGENT_DIR",
 PREV_NEWS = os.environ.get("PREV_NEWS", "news8.json")
 OUT = os.environ.get("OUT_NEWS", "news9.json")
 SCREEN = os.environ.get("SCREEN_JSON", "screen_results9.json")
+# which session's agent files to read: r9_res_*.json / r9_lines_*.json by default
+PREFIX = os.environ.get("AGENT_PREFIX", "r9")
 
 scr = json.load(open(f"{SCRATCH}/{SCREEN}"))
 need = [r["sym"] for r in scr["page1"]]
@@ -35,7 +38,7 @@ def numbered(pattern):
                   key=lambda p: int(p.rsplit("_", 1)[1].split(".")[0]))
 
 
-for f in numbered(f"{AGENT_DIR}/r9_res_*.json"):
+for f in numbered(f"{AGENT_DIR}/{PREFIX}_res_*.json"):
     for e in json.load(open(f)):
         sym = e.get("sym")
         if not sym:
@@ -54,7 +57,7 @@ for f in numbered(f"{AGENT_DIR}/r9_res_*.json"):
         }
         added.append(sym)
 
-for f in numbered(f"{AGENT_DIR}/r9_lines_*.json"):
+for f in numbered(f"{AGENT_DIR}/{PREFIX}_lines_*.json"):
     for sym, line in json.load(open(f)).items():
         if sym not in out:
             problems.append(f"{sym}: cat_line for a ticker with no news entry"); continue
