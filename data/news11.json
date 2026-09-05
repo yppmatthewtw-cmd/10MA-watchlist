@@ -2735,7 +2735,7 @@
    "https://stockstotrade.com/news/recursion-pharmaceuticals-inc-rxrx-news-2026_08_25/",
    "https://stockstotrade.com/news/recursion-pharmaceuticals-inc-rxrx-news-2026_08_19/"
   ],
-  "cat_line": "8/25 開支降1500萬 → 單日升7.23%"
+  "cat_line": "8/25 開支降1500萬 → 單日升9.5%"
  },
  "SCI": {
   "decline_short": "Q1殯儀服務量疲弱令上半年盈利增長受壓、死亡率正常化憂慮，加上7月初大市高估值回調",
@@ -2902,7 +2902,7 @@
    "https://www.gurufocus.com/news/8969842/tpg-maintained-by-morgan-stanley-price-target-lowered-to-5400",
    "https://shareholders.tpg.com/static-files/5cc31a2b-eb9e-4f44-ab20-e8a4362bd2b2"
   ],
-  "cat_line": "8/4 FRE升43%至3.15億 → 彈7.7%"
+  "cat_line": "8/4 FRE升43%至3.15億 → 單日彈5.7%"
  },
  "NSIT": {
   "decline_short": "5月Q1業績（新CEO首份）大企業硬件需求疲弱、利潤率環比倒退，6月底又被剔出羅素成長指數，7月6日見底111.71美元。",
@@ -3366,7 +3366,7 @@
    "https://www.marketscreener.com/news/barclays-upgrades-american-tower-to-overweight-from-equalweight-adjusts-pt-to-198-from-195-ce7859d3d98ef627",
    "https://www.quiverquant.com/news/American+Tower+slides+as+rising+Treasury+yields+weigh+on+rate-sensitive+REITs"
   ],
-  "cat_line": "7/28 Q2勝預期升AFFO指引 → 單日升近6%"
+  "cat_line": "7/28 Q2勝預期升AFFO指引 → 兩日累升7.5%"
  },
  "NATH": {
   "decline_short": "CFIUS審批因政府停擺延誤、交割推遲至2026下半年，套利折讓擴闊，7月17日跌至$96.05；批發牛肉成本更曾飆19%。",
@@ -5309,7 +5309,7 @@
    "https://ir.apollo.com/news-events/press-releases/detail/640/apollo-reports-second-quarter-2026-results",
    "https://app.dealroom.co/news/feed/apollo-stock-rises-2-67-on-revenue-surge-to-11-15b-despite-q2-earnings-miss"
   ],
-  "cat_line": "8/4 Q2 FRE、流入創紀錄 → 業績後累升6%"
+  "cat_line": "8/4 Q2 FRE、流入創紀錄 → 單日升2.9%"
  },
  "BAC": {
   "decline_short": "7月初大市回吐（7/8道指跌1.09%）、資金由金融及AI股轉出，業績前避險，7/8低見$58.3；未見個股負面消息。",
@@ -5382,7 +5382,7 @@
    "https://www.globenewswire.com/news-release/2026/08/06/3340124/0/en/iovance-biotherapeutics-reports-record-second-quarter-2026-revenue-of-99m-business-achievements-and-corporate-updates.html",
    "https://www.dailypolitical.com/2026/08/21/iovance-biotherapeutics-nasdaqiova-trading-down-5-8-heres-why.html"
   ],
-  "cat_line": "8/6 Q2收入升66%勝預期 → 翌日升43%"
+  "cat_line": "8/6 Q2收入升66%勝預期 → 單日升43%"
  },
  "IRWD": {
   "decline_short": "7/29低見$3.56；未搵到明確7月跌因，5月Q1後曾跌12.6%，6/15現金償還$2億可換股票據後仍餘$3.85億貸款，債務憂慮壓價。",
@@ -5400,7 +5400,7 @@
    "https://simplywall.st/stocks/us/pharmaceuticals-biotech/nasdaq-irwd/ironwood-pharmaceuticals/news/ironwood-pharmaceuticals-irwd-stock-faces-a-sentiment-check",
    "https://www.stocktitan.net/sec-filings/IRWD/8-k-ironwood-pharmaceuticals-inc-reports-material-event-3b623e562fcb.html"
   ],
-  "cat_line": "8/6 Q2 EPS倍增、上調指引 → 累升14%"
+  "cat_line": "8/6 Q2 EPS倍增、上調指引 → 單日升2.7%"
  },
  "JPM": {
   "decline_short": "7月初大市回吐（7/8道指跌1.09%）、資金由AI及金融股轉出，業績前避險，7/8低見$330.62；未見個股負面消息。",
@@ -5458,11 +5458,11 @@
    "https://www.tipranks.com/news/insider-trading/top-executives-quietly-unload-sight-sciences-shares-in-a-significant-insider-shake-up-insider-trading-news",
    "https://www.defenseworld.net/2026/08/07/ubs-group-issues-positive-forecast-for-sight-sciences-nasdaqsght-stock-price.html"
   ],
-  "cat_line": "8/4 FDA批新機OMNI→翌日升27.8%"
+  "cat_line": "8/5 Q2收入升20%、上調指引 → 翌日升27.7%"
  },
  "SNDX": {
   "decline_short": "7/10單日跌4.95%、7/28再跌4.34%，市場憂Kura Komzifti競爭及8/4業績前觀望，7/31低見$19.05。",
-  "recovery_short": "8/4 Q2收入$72.8M升92%、Revuforj銷售$55M遜預期，翌日跌2.4%；管理層指Revuforj美國峰值銷售逾$20億；其後無個股催化，隨板塊升。",
+  "recovery_short": "8/4 Q2收入$72.8M升92%、Revuforj銷售$55M遜預期，翌日升4.4%；管理層指Revuforj美國峰值銷售逾$20億；其後無個股催化，隨板塊升。",
   "hot": [
    "Revuforj美國峰值銷售逾$20億"
   ],
@@ -5516,7 +5516,7 @@
   "cat_line": "8/17 德國批准Merck $73收購→貼近作價"
  },
  "TSLA": {
-  "decline_short": "7/22 Q2 EPS $0.33遠遜預期$0.54、自由現金流轉負，翌日單日跌12.7%；大行削目標價，7/29跌穿$300。",
+  "decline_short": "7/22 Q2 EPS $0.33遠遜預期$0.54、自由現金流轉負，翌日單日跌14.5%；大行削目標價，7/29跌穿$300。",
   "recovery_short": "8月中Robotaxi安全數據良好；8/21內華達州批准Clark County最多5,000架付費Robotaxi（原限10架），單日升5.1%。",
   "hot": [
    "內華達州批准Clark County最多5,000架付費Robotaxi"
@@ -5571,7 +5571,7 @@
    "https://www.investing.com/news/company-news/ulta-beauty-q2-2026-slides-89-sales-growth-shares-fall-on-caution-93CH-4880277",
    "https://www.investing.com/news/company-news/ulta-beauty-stock-hits-52week-low-at-45189-93CH-4748062"
   ],
-  "cat_line": "8/31 Q2上調指引獲重估 → 單日反彈4%"
+  "cat_line": "8/27 Q2勝預期上調指引 → 翌日跌4.2%、8/31彈3.8%"
  },
  "WTTR": {
   "decline_short": "7/27油價單日急挫逾6%，油服股齊跌，WTTR單日跌6.6%；加上7/6 Zacks降級至持有、估值偏高，7/29低見$17.86。",
@@ -5591,6 +5591,6 @@
    "https://www.cnbc.com/2026/07/26/stock-market-today-live-updates.html",
    "https://www.thecerbatgem.com/2026/07/29/select-water-solutions-nysewttr-stock-price-down-6-6-heres-why.html"
   ],
-  "cat_line": "8/4 Q2勝預期+7年水務大單→翌日升約10%"
+  "cat_line": "8/4 Q2勝預期+7年水務大單→翌日升20.3%"
  }
 }
