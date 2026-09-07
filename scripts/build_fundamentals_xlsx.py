@@ -579,7 +579,12 @@ i = len(DEFS) + 4
 ws.cell(i, 1, "合計").font = Font(name=CJK, size=9, bold=True)
 ws.cell(i, 3, f"=SUM(C4:C{i - 1})").font = Font(name=CJK, size=9, bold=True)
 ws.cell(i, 3).alignment = Alignment(horizontal="center")
-ws.cell(i + 2, 1, f"資料截至各公司最新已公布財季；名單為 10MA Uptrend Watchlist {SRC_REV}（{LAST} 收盤）。"
+# C 欄同 R7 一樣係 COUNTIF 公式（開檔時 Excel 會自己計）。編製時嘅數量喺下面寫實，
+# 唔使開 Excel 都睇到，亦方便對照公式有冇算錯。
+built = "　｜　".join(f"{g} {gcount[g]}" for g, _ in DEFS)
+ws.cell(i + 2, 1, f"編製時分級數量：{built}　（合計 {len(data)}）。C 欄為 COUNTIF 公式，"
+                  "喺 Excel／Sheets 打開時自動重算，應同呢行一致。").font = Font(name=CJK, size=9)
+ws.cell(i + 3, 1, f"資料截至各公司最新已公布財季；名單為 10MA Uptrend Watchlist {SRC_REV}（{LAST} 收盤）。"
                   "Yahoo 口徑，非投資建議。").font = Font(name=CJK, size=9)
 
 os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)
