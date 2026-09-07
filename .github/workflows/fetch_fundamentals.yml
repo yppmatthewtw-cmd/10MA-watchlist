@@ -1,0 +1,44 @@
+name: Fetch fundamentals
+
+# Income-statement data for the watchlist's tickers. Same reason as the daily
+# bars: the research container cannot reach Yahoo, the runner can.
+on:
+  workflow_dispatch:
+    inputs:
+      screen_json:
+        description: Screen results whose page-1 tickers to fetch
+        required: true
+        default: data/screen_results12.json
+      out:
+        description: Output JSON path
+        required: true
+        default: data/fundamentals/income_r12.json
+
+permissions:
+  contents: write
+
+jobs:
+  fundamentals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet "yfinance>=0.2.50" pandas
+      - name: Download income statements
+        env:
+          SCREEN_JSON: ${{ inputs.screen_json }}
+          OUT: ${{ inputs.out }}
+        run: python3 scripts/fetch_fundamentals.py
+      - name: Commit fundamentals
+        env:
+          OUT: ${{ inputs.out }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/fundamentals
+          git commit -m "data: Yahoo income statements for $OUT" || { echo "nothing to commit"; exit 0; }
+          # the branch may have moved while the fetch ran; replay this commit on top
+          git pull --rebase --quiet origin "${GITHUB_REF_NAME}"
+          git push
