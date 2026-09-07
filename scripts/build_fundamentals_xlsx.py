@@ -182,10 +182,12 @@ def grade_of(d):
         if d["op_yoy"] is not None and d["op_yoy"] < 0:
             return "B", f"{L}利潤為正但按年倒退，盈利仍在但動能轉弱。"
         return "A", f"{L}利潤為正、帳面≈經常、按年未倒退 —— 盈利乾淨。"
-    # loss-making: is it narrowing?
+    # loss-making: newly so, narrowing, or stuck?
     tr = [v for v in d["op_trend"] if v is not None]
-    narrowing = len(tr) >= 2 and tr[-1] > tr[0]
-    if narrowing:
+    if len(tr) >= 2 and tr[0] > 0:
+        d["turned"] = True
+        return "D", f"四季內由盈轉虧（{L} {fmt_m(M(tr[0]))} → {fmt_m(M(tr[-1]))}）。"
+    if len(tr) >= 2 and tr[-1] > tr[0]:
         return "C", f"{L}仍虧損，但四季軌跡收窄中。"
     return "D", f"{L}虧損且未見收窄。"
 
@@ -346,7 +348,7 @@ lines = [
     (f"A（{gcount['A']} 隻）營運利潤為正、帳面≈經常（一次性佔淨利 <10%）、按年未倒退 —— 盈利乾淨。", False, 10),
     (f"B（{gcount['B']} 隻）營運利潤為正，但帳面含重大一次性項目（≥10%），或營運利潤按年倒退 —— 盈利成立但有雜質／動能轉弱。", False, 10),
     (f"C（{gcount['C']} 隻）營運仍然虧損，但四季軌跡收窄中。", False, 10),
-    (f"D（{gcount['D']} 隻）營運虧損而且未見收窄。", False, 10),
+    (f"D（{gcount['D']} 隻）營運虧損而且未見收窄，或者四季內由盈轉虧（後者喺「經常性轉正排隊」分頁另立一格）。", False, 10),
     ("A/B 之間嘅界線同 R7 一樣，係睇「帳面 = 經常」與否，而唔係睇賺幾多。", False, 10),
     ("", False, 10),
     ("【會計年度提示】", True, 11),
@@ -483,7 +485,7 @@ for i, d in enumerate(mat, 5):
     impact = (f"帳面淨利 {fmt_m(net)}，剔除後 {fmt_m(norm)}" if norm is not None
               else f"帳面淨利 {fmt_m(net)}，剔除後 Yahoo 未提供")
     if norm is not None and net is not None and (norm > 0) != (net > 0):
-        impact += " — 剔除後由盈轉虧／由虧轉盈，帳面方向唔可信"
+        impact += "　— 剔除後由虧轉盈，帳面方向唔可信" if net < 0 else "　— 剔除後由盈轉虧，帳面方向唔可信"
     for j, v in enumerate([direction, f"{d['sym']} {d['name'][:18]}",
                            f"{fmt_m(unu)}（佔帳面淨利 {d['unusual_share']:.0f}%）",
                            "待核實", impact], 1):
@@ -525,9 +527,12 @@ buckets = [
     ("虧損收窄中", "營運／稅前四季軌跡",
      [f"{d['sym']} ({fmt_m(M(d['op_trend'][0]))} → {fmt_m(M(d['op_trend'][-1]))})"
       for d in data if d["grade"] == "C"]),
+    ("四季內由盈轉虧", "營運／稅前四季軌跡",
+     [f"{d['sym']} ({fmt_m(M(d['op_trend'][0]))} → {fmt_m(M(d['op_trend'][-1]))})"
+      for d in data if d["grade"] == "D" and d.get("turned")]),
     ("虧損未見收窄", "營運／稅前四季軌跡",
      [f"{d['sym']} ({fmt_m(M(d['op_trend'][0]))} → {fmt_m(M(d['op_trend'][-1]))})"
-      for d in data if d["grade"] == "D"]),
+      for d in data if d["grade"] == "D" and not d.get("turned")]),
     ("無損益表數據", "—", [d["sym"] for d in data if not d.get("q")]),
 ]
 r = 4
@@ -558,7 +563,7 @@ for j, t in enumerate(["分級", "定義 (經常性口徑)", "數量", "Tickers"
 DEFS = [("A", "營運利潤為正、帳面≈經常 (一次性 <10%)、按年未倒退"),
         ("B", "營運利潤為正，但含重大一次性 (≥10%) 或營運利潤按年倒退"),
         ("C", "營運仍虧損，四季軌跡收窄中"),
-        ("D", "營運虧損且未見收窄"),
+        ("D", "營運虧損且未見收窄，或四季內由盈轉虧"),
         ("—", "Yahoo 無季度損益表，未評級")]
 for i, (g, defi) in enumerate(DEFS, 4):
     syms = [d["sym"] for d in data if d["grade"] == g]
