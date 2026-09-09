@@ -72,10 +72,15 @@ RUMOURS = {"CCC": "回升由收購傳聞驅動，傳聞證實或否定都會令�
            "WDAY": "回升由收購傳聞驅動，未有作價；消息落空會令波幅跳升。",
            "VOYA": "TOMS Capital（持股 4.5%）施壓推動出售或策略檢討，未有作價；反彈含併購憧憬成分。"}
 
-flags, dropped_flags = {}, []
+flags, dropped_flags, recomputed = {}, [], []
 for sym, fl in (prev.get("ticker_flags") or {}).items():
     if sym not in listed:
         dropped_flags.append(sym); continue
+    # "已跌穿底" states this revision's close against this revision's bottom, so it
+    # is never carried: a row that has climbed back above its bottom (or made a new
+    # one) would otherwise keep a flag quoting a price it no longer trades at.
+    if fl.get("badge") == "已跌穿底":
+        recomputed.append(sym); continue
     flags[sym] = dict(fl)
 
 for sym in listed:
@@ -572,7 +577,8 @@ if review_summary:
 
 json.dump(news, open(f"{SCRATCH}/{NEWS}", "w"), ensure_ascii=False, indent=1)
 json.dump(review, open(f"{SCRATCH}/{OUT}", "w"), ensure_ascii=False, indent=1)
-print(f"wrote {SCRATCH}/{OUT} · flags {len(flags)} (dropped {len(dropped_flags)}: {dropped_flags}) · "
+print(f"wrote {SCRATCH}/{OUT} · flags {len(flags)} (dropped {len(dropped_flags)}: {dropped_flags}; "
+      f"broken-bottom flags recomputed for {recomputed}) · "
       f"catalyst warnings {len(warns)} · notes {len(notes)} · new {n_new} · out {n_out} "
       f"(broke {len(broke)}, struct {struct_lower}+{struct_aged}, ma {len(ma_only)}, gone {len(gone)})")
 print(f"09-04: universe med {u_med:+.2f}% up {u_up:.1f}% · p1 med {p1_med:+.2f}% down>1% {len(p1_down)} · below MA {len(p1_below_ma)} · undercut {p1_undercut}")
