@@ -63,7 +63,10 @@ def ret(sym, i):
 # tickers that have left, plus TECH (Merck $73 cash, German clearance 08-17)
 # from the R11 research
 OFFERS = {"ITGR": 127.0, "OGN": 14.0, "NATH": 102.0, "GBTG": 9.50, "TXNM": 61.25,
-          "SMTI": 35.0, "DBRG": 16.0, "TECH": 73.0}
+          "DBRG": 16.0, "TECH": 73.0}
+# offers paid in cash + acquirer stock: the value moves with the acquirer, so it
+# is computed from that day's close rather than pinned to a headline number
+STOCK_OFFERS = {"SMTI": ("MiMedx", 33.0, 0.4735, "MDXG")}
 STOCK_DEALS = {"PSNL": "全股收購，換股比率浮動（上限 0.3356 股 TEM）；$16.25 係目標值而非固定現金價。",
                "BLFS": "作價 = $11.25 現金 + 0.1442 股 RGEN，並非固定 $31；股價跟 Repligen 走。",
                "CRBG": "換股合併目標：股價已被協議釘住，量度嘅係換股價差而非突破前收縮。",
@@ -93,6 +96,19 @@ for sym in listed:
             "badge": (f"套利釘價 · 距作價{gap:+.1f}%" if gap >= 0 else f"高於作價 {abs(gap):.1f}%"),
             "text": (f"現金作價 ${off:g}，現價 ${c:g}（{'剩餘升幅只有 ' + format(gap, '+.1f') + '%' if gap >= 0 else '已高於作價 ' + format(abs(gap), '.1f') + '%'}）；"
                      "波幅收縮係交易釘價所致，唔係蓄勢突破，VCP／確定性高分屬機械假象。"),
+        }
+    elif sym in STOCK_OFFERS and STOCK_OFFERS[sym][3] in SER:
+        who, cash, ratio, acq = STOCK_OFFERS[sym]
+        apx = SER[acq][1][-1]
+        val = cash + ratio * apx
+        c = listed[sym]["close"]
+        gap = (val / c - 1) * 100
+        flags[sym] = {
+            "deal": True,
+            "badge": (f"換股釘價 · 距作價{gap:+.1f}%" if gap >= 0 else f"高於作價 {abs(gap):.1f}%"),
+            "text": (f"作價係每股 ${cash:g} 現金 ＋ {ratio} 股 {acq}，唔係固定現金價：以 {acq} 收 ${apx:g} 計，"
+                     f"作價值 ${val:.2f}，現價 ${c:g}（{'低過作價 ' + format(abs(gap), '.2f') + '%' if gap >= 0 else '高過作價 ' + format(abs(gap), '.2f') + '%'}）。"
+                     f"股價跟 {acq} 走，波幅收縮係交易釘價所致，VCP／確定性量度緊套利價差而唔係蓄勢突破。"),
         }
     elif sym in STOCK_DEALS:
         flags[sym] = {"deal": True, "badge": "換股併購目標", "text": STOCK_DEALS[sym]}
@@ -153,7 +169,7 @@ for sym, w in (prev.get("catalyst_warn") or {}).items():
             w = dict(w, ret=round(r, 1))
     warns[sym] = w
 
-_CATL = re.compile(r"^(\d{1,2})/(\d{1,2})\s")
+_CATL = re.compile(r"^(\d{1,2})/(\d{1,2})(?=\D)")
 COPIED = {IDX[x] for x in scr["meta"]["copied_days"] if x in IDX}
 down_days, flat_days, dated, undated, no_cat = [], [], 0, 0, 0
 for sym in listed:
@@ -279,7 +295,12 @@ def ma_frames(cs):
     return ok
 
 
+# Breaking the last bottom on a close does NOT delist a row on its own — the
+# bottom needs three days to be re-detected, which is why KURA and HLLY are still
+# listed. So the classification is by what the screen actually tests: the MA
+# condition first, and the structure only for rows that still pass it.
 broke, struct_lower, struct_aged, ma_only, ma_dipped, gone = [], [], [], [], [], []
+undercut_depth = {}
 for s in out_syms:
     if s not in SER or SER[s][0] + len(SER[s][1]) != N:
         gone.append(s); continue
@@ -289,12 +310,16 @@ for s in out_syms:
     j = IDX[bd] - fi if bd in IDX else None
     dipped = j is not None and j + 1 < len(cs) and min(cs[j + 1:]) < pl
     if pl and c < pl:
-        broke.append(s)
-    elif ma_frames(cs):
+        broke.append(s); undercut_depth[s] = (c / pl - 1) * 100
+    if ma_frames(cs):
         (struct_lower if dipped else struct_aged).append(s)
     else:
         ma_only.append(s)
         if dipped: ma_dipped.append(s)
+broke_and_ma = [s for s in broke if s in ma_only]
+udv = sorted(undercut_depth.values())
+und_med = udv[len(udv) // 2] if udv else 0.0
+und_shallow = sum(1 for v in udv if v > -1.0)
 
 # the new day itself: page-1 rows vs the $1bn+ universe
 li = N - 1
@@ -314,7 +339,9 @@ new_in_top50 = [f"{s} #{RANK[s]}" for s in new_syms if RANK[s] <= 50]
 bot_0901 = [s for s in listed if listed[s].get("hl") and listed[s]["hl"][-1][0] == "2026-09-01"]
 bot_0901_top50 = [s for s in bot_0901 if RANK[s] <= 50]
 worst = sorted(((s, ret(s, li)) for s in listed if ret(s, li) is not None), key=lambda x: x[1])[:5]
+worst_rows, best_rows = list(worst), None   # the R12/R13 block rebinds `worst` to text
 best = sorted(((s, ret(s, li)) for s in listed if ret(s, li) is not None), key=lambda x: -x[1])[:5]
+best_rows = list(best)
 
 # structures that lean on the volume-less 09-02 bar
 novol_peak = [s for s in listed if listed[s]["cert_c"].get("peak_no_vol")]
@@ -528,6 +555,17 @@ if REVISION in ("R12", "R13"):
                    f"{last} 收市價經 Yahoo 交叉核對。")
 if REVISION == "R13":
     dl = ds.get(last, {})
+    # rows whose close sits within 1% above their last bottom — the hold is
+    # technically intact but has no margin left
+    RANKM = {r["sym"]: i for i, r in enumerate(scr["page1"], 1)}
+    near_bot = sorted(((RANKM[sym], sym, (listed[sym]["close"] / listed[sym]["hl"][-1][1] - 1) * 100,
+                        listed[sym]["below_ma"])
+                       for sym in listed if listed[sym].get("hl")
+                       and 0 <= listed[sym]["close"] / listed[sym]["hl"][-1][1] - 1 < 0.01))
+    nb_txt = "、".join(f"{sym} #{rk} +{g:.2f}%{'（同時低過 MA10）' if bm else ''}" for rk, sym, g, bm in near_bot)
+    OILC = [t for t in ("VTS", "RES", "ACDC", "AESI") if t in listed]
+    energy_rows = [sym for sym in listed if listed[sym].get("sector_zh") == "能源"]
+    peak_0902 = [sym for sym in listed if listed[sym]["cert_c"].get("peak_day") == "2026-09-02"]
     macro = os.environ.get("MACRO_ZH", "")
     ext = os.environ.get("EXT_NOTE", "")
     novol_days = [d for d, c in x["fill_days"].items() if c == "price_only"]
@@ -551,15 +589,60 @@ if REVISION == "R13":
     headline = (
         f"R13 建基於 {last}（周二）收盤 —— 09-07 勞動節休市，所以呢個係 R12 之後嘅第一個交易日。{macro}"
         f"本掃描 $10 億以上股份中位數 {u_med:+.2f}%、{u_up:.0f}% 上升；總表 {len(listed)} 隻本身中位數 {p1_med:+.2f}%，"
-        f"{len(p1_down)} 隻跌超過 1%、{len(p1_undercut)} 隻收市已低過最後一個底但未夠三日確認、top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
-        f"相對 R12：{n_new} 隻新上榜、{n_out} 隻跌出（{len(broke)} 隻跌穿最後一個底、{len(struct_lower) + len(struct_aged)} 隻底部序列斷咗或過咗窗口、"
-        f"{len(ma_only)} 隻 MA 條件唔再成立）。新上榜以 {'、'.join(new_sectors.split('、')[:3])} 為主（{new_caps}），"
-        f"但只有 {len(new_in_top50)}/{n_new} 隻入 top 50。"
+        f"{len(p1_down)} 隻跌超過 1%、{len(p1_undercut)} 隻收市已低過最後一個底但未夠三日確認、另有 {len(near_bot)} 行只高過最後一個底 1% 以內"
+        f"（包括第 1 位 ITGR +0.90%、EPD 只高 0.03%），top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
+        f"相對 R12：{n_new} 隻新上榜、{n_out} 隻跌出 —— {len(ma_only)} 隻係四個時間框嘅 MA 條件全部唔再成立"
+        f"（當中 {len(broke_and_ma)} 隻同時收市跌穿最後一個底，但跌穿幅度中位只有 {und_med:.1f}%、{und_shallow} 隻唔夠 1%），"
+        f"另 {len(struct_lower) + len(struct_aged)} 隻 MA 仍達標但造出更低嘅底。要留意：收市跌穿底本身唔會令一行落榜"
+        f"（底部要三日先重新確認），所以 KURA、HLLY 跌穿咗都仲喺榜 —— 真正落榜機制係 MA。"
+        f"新上榜以 {'、'.join(new_sectors.split('、')[:3])} 為主（{new_caps}），只有 {len(new_in_top50)}/{n_new} 隻入 top 50，"
+        f"而且當中 {len(OILC)} 隻（{'、'.join(OILC)}）係同一注油價交易、同一星期見底。"
         f"當日收市價由 Nasdaq 快照反推對賬確認（5,083 隻中位偏差 0.000%）；Yahoo 收市後兩次抓取都只出咗 {dl.get('n', 0)} 隻嘅 09-08 日線"
         f"（全部零偏差），全量核對留待下一版。序列本身冇補值日、冇有價無量日。審視層全部按本版重新量度：釘價股 {len(deal_all)} 隻有標記、"
         f"催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
     review_rule = (f"R13（唔改規則）：數據更新至 {last} 收盤，Nasdaq 快照反推對賬中位偏差 0.000%、Yahoo 日線逐隻交叉核對；"
-                   f"5 隻合股按比例重算歷史；審視層所有數字按本版重新量度。")
+                   f"5 隻合股按比例重算歷史；審視層所有數字按本版重新量度，「已跌穿底」標記每版重算、唔會沿用。")
+    notes[1] = {
+        "title": f"[本版觀察] {last[5:]} 油價＋關稅雙重衝擊，名單點反應",
+        "text": (f"{last[5:]} 全體 $10 億市值以上股份中位數 {u_med:+.2f}%、{u_up:.1f}% 上升；總表 {len(listed)} 隻中位數 {p1_med:+.2f}%，"
+                 f"{len(p1_down)} 隻跌超過 1%（最弱：" + "、".join(f"{a} {b:+.1f}%" for a, b in worst_rows) + "），"
+                 f"最強：" + "、".join(f"{a} {b:+.1f}%" for a, b in best_rows) + f"。收市喺 MA10 之下嘅有 {len(p1_below_ma)} 隻，"
+                 f"top 60 入面有 {len(top60_under)} 行收市貼住或低過 MA10：{'、'.join(top60_under)}。"
+                 f"「守底」嘅安全邊際基本上冇晒：除咗 {len(p1_undercut)} 隻收市已跌穿最後一個底（{J(p1_undercut)}，未夠三日確認所以仍然在榜，已加標記），"
+                 f"另有 {len(near_bot)} 行只高過最後一個底 1% 以內 —— {nb_txt}。"
+                 f"新上榜 {n_new} 隻嘅板塊分散係假象：{len(OILC)} 隻（{'、'.join(OILC)}）其實係同一注油價交易，"
+                 f"全部喺 7 月 27 日布蘭特單日插 8.7% 之後嘅一星期內見底（07-28 至 07-29），"
+                 f"再靠布油由 8 月 5 日 $78.11 反彈到 8 月 21 日 $94.83 推上嚟，四隻之中三隻嘅催化欄本身就寫「無個股催化」；"
+                 f"連同榜上合共 {len(energy_rows)} 行能源股，油價一轉頭會一次過失守。"
+                 f"{len(p1_peak_today)} 隻嘅底部後最高位就係 {last[5:]} 當日。"),
+        "tickers": (p1_undercut + [x[1] for x in near_bot])[:10]}
+    for n in notes:
+        if n["title"].startswith("[已修正] 催化欄"):
+            n["text"] = (f"{dated} 句有日期、{undated} 句冇日期（原文本身冇提日期，唔憑空補）、{no_cat} 句係「無個股催化」。"
+                         f"其中 {len(down_days)} 句所指嗰日收市係跌市，全部自動加「事件日 −X%」標記；"
+                         f"另有 {len(flat_days)} 句所指嗰日波幅喺 ±1% 之內。"
+                         f"本版獨立覆核逐句對照序列，改正咗 3 句效果數字：DDD「翌日升23.9%」實為 +25.8%、RES「單日升3.2%」實為 +5.9%、"
+                         f"SRPT「單日彈14.1%」實為 +11.0%（08-27，亦係佢 8 月最大單日升幅）。"
+                         f"同時修好兩個檢查漏洞：(1) 日期 regex 本來要求「8/3 」後面有空格，令 DDD、NVAX 呢類冇空格嘅句子完全避開檢查"
+                         f"（改為 ^(\\d+)/(\\d+)(?=\\D) 之後，有日期嘅由 83 句變 {dated} 句）；"
+                         f"(2) 效果數字本來容許「事件日之後三日任何一日」對得上就放行，RES 就係靠 07-31 嘅 +3.5% 蒙混過關。")
+        if n["title"].startswith("[已加標記] 突破高位落喺冇成交量嗰日"):
+            n["title"] = "[備註] 本版冇任何「無量」高位或底部"
+            n["text"] = (f"09-02 嘅成交量喺 R12 已由 Yahoo 補回，所以本版冇任何一行嘅底部後最高位或底部落喺無成交量嘅日子，"
+                         f"「·無量」符號冇對象。仍然有 {len(peak_0902)} 行嘅底部後最高位落喺 09-02 —— 嗰日嘅收市價係官方 net-change 反推、"
+                         f"成交量係 Yahoo 補回，兩樣都有數據，同「無量」係兩回事。")
+        if n["title"].startswith("[已加標記] 靠 09-02"):
+            n["title"] = "[待你決定] 底部確認只需三日，窗口邊界令名單對單日數據敏感"
+            n["text"] = (f"總表 {len(bot_0901)} 行嘅最後一個底落喺 09-01（已守 4 日），另有 8 行落喺 09-02（已守 3 日，即規則最少值）。"
+                         f"敏感度測試：如果剝走 09-02 呢一日，{dep}/{len(listed)} 行就唔會通過佢哋現有排名嗰個時間框嘅 MA 條件"
+                         f"（按四個時間框一齊計係 11 行）。但呢個唔係 09-02 特有 —— 獨立覆核試過剝走 09-03 一樣係 11 行，"
+                         f"剝走 09-01／08-31／08-26 分別係 6／7／6 行，而失去「一底高於一底」嘅永遠係同一批"
+                         f"（REFI、VTS、AESI、NVAX、RES、ACDC），因為佢哋 45 日窗口外第一格就有一個更高嘅底。"
+                         f"即係話呢個敏感度係 45／25 日窗口邊界效應，唔係邊一日數據嘅問題；要唔要收緊（例如底部確認由 3 日加到 5 日、"
+                         f"或者窗口用固定日曆長度），由你決定。")
+        if n["title"].startswith("[已加標記] 市值近界"):
+            n["text"] = n["text"].replace("市值用 09-04 快照", f"市值用 {last[5:]} 快照").replace(
+                "（APH 拆股後供應商未加股數，已手動乘 2，佢本身唔喺榜）", "")
 if REVISION not in ("R12", "R13"):
     review_rule = f"R11（唔改規則）：數據更新至 {last} 收盤，09-04 快照同 09-03 序列反推對賬中位偏差 0.000%，冇拆股；審視層所有數字按本版重新量度。"
 

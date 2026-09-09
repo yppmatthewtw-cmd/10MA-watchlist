@@ -21,7 +21,7 @@ OTHER = re.compile(r"原油|油價|以太幣|比特幣|銅價|金價|指數|標�
 METRIC = re.compile(r"收入|EPS|盈|利潤|指引|ARR|ASV|銷|按年|按季|同店|EBITDA|毛利|現金流|流量|訂閱|出貨|存款|貸款|價至|美元|億|萬")
 PRICE_IN_BADGE = re.compile(r"\$(\d+(?:\.\d+)?)(?![\d\.]*(?:億|萬|B|M|bn|m))")
 # the 催化 column writes its date as "8/5" and its effect after an arrow
-CATL = re.compile(r"^(\d{1,2})/(\d{1,2})\s")
+CATL = re.compile(r"^(\d{1,2})/(\d{1,2})(?=\D)")
 CATL_EFFECT = re.compile(r"(單日|翌日|當日|其後|自底|累)?[^0-9]{0,8}([+\-]?\d+(?:\.\d+)?)%")
 
 

@@ -2813,7 +2813,7 @@
  },
  "SRPT": {
   "decline_short": "7月底Q2收入$4.01億按年跌34%，全年指引上限由$14億削至$13億，Q3 Elevidys或再跌。",
-  "recovery_short": "新CEO 7月28日上任；8月27日單日彈14.1%：對手Capricor deramiocel遭FDA顧問委員會9比3反對（PDUFA押後至11月）、Wolfe升評級（目標價$27）、資金為下半年Elevidys數據提前布局",
+  "recovery_short": "新CEO 7月28日上任；8月27日單日彈11.0%：對手Capricor deramiocel遭FDA顧問委員會9比3反對（PDUFA押後至11月）、Wolfe升評級（目標價$27）、資金為下半年Elevidys數據提前布局",
   "hot": [
    "對手Capricor deramiocel遭FDA顧問委員會9比3反對",
    "Wolfe升評級（目標價$27）"
@@ -2830,7 +2830,7 @@
    "https://www.biospace.com/fda/capricor-shares-rise-as-fda-lifts-duchenne-cell-therapy-rejection",
    "https://www.marketbeat.com/instant-alerts/price-sarepta-therapeutics-nasdaq-srpt-stock-price-up-152-whats-next-2026-08-27/"
   ],
-  "cat_line": "8/27 對手Capricor遭FDA顧問委員會反對 → 單日彈14.1%"
+  "cat_line": "8/27 對手Capricor遭FDA顧問委員會反對 → 單日彈11.0%"
  },
  "TALO": {
   "decline_short": "6月底美伊局勢降溫、油價由高位回落，能源股跟跌，6月30日低見$12.91；7月未見個股消息。",
@@ -5715,7 +5715,7 @@
    "https://stockstotrade.com/news/3d-systems-corporation-ddd-news-2026_06_04/",
    "https://www.globenewswire.com/news-release/2026/08/10/3341733/8852/en/3d-systems-receives-9-million-contract-award-from-u-s-air-force-for-advanced-large-format-metal-3d-printing-system.html"
   ],
-  "cat_line": "8/3盤後Q2勝預期 → 翌日升23.9%"
+  "cat_line": "8/3盤後Q2勝預期 → 翌日升25.8%"
  },
  "HLLY": {
   "decline_short": "關稅成本上升、汽車改裝需求疲弱，市場憂邊際利潤受壓兼業績前觀望，HLLY 7/23跌至2.52美元見底。",
@@ -5804,7 +5804,7 @@
    "https://www.stocktitan.net/sec-filings/RES/8-k-rpc-inc-reports-material-event-97779072dbfd.html",
    "https://uk.finance.yahoo.com/news/energy-stocks-tumble-oil-suffers-121059763.html"
   ],
-  "cat_line": "7/30 Q2 EPS勝預期一倍 → 單日升3.2%"
+  "cat_line": "7/30 Q2 EPS勝預期一倍 → 單日升5.9%"
  },
  "VTS": {
   "decline_short": "7/27油價急插（布油-8.7%至88.36美元）拖累油氣股，VTS 7/28跌至15.00美元，創52周新低。",
