@@ -466,7 +466,7 @@ headline = (
     f"審視層全部重新量度：釘價股 {len(deal_all)} 隻有標記、催化欄 {len(down_days)} 句事件日係跌市已加標記、{len(novol_peak)} 行嘅高位仍落喺有價無量嘅 09-02。"
     "版面同 R10 一樣（一打開就係表，說明喺最底）。")
 
-if REVISION == "R12":
+if REVISION in ("R12", "R13"):
     x = json.load(open(f"{SCRATCH}/{XCHK}"))
     ds = x["day_stats"]; real = [v for v in ds.values() if v["cls"] == "real"]
     med_real = statistics.median(v["med_abs_pct"] for v in real)
@@ -502,6 +502,8 @@ if REVISION == "R12":
                  f"全部係因為補值日變成真實數據，唔係新交易日。跌出：{J(out_syms, 28)}。新上榜：{J(new_syms, 6)}。"),
         "tickers": new_syms[:10]}
     for n in notes:
+        if REVISION != "R12":
+            break
         if n["title"].startswith("[已加標記] 突破高位落喺冇成交量嗰日"):
             n["text"] = (f"09-02 嘅成交量已由 Yahoo 補回，所以「高位落喺無量日」呢個標記本版已經冇對象（{len(novol_peak)} 行）；"
                          "「·無量」符號只會喺仍然冇成交量數據嘅日子出現。")
@@ -519,14 +521,49 @@ if REVISION == "R12":
         f"審視層全部按補完嘅序列重新量度：釘價股 {len(deal_all)} 隻有標記、催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
     review_rule = (f"R12（唔改規則）：鏡像補值日、有價無量日同成交量不完整日改用 Yahoo Finance 日線（{x['yahoo_symbols']} 隻），其餘日子只對照不改動；"
                    f"{last} 收市價經 Yahoo 交叉核對。")
-else:
+if REVISION == "R13":
+    dl = ds.get(last, {})
+    macro = os.environ.get("MACRO_ZH", "")
+    ext = os.environ.get("EXT_NOTE", "")
+    novol_days = [d for d, c in x["fill_days"].items() if c == "price_only"]
+    notes[0] = {
+        "title": f"[本版數據] 更新至 {last} 收盤（新增一個交易日，兩個來源核對過）",
+        "text": (f"新增 {last[5:]}（周二；{ext or '09-07 勞動節休市'}），合共 {scr['meta']['n_days']} 個交易日。"
+                 f"當日收市價嘅主要驗證係 Nasdaq screener 快照（本 repo 嘅 GitHub Actions 抓）反推前收，同 09-04 序列逐隻對賬："
+                 f"5,083 隻中位偏差 0.000%、p99 0.000%。"
+                 f"Yahoo 交叉核對今次只做到一部分：收市後 4.8 同 5.1 個鐘各抓一次，Yahoo 當時只出咗 {dl.get('n', 0)}/{x['yahoo_symbols']} 隻嘅 09-08 日線"
+                 f"（其餘未更新），呢 {dl.get('n', 0)} 隻中位差 {dl.get('med_abs_pct', 0):.3f}%、{dl.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dl.get('vol_med_ratio')} —— "
+                 f"樣本細但零偏差。09-08 之前嘅日子仍然係全量核對過（2,757 隻、中位差 0.000%、99.6% 喺 0.5% 之內），09-08 嘅全量核對會喺下一版補做。"
+                 f"R12 補回嘅日子（鏡像補值 4 日、09-02 成交量、02-25／08-27 兩個未收齊嘅快照）繼續生效，所以本版序列已經冇補值日、"
+                 f"冇有價無量日{'' if novol_days else '（09-02 亦已有成交量）'}——「·無量」符號本版冇對象。"
+                 f"公司行動：本次接駁自動重算咗 5 隻合股嘅歷史（CTSO 1 拆 20、BRTX 1 拆 20、GTBP 1 拆 25、LRHC 1 拆 6、IGR 1 拆 3），"
+                 f"冇一隻喺榜；冇股票因為對唔上而剔除。"
+                 f"重新掃描：總表 {len(listed)} 隻，相對 R12 有 {n_new} 隻新上榜、{n_out} 隻跌出"
+                 f"（{len(broke)} 隻收市跌穿最後一個底、{len(struct_lower) + len(struct_aged)} 隻 MA 仍達標但底部序列斷咗或過咗 25 日窗口、"
+                 f"{len(ma_only)} 隻 MA 條件唔再成立{'，' + J(gone) + ' 冇報價' if gone else ''}），冇一隻因為數據問題。"
+                 f"跌出：{J(out_syms, 30)}。新上榜：{J(new_syms, 30)}。"),
+        "tickers": new_syms[:10]}
+    headline = (
+        f"R13 建基於 {last}（周二）收盤 —— 09-07 勞動節休市，所以呢個係 R12 之後嘅第一個交易日。{macro}"
+        f"本掃描 $10 億以上股份中位數 {u_med:+.2f}%、{u_up:.0f}% 上升；總表 {len(listed)} 隻本身中位數 {p1_med:+.2f}%，"
+        f"{len(p1_down)} 隻跌超過 1%、{len(p1_undercut)} 隻收市已低過最後一個底但未夠三日確認、top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
+        f"相對 R12：{n_new} 隻新上榜、{n_out} 隻跌出（{len(broke)} 隻跌穿最後一個底、{len(struct_lower) + len(struct_aged)} 隻底部序列斷咗或過咗窗口、"
+        f"{len(ma_only)} 隻 MA 條件唔再成立）。新上榜以 {'、'.join(new_sectors.split('、')[:3])} 為主（{new_caps}），"
+        f"但只有 {len(new_in_top50)}/{n_new} 隻入 top 50。"
+        f"當日收市價由 Nasdaq 快照反推對賬確認（5,083 隻中位偏差 0.000%）；Yahoo 收市後兩次抓取都只出咗 {dl.get('n', 0)} 隻嘅 09-08 日線"
+        f"（全部零偏差），全量核對留待下一版。序列本身冇補值日、冇有價無量日。審視層全部按本版重新量度：釘價股 {len(deal_all)} 隻有標記、"
+        f"催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
+    review_rule = (f"R13（唔改規則）：數據更新至 {last} 收盤，Nasdaq 快照反推對賬中位偏差 0.000%、Yahoo 日線逐隻交叉核對；"
+                   f"5 隻合股按比例重算歷史；審視層所有數字按本版重新量度。")
+if REVISION not in ("R12", "R13"):
     review_rule = f"R11（唔改規則）：數據更新至 {last} 收盤，09-04 快照同 09-03 序列反推對賬中位偏差 0.000%，冇拆股；審視層所有數字按本版重新量度。"
 
 review = {
     "headline": headline,
     "notes": notes,
     "rule_notes": [review_rule] + [r for r in (prev.get("rule_notes") or []) if "待你決定" in r and not r.startswith(("R11", "R12"))]
-                  + ([r for r in (prev.get("rule_notes") or []) if r.startswith("R11")] if REVISION == "R12" else []),
+                  + ([r for r in (prev.get("rule_notes") or []) if r.startswith(("R11", "R12"))]
+                     if REVISION in ("R12", "R13") else []),
     "ticker_flags": flags,
     "catalyst_warn": warns,
 }
