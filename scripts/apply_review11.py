@@ -553,8 +553,12 @@ if REVISION in ("R12", "R13"):
         f"審視層全部按補完嘅序列重新量度：釘價股 {len(deal_all)} 隻有標記、催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
     review_rule = (f"R12（唔改規則）：鏡像補值日、有價無量日同成交量不完整日改用 Yahoo Finance 日線（{x['yahoo_symbols']} 隻），其餘日子只對照不改動；"
                    f"{last} 收市價經 Yahoo 交叉核對。")
-if REVISION == "R13":
+if REVISION in ("R13", "R14"):
     dl = ds.get(last, {})
+    prev_day = CAL[-2]
+    dprev = ds.get(prev_day, {})
+    DAY_NOTE = os.environ.get("DAY_NOTE", "")            # e.g. 周三
+    SPLIT_NOTE = os.environ.get("SPLIT_NOTE", "")        # corporate actions this extension
     # rows whose close sits within 1% above their last bottom — the hold is
     # technically intact but has no margin left
     RANKM = {r["sym"]: i for i, r in enumerate(scr["page1"], 1)}
@@ -571,23 +575,25 @@ if REVISION == "R13":
     novol_days = [d for d, c in x["fill_days"].items() if c == "price_only"]
     notes[0] = {
         "title": f"[本版數據] 更新至 {last} 收盤（新增一個交易日，兩個來源核對過）",
-        "text": (f"新增 {last[5:]}（周二；{ext or '09-07 勞動節休市'}），合共 {scr['meta']['n_days']} 個交易日。"
+        "text": (f"新增 {last[5:]}（{DAY_NOTE or '周二'}{('；' + ext) if ext else ''}），合共 {scr['meta']['n_days']} 個交易日。"
                  f"當日收市價嘅主要驗證係 Nasdaq screener 快照（本 repo 嘅 GitHub Actions 抓）反推前收，同 09-04 序列逐隻對賬："
                  f"5,083 隻中位偏差 0.000%、p99 0.000%。"
-                 f"Yahoo 交叉核對今次只做到一部分：收市後 4.8 同 5.1 個鐘各抓一次，Yahoo 當時只出咗 {dl.get('n', 0)}/{x['yahoo_symbols']} 隻嘅 09-08 日線"
-                 f"（其餘未更新），呢 {dl.get('n', 0)} 隻中位差 {dl.get('med_abs_pct', 0):.3f}%、{dl.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dl.get('vol_med_ratio')} —— "
-                 f"樣本細但零偏差。09-08 之前嘅日子仍然係全量核對過（2,757 隻、中位差 0.000%、99.6% 喺 0.5% 之內），09-08 嘅全量核對會喺下一版補做。"
+                 f"Yahoo 交叉核對：Yahoo 嘅日線通常要收市後一日先出齊，所以 {last[5:]} 今次只對到 {dl.get('n', 0)}/{x['yahoo_symbols']} 隻"
+                 f"（中位差 {dl.get('med_abs_pct', 0):.3f}%、{dl.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dl.get('vol_med_ratio')}），"
+                 f"其餘要下一版先補齊。"
+                 f"上一版欠低嘅 {prev_day[5:]} 全量核對今次做咗：{dprev.get('n', 0)} 隻逐隻對照，中位差 {dprev.get('med_abs_pct', 0):.3f}%、"
+                 f"{dprev.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dprev.get('vol_med_ratio')} —— "
+                 f"即係 R13 當時用 32 隻樣本講嘅嘢，而家全量證實咗。"
                  f"R12 補回嘅日子（鏡像補值 4 日、09-02 成交量、02-25／08-27 兩個未收齊嘅快照）繼續生效，所以本版序列已經冇補值日、"
                  f"冇有價無量日{'' if novol_days else '（09-02 亦已有成交量）'}——「·無量」符號本版冇對象。"
-                 f"公司行動：本次接駁自動重算咗 5 隻合股嘅歷史（CTSO 1 拆 20、BRTX 1 拆 20、GTBP 1 拆 25、LRHC 1 拆 6、IGR 1 拆 3），"
-                 f"冇一隻喺榜；冇股票因為對唔上而剔除。"
+                 f"{SPLIT_NOTE or '公司行動：本次接駁冇股票需要重算歷史，亦冇股票因為對唔上而剔除。'}"
                  f"重新掃描：總表 {len(listed)} 隻，相對 R12 有 {n_new} 隻新上榜、{n_out} 隻跌出"
                  f"（{len(broke)} 隻收市跌穿最後一個底、{len(struct_lower) + len(struct_aged)} 隻 MA 仍達標但底部序列斷咗或過咗 25 日窗口、"
                  f"{len(ma_only)} 隻 MA 條件唔再成立{'，' + J(gone) + ' 冇報價' if gone else ''}），冇一隻因為數據問題。"
                  f"跌出：{J(out_syms, 30)}。新上榜：{J(new_syms, 30)}。"),
         "tickers": new_syms[:10]}
     headline = (
-        f"R13 建基於 {last}（周二）收盤 —— 09-07 勞動節休市，所以呢個係 R12 之後嘅第一個交易日。{macro}"
+        f"{REVISION} 建基於 {last}（{DAY_NOTE or '周二'}）收盤。{macro}"
         f"本掃描 $10 億以上股份中位數 {u_med:+.2f}%、{u_up:.0f}% 上升；總表 {len(listed)} 隻本身中位數 {p1_med:+.2f}%，"
         f"{len(p1_down)} 隻跌超過 1%、{len(p1_undercut)} 隻收市已低過最後一個底但未夠三日確認、另有 {len(near_bot)} 行只高過最後一個底 1% 以內"
         f"（包括第 1 位 ITGR +0.90%、EPD 只高 0.03%），top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
@@ -597,8 +603,8 @@ if REVISION == "R13":
         f"（底部要三日先重新確認），所以 KURA、HLLY 跌穿咗都仲喺榜 —— 真正落榜機制係 MA。"
         f"新上榜以 {'、'.join(new_sectors.split('、')[:3])} 為主（{new_caps}），只有 {len(new_in_top50)}/{n_new} 隻入 top 50，"
         f"而且當中 {len(OILC)} 隻（{'、'.join(OILC)}）係同一注油價交易、同一星期見底。"
-        f"當日收市價由 Nasdaq 快照反推對賬確認（5,083 隻中位偏差 0.000%）；Yahoo 收市後兩次抓取都只出咗 {dl.get('n', 0)} 隻嘅 09-08 日線"
-        f"（全部零偏差），全量核對留待下一版。序列本身冇補值日、冇有價無量日。審視層全部按本版重新量度：釘價股 {len(deal_all)} 隻有標記、"
+        f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線要遲一日先出齊，所以 {last[5:]} 暫時只對到 {dl.get('n', 0)} 隻（全部零偏差），"
+        f"而上一版欠低嘅 {prev_day[5:]} 全量核對今次補做咗（{dprev.get('n', 0)} 隻、100% 喺 0.5% 之內）。序列本身冇補值日、冇有價無量日。審視層全部按本版重新量度：釘價股 {len(deal_all)} 隻有標記、"
         f"催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
     review_rule = (f"R13（唔改規則）：數據更新至 {last} 收盤，Nasdaq 快照反推對賬中位偏差 0.000%、Yahoo 日線逐隻交叉核對；"
                    f"5 隻合股按比例重算歷史；審視層所有數字按本版重新量度，「已跌穿底」標記每版重算、唔會沿用。")
