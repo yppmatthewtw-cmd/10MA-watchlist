@@ -498,7 +498,7 @@ headline = (
     f"審視層全部重新量度：釘價股 {len(deal_all)} 隻有標記、催化欄 {len(down_days)} 句事件日係跌市已加標記、{len(novol_peak)} 行嘅高位仍落喺有價無量嘅 09-02。"
     "版面同 R10 一樣（一打開就係表，說明喺最底）。")
 
-if REVISION in ("R12", "R13"):
+if REVISION != "R11":                # every revision since R12 has a cross-check
     x = json.load(open(f"{SCRATCH}/{XCHK}"))
     ds = x["day_stats"]; real = [v for v in ds.values() if v["cls"] == "real"]
     med_real = statistics.median(v["med_abs_pct"] for v in real)
@@ -557,6 +557,8 @@ if REVISION in ("R13", "R14"):
     dl = ds.get(last, {})
     prev_day = CAL[-2]
     dprev = ds.get(prev_day, {})
+    PREV_LABEL = os.environ.get("PREV_REV_LABEL", "上一版")
+    n_recon = sum(1 for sym, (fi, cs, vs, ff) in SER.items() if fi + len(cs) == N and len(cs) >= 2)
     DAY_NOTE = os.environ.get("DAY_NOTE", "")            # e.g. 周三
     SPLIT_NOTE = os.environ.get("SPLIT_NOTE", "")        # corporate actions this extension
     # rows whose close sits within 1% above their last bottom — the hold is
@@ -567,7 +569,8 @@ if REVISION in ("R13", "R14"):
                        for sym in listed if listed[sym].get("hl")
                        and 0 <= listed[sym]["close"] / listed[sym]["hl"][-1][1] - 1 < 0.01))
     nb_txt = "、".join(f"{sym} #{rk} +{g:.2f}%{'（同時低過 MA10）' if bm else ''}" for rk, sym, g, bm in near_bot)
-    OILC = [t for t in ("VTS", "RES", "ACDC", "AESI") if t in listed]
+    OILC = [t for t in ("VTS", "RES", "ACDC", "AESI") if t in new_syms]
+    OILC_HELD = [t for t in ("VTS", "RES", "ACDC", "AESI") if t in listed and t not in new_syms]
     energy_rows = [sym for sym in listed if listed[sym].get("sector_zh") == "能源"]
     peak_0902 = [sym for sym in listed if listed[sym]["cert_c"].get("peak_day") == "2026-09-02"]
     macro = os.environ.get("MACRO_ZH", "")
@@ -576,8 +579,8 @@ if REVISION in ("R13", "R14"):
     notes[0] = {
         "title": f"[本版數據] 更新至 {last} 收盤（新增一個交易日，兩個來源核對過）",
         "text": (f"新增 {last[5:]}（{DAY_NOTE or '周二'}{('；' + ext) if ext else ''}），合共 {scr['meta']['n_days']} 個交易日。"
-                 f"當日收市價嘅主要驗證係 Nasdaq screener 快照（本 repo 嘅 GitHub Actions 抓）反推前收，同 09-04 序列逐隻對賬："
-                 f"5,083 隻中位偏差 0.000%、p99 0.000%。"
+                 f"當日收市價嘅主要驗證係 Nasdaq screener 快照（本 repo 嘅 GitHub Actions 抓）反推前收，"
+                 f"同對上一個交易日（{prev_day[5:]}）嘅序列逐隻對賬：{n_recon:,} 隻中位偏差 0.000%、p99 0.000%。"
                  f"Yahoo 交叉核對：Yahoo 嘅日線通常要收市後一日先出齊，所以 {last[5:]} 今次只對到 {dl.get('n', 0)}/{x['yahoo_symbols']} 隻"
                  f"（中位差 {dl.get('med_abs_pct', 0):.3f}%、{dl.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dl.get('vol_med_ratio')}），"
                  f"其餘要下一版先補齊。"
@@ -587,7 +590,7 @@ if REVISION in ("R13", "R14"):
                  f"R12 補回嘅日子（鏡像補值 4 日、09-02 成交量、02-25／08-27 兩個未收齊嘅快照）繼續生效，所以本版序列已經冇補值日、"
                  f"冇有價無量日{'' if novol_days else '（09-02 亦已有成交量）'}——「·無量」符號本版冇對象。"
                  f"{SPLIT_NOTE or '公司行動：本次接駁冇股票需要重算歷史，亦冇股票因為對唔上而剔除。'}"
-                 f"重新掃描：總表 {len(listed)} 隻，相對 R12 有 {n_new} 隻新上榜、{n_out} 隻跌出"
+                 f"重新掃描：總表 {len(listed)} 隻，相對 {PREV_LABEL} 有 {n_new} 隻新上榜、{n_out} 隻跌出"
                  f"（{len(broke)} 隻收市跌穿最後一個底、{len(struct_lower) + len(struct_aged)} 隻 MA 仍達標但底部序列斷咗或過咗 25 日窗口、"
                  f"{len(ma_only)} 隻 MA 條件唔再成立{'，' + J(gone) + ' 冇報價' if gone else ''}），冇一隻因為數據問題。"
                  f"跌出：{J(out_syms, 30)}。新上榜：{J(new_syms, 30)}。"),
@@ -596,17 +599,20 @@ if REVISION in ("R13", "R14"):
         f"{REVISION} 建基於 {last}（{DAY_NOTE or '周二'}）收盤。{macro}"
         f"本掃描 $10 億以上股份中位數 {u_med:+.2f}%、{u_up:.0f}% 上升；總表 {len(listed)} 隻本身中位數 {p1_med:+.2f}%，"
         f"{len(p1_down)} 隻跌超過 1%、{len(p1_undercut)} 隻收市已低過最後一個底但未夠三日確認、另有 {len(near_bot)} 行只高過最後一個底 1% 以內"
-        f"（包括第 1 位 ITGR +0.90%、EPD 只高 0.03%），top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
-        f"相對 R12：{n_new} 隻新上榜、{n_out} 隻跌出 —— {len(ma_only)} 隻係四個時間框嘅 MA 條件全部唔再成立"
+        f"（最貼嘅：{'、'.join(f'{sym} #{rk} +{g:.2f}%' for rk, sym, g, _ in near_bot[:3])}），"
+        f"top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
+        f"相對 {PREV_LABEL}：{n_new} 隻新上榜、{n_out} 隻跌出 —— {len(ma_only)} 隻係四個時間框嘅 MA 條件全部唔再成立"
         f"（當中 {len(broke_and_ma)} 隻同時收市跌穿最後一個底，但跌穿幅度中位只有 {und_med:.1f}%、{und_shallow} 隻唔夠 1%），"
         f"另 {len(struct_lower) + len(struct_aged)} 隻 MA 仍達標但造出更低嘅底。要留意：收市跌穿底本身唔會令一行落榜"
-        f"（底部要三日先重新確認），所以 KURA、HLLY 跌穿咗都仲喺榜 —— 真正落榜機制係 MA。"
-        f"新上榜以 {'、'.join(new_sectors.split('、')[:3])} 為主（{new_caps}），只有 {len(new_in_top50)}/{n_new} 隻入 top 50，"
-        f"而且當中 {len(OILC)} 隻（{'、'.join(OILC)}）係同一注油價交易、同一星期見底。"
-        f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線要遲一日先出齊，所以 {last[5:]} 暫時只對到 {dl.get('n', 0)} 隻（全部零偏差），"
+        f"（底部要三日先重新確認）{'，所以 ' + J(p1_undercut, 3) + ' 跌穿咗都仲喺榜' if p1_undercut else ''} —— 真正落榜機制係 MA。"
+        f"新上榜以 {'、'.join(new_sectors.split('、')[:3])} 為主（{new_caps}），只有 {len(new_in_top50)}/{n_new} 隻入 top 50。"
+        + (f"新上榜當中 {len(OILC)} 隻（{'、'.join(OILC)}）係同一注油價交易、同一星期見底。" if OILC else "")
+        + (f"上一版點名嘅油價一注（{'、'.join(OILC_HELD)}）仍然在榜，連同全部 {len(energy_rows)} 行能源股，"
+           f"油價一轉頭會一次過失守。" if OILC_HELD else "")
+        + f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線要遲一日先出齊，所以 {last[5:]} 暫時只對到 {dl.get('n', 0)} 隻（全部零偏差），"
         f"而上一版欠低嘅 {prev_day[5:]} 全量核對今次補做咗（{dprev.get('n', 0)} 隻、100% 喺 0.5% 之內）。序列本身冇補值日、冇有價無量日。審視層全部按本版重新量度：釘價股 {len(deal_all)} 隻有標記、"
         f"催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
-    review_rule = (f"R13（唔改規則）：數據更新至 {last} 收盤，Nasdaq 快照反推對賬中位偏差 0.000%、Yahoo 日線逐隻交叉核對；"
+    review_rule = (f"{REVISION}（唔改規則）：數據更新至 {last} 收盤，Nasdaq 快照反推對賬中位偏差 0.000%、Yahoo 日線逐隻交叉核對；"
                    f"5 隻合股按比例重算歷史；審視層所有數字按本版重新量度，「已跌穿底」標記每版重算、唔會沿用。")
     notes[1] = {
         "title": f"[本版觀察] {last[5:]} 油價＋關稅雙重衝擊，名單點反應",
@@ -616,10 +622,11 @@ if REVISION in ("R13", "R14"):
                  f"top 60 入面有 {len(top60_under)} 行收市貼住或低過 MA10：{'、'.join(top60_under)}。"
                  f"「守底」嘅安全邊際基本上冇晒：除咗 {len(p1_undercut)} 隻收市已跌穿最後一個底（{J(p1_undercut)}，未夠三日確認所以仍然在榜，已加標記），"
                  f"另有 {len(near_bot)} 行只高過最後一個底 1% 以內 —— {nb_txt}。"
-                 f"新上榜 {n_new} 隻嘅板塊分散係假象：{len(OILC)} 隻（{'、'.join(OILC)}）其實係同一注油價交易，"
-                 f"全部喺 7 月 27 日布蘭特單日插 8.7% 之後嘅一星期內見底（07-28 至 07-29），"
-                 f"再靠布油由 8 月 5 日 $78.11 反彈到 8 月 21 日 $94.83 推上嚟，四隻之中三隻嘅催化欄本身就寫「無個股催化」；"
-                 f"連同榜上合共 {len(energy_rows)} 行能源股，油價一轉頭會一次過失守。"
+                 + (f"新上榜 {n_new} 隻嘅板塊分散係假象：{len(OILC)} 隻（{'、'.join(OILC)}）其實係同一注油價交易，"
+                    f"全部喺 7 月 27 日布蘭特單日插 8.7% 之後嘅一星期內見底（07-28 至 07-29）。" if OILC else "")
+                 + (f"上一版點名嘅油價一注（{'、'.join(OILC_HELD)}）仍然在榜；" if OILC_HELD else "")
+                 + f"榜上合共 {len(energy_rows)} 行能源股（佔 {len(energy_rows) / len(listed) * 100:.0f}%），"
+                   f"09-09 布蘭特結算 $101.21、企穩 100 美元係佢哋企硬嘅原因，油價一轉頭會一次過失守。"
                  f"{len(p1_peak_today)} 隻嘅底部後最高位就係 {last[5:]} 當日。"),
         "tickers": (p1_undercut + [x[1] for x in near_bot])[:10]}
     for n in notes:
@@ -649,7 +656,7 @@ if REVISION in ("R13", "R14"):
         if n["title"].startswith("[已加標記] 市值近界"):
             n["text"] = n["text"].replace("市值用 09-04 快照", f"市值用 {last[5:]} 快照").replace(
                 "（APH 拆股後供應商未加股數，已手動乘 2，佢本身唔喺榜）", "")
-if REVISION not in ("R12", "R13"):
+if REVISION == "R11":
     review_rule = f"R11（唔改規則）：數據更新至 {last} 收盤，09-04 快照同 09-03 序列反推對賬中位偏差 0.000%，冇拆股；審視層所有數字按本版重新量度。"
 
 review = {
@@ -657,7 +664,7 @@ review = {
     "notes": notes,
     "rule_notes": [review_rule] + [r for r in (prev.get("rule_notes") or []) if "待你決定" in r and not r.startswith(("R11", "R12"))]
                   + ([r for r in (prev.get("rule_notes") or []) if r.startswith(("R11", "R12"))]
-                     if REVISION in ("R12", "R13") else []),
+                     if REVISION != "R11" else []),
     "ticker_flags": flags,
     "catalyst_warn": warns,
 }
