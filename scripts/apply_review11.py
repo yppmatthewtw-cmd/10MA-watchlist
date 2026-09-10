@@ -63,7 +63,7 @@ def ret(sym, i):
 # tickers that have left, plus TECH (Merck $73 cash, German clearance 08-17)
 # from the R11 research
 OFFERS = {"ITGR": 127.0, "OGN": 14.0, "NATH": 102.0, "GBTG": 9.50, "TXNM": 61.25,
-          "DBRG": 16.0, "TECH": 73.0}
+          "DBRG": 16.0, "TECH": 73.0, "BWMN": 43.0}
 # offers paid in cash + acquirer stock: the value moves with the acquirer, so it
 # is computed from that day's close rather than pinned to a headline number
 STOCK_OFFERS = {"SMTI": ("MiMedx", 33.0, 0.4735, "MDXG")}
@@ -145,6 +145,16 @@ if "IRD" in flags and "IRD" in listed and "2026-08-31" in IDX:
                             "最後一個更高低點只係 3.61→3.62（+0.28%）。VCP 得 16.6 但確定性高分，分數全部嚟自守底同無量嘅突破。")
 if "DMLP" in flags and "DMLP" in listed and "2026-08-04" in IDX:
     flags["DMLP"]["text"] = flags["DMLP"]["text"].replace("+14.8%", f"{pct('DMLP', '2026-08-04', None):+.1f}%")
+if "DMLP" in flags and "DMLP" in listed and listed["DMLP"].get("hl"):
+    b0, p0 = listed["DMLP"]["hl"][0]
+    if b0 in IDX:
+        flags["DMLP"]["text"] = re.sub(r"自 08-04 起嘅 \+[\d.]+%",
+                                       f"自 {b0[5:]} 起嘅 {pct('DMLP', b0, None):+.1f}%", flags["DMLP"]["text"])
+if "BRK/B" in flags and "BRK/B" in listed and "2026-08-10" in IDX:
+    c = listed["BRK/B"]["close"]
+    gap = pct("BRK/B", "2026-08-10", None)
+    flags["BRK/B"]["text"] = re.sub(r"現價 \$[\d.]+ 仍然低過 08-10 收市 [\d.]+%",
+                                    f"現價 ${c:g} 仍然低過 08-10 收市 {abs(gap):.1f}%", flags["BRK/B"]["text"])
 for sym in ("DFIN", "NOW", "CHRD"):
     if sym in flags and "（事件日回報係固定歷史" not in flags[sym]["text"]:
         flags[sym]["text"] += "（事件日回報係固定歷史；其餘百分比係 R9 量度）"
@@ -195,7 +205,9 @@ for sym, day, r, r_next, says_next in down_days:
     if sym in warns:
         continue
     md = day.replace("-", "/")
-    if says_next and r_next is not None and r_next >= 3.0:
+    after_hours = "盤後" in ((news.get(sym) or {}).get("recovery_short", "") +
+                            (news.get(sym) or {}).get("decline_short", ""))
+    if (says_next or after_hours) and r_next is not None and r_next >= 1.5:
         # an after-close print: the line already points at the next day, so the
         # event-day drop is the pre-print move, not the market's verdict
         after_close.append(sym)
@@ -351,6 +363,8 @@ hl_thin = [s for s in listed if len(listed[s]["hl"]) >= 2
 top = scr["page1"][:50]
 pinned = [r["sym"] for r in top if flags.get(r["sym"], {}).get("deal")]
 wiggle = [r["sym"] for r in top if r["cert_c"]["pL"] and r["cert_c"]["H_mid"] / r["cert_c"]["pL"] - 1 < 0.01]
+wiggle_all = [r["sym"] for r in scr["page1"]
+              if r["cert_c"]["pL"] and r["cert_c"]["H_mid"] / r["cert_c"]["pL"] - 1 < 0.01]
 sat = {k: sum(1 for r in top if r["cert_c"]["s"][k] >= 0.999) for k in top[0]["cert_c"]["s"]}
 above = sorted((r["close"] / r["cert_c"]["H_mid"] - 1) * 100 for r in top)
 near_cut = [s for s in listed if any(abs(listed[s]["mcap"] / c - 1) < 0.05 for c in scr["meta"]["cap_cuts_b"])]
@@ -441,9 +455,9 @@ for n in open_notes:
         n["title"] = "[待你決定] 確定性飽和同釘價股仍然主導榜首（本版重新量度）"
         n["text"] = (f"喺 {last} 嘅數據上一樣成立：總表 top 50 入面「突破」項有 {sat['break']}/50 係滿分、「回補」{sat['retr']}/50、"
                      f"「均線」{sat['ma']}/50，即係確定性一半權重根本冇分辨力，實際排序由守底日數同量比決定；"
-                     f"另外 {len(wiggle)} 隻嘅中間高位只高過上一個底 <1%（{J(wiggle, 6)}），三項自動接近滿分。"
+                     f"另外全表 {len(wiggle_all)} 隻（top 50 佔 {len(wiggle)} 隻）嘅中間高位只高過上一個底 <1%（{J(wiggle_all, 6)}），三項自動接近滿分。"
                      f"併購釘價股佔 top 50 嘅 {len(pinned)} 隻（{J(pinned, 8)}）{'，包括第 1 位' if pinned and top[0]['sym'] == pinned[0] else ''}。"
-                     f"top 50 距離中間高位嘅中位數 {above[len(above)//2]:+.1f}%。建議（會改規則）：突破需 ≥ 中間高位 ×1.01、去掉均線項重新加權、釘價股另置區塊 —— 三項都要你拍板。")
+                     f"top 50 距離中間高位嘅中位數 {above[len(above)//2]:+.2f}%。建議（會改規則）：突破需 ≥ 中間高位 ×1.01、去掉均線項重新加權、釘價股另置區塊 —— 三項都要你拍板。")
         n["tickers"] = pinned[:8]
     elif t.startswith("[待你決定] 部分行嘅「一底高於一底」"):
         thin_txt = "、".join(f"{s} {(listed[s]['hl'][-1][1] / listed[s]['hl'][-2][1] - 1) * 100:+.2f}%"
@@ -465,9 +479,9 @@ for n in open_notes:
                          "建議：同一公司只計一個名額（保留流動性較高嗰類）—— 會改規則，由你決定。")
             n["tickers"] = stayed
     elif t.startswith("[待你決定] 確定性三項（45% 權重）"):
-        n["text"] = (f"當最後兩個底之間嘅中間高位只高過上一個底 <1%（本版 top 50 有 {len(wiggle)} 隻，例如 {J(wiggle, 5)}），"
+        n["text"] = (f"當最後兩個底之間嘅中間高位只高過上一個底 <1%（本版全表 {len(wiggle_all)} 隻：{J(wiggle_all, 6)}），"
                      "突破、回補、守底三項會被一日小回全數攞滿。建議：中間高位需高過上一個底 ≥2% 先計 —— 會改規則，由你決定。")
-        n["tickers"] = wiggle[:6]
+        n["tickers"] = wiggle_all[:6]
     else:
         n["tickers"] = [x for x in (n.get("tickers") or []) if x in listed]
     if n["title"].startswith("[待你決定] MA 連升 3 日"):
@@ -485,6 +499,9 @@ lineage = {"title": "[備註] R8–R10 嘅修正同做法繼續生效",
 for f in agent_notes[:9]:
     notes.append({"title": f"[覆核 · 已修正] {f.get('title', '')[:60]}",
                   "text": (f.get("evidence", "")[:400] + " → 處理：" + f.get("proposed_fix", "")[:200]).strip()})
+# the previous revision's copy of a note this one rewrites would otherwise ship twice
+_rewritten = {n["title"] for n in notes}
+open_notes = [n for n in open_notes if n["title"] not in _rewritten]
 notes = notes + [lineage] + open_notes
 
 # ---- 6. headline -------------------------------------------------------------
@@ -533,6 +550,7 @@ if REVISION != "R11":                # every revision since R12 has a cross-chec
                  f"——補值日本來係平盤、而家有真實嘅高低位，底部序列整個重新計；{len(ma_only)} 隻 MA 條件唔再成立），"
                  f"全部係因為補值日變成真實數據，唔係新交易日。跌出：{J(out_syms, 28)}。新上榜：{J(new_syms, 6)}。"),
         "tickers": new_syms[:10]}
+    SENS_TXT = os.environ.get("SENS_TXT", "")
     for n in notes:
         if REVISION != "R12":
             break
@@ -569,6 +587,31 @@ if REVISION in ("R13", "R14"):
                        for sym in listed if listed[sym].get("hl")
                        and 0 <= listed[sym]["close"] / listed[sym]["hl"][-1][1] - 1 < 0.01))
     nb_txt = "、".join(f"{sym} #{rk} +{g:.2f}%{'（同時低過 MA10）' if bm else ''}" for rk, sym, g, bm in near_bot)
+    # how much of the ORIGINAL R12 list is left, and how differently the leavers
+    # and the survivors traded — without this the table's median reads as calm
+    BASE = os.environ.get("BASE_SCREEN", "")           # e.g. screen_results12.json
+    BASE_LABEL = os.environ.get("BASE_LABEL", "")
+    surv_txt = ""
+    if BASE and os.path.exists(f"{SCRATCH}/{BASE}"):
+        base = json.load(open(f"{SCRATCH}/{BASE}"))
+        base_syms = [r["sym"] for r in base["page1"]]
+        base_last = base["meta"]["last_date"]
+        i0 = IDX.get(base_last)
+        def move(sym):
+            if sym not in SER or i0 is None: return None
+            fi, cs, vs, ff = SER[sym]
+            a, b = i0 - fi, N - 1 - fi
+            return (cs[b] / cs[a] - 1) * 100 if 0 <= a < len(cs) and 0 <= b < len(cs) else None
+        stay = [s2 for s2 in base_syms if s2 in listed]
+        left = [s2 for s2 in base_syms if s2 not in listed]
+        mv_stay = [m for m in (move(s2) for s2 in stay) if m is not None]
+        mv_left = [m for m in (move(s2) for s2 in left) if m is not None]
+        if mv_stay and mv_left:
+            surv_txt = (f"累計嚟睇：{BASE_LABEL or base_last} 嗰 {len(base_syms)} 行，到今日只剩 {len(stay)} 行"
+                        f"（{len(stay) / len(base_syms) * 100:.0f}%）。由 {base_last[5:]} 到 {last[5:]}，"
+                        f"跌出嗰 {len(left)} 行中位數 {statistics.median(mv_left):+.1f}%，留低嗰 {len(stay)} 行只係 "
+                        f"{statistics.median(mv_stay):+.1f}% —— 所以總表今日「中位 {p1_med:+.2f}%」睇落穩陣，"
+                        f"其實係篩走咗傷兵之後嘅倖存者偏差，唔可以當成名單抗跌。")
     OILC = [t for t in ("VTS", "RES", "ACDC", "AESI") if t in new_syms]
     OILC_HELD = [t for t in ("VTS", "RES", "ACDC", "AESI") if t in listed and t not in new_syms]
     energy_rows = [sym for sym in listed if listed[sym].get("sector_zh") == "能源"]
@@ -597,7 +640,7 @@ if REVISION in ("R13", "R14"):
         "tickers": new_syms[:10]}
     headline = (
         f"{REVISION} 建基於 {last}（{DAY_NOTE or '周二'}）收盤。{macro}"
-        f"本掃描 $10 億以上股份中位數 {u_med:+.2f}%、{u_up:.0f}% 上升；總表 {len(listed)} 隻本身中位數 {p1_med:+.2f}%，"
+        f"本掃描 $10 億以上股份中位數 {u_med:+.2f}%、{u_up:.1f}% 上升；總表 {len(listed)} 隻本身中位數 {p1_med:+.2f}%，"
         f"{len(p1_down)} 隻跌超過 1%、{len(p1_undercut)} 隻收市已低過最後一個底但未夠三日確認、另有 {len(near_bot)} 行只高過最後一個底 1% 以內"
         f"（最貼嘅：{'、'.join(f'{sym} #{rk} +{g:.2f}%' for rk, sym, g, _ in near_bot[:3])}），"
         f"top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
@@ -609,6 +652,7 @@ if REVISION in ("R13", "R14"):
         + (f"新上榜當中 {len(OILC)} 隻（{'、'.join(OILC)}）係同一注油價交易、同一星期見底。" if OILC else "")
         + (f"上一版點名嘅油價一注（{'、'.join(OILC_HELD)}）仍然在榜，連同全部 {len(energy_rows)} 行能源股，"
            f"油價一轉頭會一次過失守。" if OILC_HELD else "")
+        + (surv_txt if surv_txt else "")
         + f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線要遲一日先出齊，所以 {last[5:]} 暫時只對到 {dl.get('n', 0)} 隻（全部零偏差），"
         f"而上一版欠低嘅 {prev_day[5:]} 全量核對今次補做咗（{dprev.get('n', 0)} 隻、100% 喺 0.5% 之內）。序列本身冇補值日、冇有價無量日。審視層全部按本版重新量度：釘價股 {len(deal_all)} 隻有標記、"
         f"催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
@@ -646,18 +690,30 @@ if REVISION in ("R13", "R14"):
                          f"成交量係 Yahoo 補回，兩樣都有數據，同「無量」係兩回事。")
         if n["title"].startswith("[已加標記] 靠 09-02"):
             n["title"] = "[待你決定] 底部確認只需三日，窗口邊界令名單對單日數據敏感"
-            n["text"] = (f"總表 {len(bot_0901)} 行嘅最後一個底落喺 09-01（已守 4 日），另有 8 行落喺 09-02（已守 3 日，即規則最少值）。"
-                         f"敏感度測試：如果剝走 09-02 呢一日，{dep}/{len(listed)} 行就唔會通過佢哋現有排名嗰個時間框嘅 MA 條件"
-                         f"（按四個時間框一齊計係 11 行）。但呢個唔係 09-02 特有 —— 獨立覆核試過剝走 09-03 一樣係 11 行，"
-                         f"剝走 09-01／08-31／08-26 分別係 6／7／6 行，而失去「一底高於一底」嘅永遠係同一批"
-                         f"（REFI、VTS、AESI、NVAX、RES、ACDC），因為佢哋 45 日窗口外第一格就有一個更高嘅底。"
-                         f"即係話呢個敏感度係 45／25 日窗口邊界效應，唔係邊一日數據嘅問題；要唔要收緊（例如底部確認由 3 日加到 5 日、"
+            from collections import Counter as _C
+            bd_c = _C(listed[sym]["hl"][-1][0] for sym in listed if listed[sym].get("hl"))
+            bd_txt = "、".join(f"{d[5:]} {c} 行（已守 {N - 1 - IDX[d]} 日）"
+                              for d, c in sorted(bd_c.items(), reverse=True)[:3] if d in IDX)
+            n["text"] = (f"最後一個底最集中嘅三日：{bd_txt}（規則最少值係 3 日）。"
+                         f"敏感度測試（本版重算）：剝走 09-02 呢一日，{dep}/{len(listed)} 行就唔會通過佢哋現有排名嗰個時間框嘅 MA 條件；"
+                         f"{SENS_TXT or '獨立覆核按四個時間框一齊計係 13 行，而剝走其他近期交易日（09-03／09-01／08-31／08-26）分別係 13／12／14／9 行'}。"
+                         f"即係話呢個敏感度唔係邊一日特有，而係 45／25 日窗口邊界效應；要唔要收緊（例如底部確認由 3 日加到 5 日、"
                          f"或者窗口用固定日曆長度），由你決定。")
         if n["title"].startswith("[已加標記] 市值近界"):
             n["text"] = n["text"].replace("市值用 09-04 快照", f"市值用 {last[5:]} 快照").replace(
                 "（APH 拆股後供應商未加股數，已手動乘 2，佢本身唔喺榜）", "")
 if REVISION == "R11":
     review_rule = f"R11（唔改規則）：數據更新至 {last} 收盤，09-04 快照同 09-03 序列反推對賬中位偏差 0.000%，冇拆股；審視層所有數字按本版重新量度。"
+
+# the R13/R14 branch renames notes after they were assembled, so a carried copy
+# can end up sharing a rewritten title: drop the later duplicate, keeping the
+# first (which is the one this revision recomputed).
+_seen, _notes = set(), []
+for n in notes:
+    if n["title"] in _seen:
+        continue
+    _seen.add(n["title"]); _notes.append(n)
+notes = _notes
 
 review = {
     "headline": headline,

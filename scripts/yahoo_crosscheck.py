@@ -120,24 +120,41 @@ for s in cur:
     for j in range(len(fac)):
         if fac[j] is None and j > 0 and (fi + j) in SYN:
             fac[j] = fac[j - 1]
-    # runs of a constant factor != 1 of at least SPLIT_RUN days
-    j = 0; runs = []
-    while j < len(fac):
-        f = fac[j]
-        if f in (None, 1.0):
-            j += 1; continue
-        k = j
-        while k + 1 < len(fac) and fac[k + 1] == f: k += 1
-        if k - j + 1 >= SPLIT_RUN:
-            runs.append((j, k, f))
-        j = k + 1
-    if runs:
+    # A split's factor applies to every day before it, so the basis is resolved
+    # by sweeping backwards: start on the current basis (1.0), adopt a factor
+    # when a day shows one that recurs at least SPLIT_RUN times, and carry it to
+    # every earlier day — including days whose own ratio is too noisy to name a
+    # factor. Sweeping instead of taking runs is what stops an odd print inside
+    # the pre-split stretch (NAKA's 02-25 and 03-18) from being left on the old
+    # basis, which would leave a 40x gap in the middle of the series.
+    counts = {}
+    for f in fac:
+        if f not in (None, 1.0):
+            counts[f] = counts.get(f, 0) + 1
+    real = {f for f, c in counts.items() if c >= SPLIT_RUN}
+    eff, basis = [1.0] * len(fac), 1.0          # `cur` is the current-ticker list
+    for j in range(len(fac) - 1, -1, -1):
+        if fac[j] in real:
+            basis = fac[j]
+        elif fac[j] == 1.0:
+            basis = 1.0
+        eff[j] = basis
+    if real and any(e != 1.0 for e in eff):
         cs, vs = list(cs), list(vs)
-        for a, b, f in runs:
+        spans = []
+        j = 0
+        while j < len(eff):
+            if eff[j] == 1.0:
+                j += 1; continue
+            k = j
+            while k + 1 < len(eff) and eff[k + 1] == eff[j]: k += 1
+            spans.append((j, k, eff[j]))
+            j = k + 1
+        for a, b, f in spans:
             for jj in range(a, b + 1):
                 cs[jj] = round(cs[jj] / f, 4); vs[jj] = vs[jj] * f
         SER[s] = (fi, cs, vs, ff)
-        splits[s] = [(CAL[fi + a], CAL[fi + b], f, b - a + 1) for a, b, f in runs]
+        splits[s] = [(CAL[fi + a], CAL[fi + b], f, b - a + 1) for a, b, f in spans]
     n_unclean = sum(1 for j in range(len(cs)) if fac[j] is None and CAL[fi + j] in m and (fi + j) not in FILL_DAYS)
     if n_unclean: unclean[s] = n_unclean
 print(f"share basis: {len(splits)} tickers rescaled for a split the series never adjusted "
