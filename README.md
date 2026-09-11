@@ -9,6 +9,7 @@
 
 | 版本 | 內容 |
 |------|------|
+| R15.00 | 數據更新至 **2026-09-10 收盤**（周四，177 個交易日）：09-10 快照反推對賬中位偏差 0.000%（LFT 10 合 1 已重算）；**上一版欠低嘅 09-09 全量 Yahoo 核對今次補做咗**（2,758 隻、100% 喺 0.5% 之內）；當日 8 月 PPI 按年 5.4%、WTI $102.48／布蘭特 $107.63 創 5 月以來新高、10 年期息 4.95%，加息機率抽升至 70% —— **四連跌**，$10 億以上股份中位 −0.69%、只 30.6% 上升；總表 102 → 101 隻（20 新上榜、21 跌出）；**本版最重要嘅發現（覆核提出）**：名單嘅緩衝已經冇晒 —— 48/101 行收市低過自己 MA10、中位行只高出 +0.11%、70/101 行冇緩衝，**凍結測試**（價格企定唔郁）顯示多一日 30 行、五日 45 行會自動跌出；**批判性覆核另修正**：QRVO 補回換股釘價標記（0.960 股 SWKS＋$32.50，價差 +0.7%，同 SWKS 相關系數 0.992，而 SWKS 自己都喺榜）、GEN 嘅「未夠三日確認」改為實測連續 3 日收喺底下、FEIM 標「催化晚過收市」（唯一催化係 09-10 收市後先公布）、TMDX 催化句改為「翌日先挫 5.3%」、底部日數改為按行數排序、AUGO／LAND 嘅口徑修正 |
 | R14.00 | 數據更新至 **2026-09-09 收盤**（周三，176 個交易日）：09-09 快照反推對賬 5,082 隻中位偏差 0.000%；**上一版欠低嘅 09-08 全量 Yahoo 核對今次補做咗**（2,758 隻、100% 喺 0.5% 之內、成交量比 1.00），09-09 因為 Yahoo 遲一日出齊暫時只對到 27 隻；**Yahoo 對照揪出 NAKA 1 拆 40 合股從未重算**，順帶發現舊重算邏輯會漏低夾喺中間嘅噪音日（留低 40 倍假跳空），已改為由最新一日向前掃；當日「油價破百」＋10 年期息 4.857% 雙重夾擊，$10 億以上股份中位 −0.97%、只 19.5% 上升 —— **總表 114 → 102 隻**（12 新上榜、24 跌出，全部 MA 失守、7 隻兼跌穿底）；**批判性覆核**：頭條同 notes 嘅版號、例子、敏感度數字全部改由本版數據計算（唔再照抄上一版），刪走重複 note，補上**累計倖存者偏差**（R12 158 行只剩 80 行，跌出批 −3.0% vs 留低批 −0.8%）、BWMN／BRK/B／DMLP 標記重算、NMIH 盤後公布用返正確寫法 |
 | R13.00 | 數據更新至 **2026-09-08 收盤**（周二，09-07 勞動節休市；175 個交易日）：09-08 快照反推對賬中位偏差 0.000%、5 隻合股按比例重算歷史，序列冇補值日／冇有價無量日；Yahoo 收市後兩次抓取都只出咗 32/2,757 隻嘅 09-08 日線（全部零偏差），全量核對留待下一版。當日「油價＋關稅」雙重衝擊（布蘭特見 $99.45、加拿大報復性關稅），$10 億以上股份中位 −0.74%、只 33% 上升 —— **總表由 158 隻縮到 114 隻**（12 新上榜、56 跌出）；**批判性覆核改正咗五處**：跌出分類（54 隻係 MA 落榜，跌穿底本身唔會落榜）、note 日期由 09-04 改 09-08、催化欄日期 regex（要求空格令 DDD／NVAX 避開檢查）、三句效果數字（DDD 25.8%、RES 5.9%、SRPT 11.0%）、SMTI 由「$35 全現金」改為現金＋MDXG 換股並按 MDXG 收市價計價差；新增：7 行只高過最後一個底 1% 以內（含 #1 ITGR）、新上榜 4 隻（VTS／RES／ACDC／AESI）係同一注油價交易 |
 | 財務表 R1.00 (xlsx) | **10MA Watchlist 全部 158 隻嘅營收及營利** —— 沿用 `AI_Growth_Breakeven_Watchlist_R7.xlsx` 嘅版面（六個分頁、22 欄、營利三行拆解 淨利｜經常｜一次、A–D 分級）：數據由 `fetch_fundamentals.yml` 喺 runner 抓 Yahoo 季度損益表（158/158 有數據），營收四季用純數字（百萬）、季度對照逐隻列明；經常 = Normalized Income（剔除一次性及其稅影響），一次 = Total Unusual Items（102 隻有數，其餘列「待核實」而唔當作乾淨）；金融股 12 隻 Yahoo 冇營運利潤行，改用稅前利潤並喺格內標明；Yahoo 未填數嘅空欄（6 隻）已剔除；分析員預期同財報口徑唔同嘅（收入差 >40%、GAAP 蝕但 non-GAAP EPS 為正）逐格加 ⚠ 標記 |
@@ -99,6 +100,21 @@ SERIES=series4.pkl OUT_JSON=screen_results7.json \
 python3 scripts/merge_news7.py                           # 沿用 news6 + 新上榜研究 -> data/news7.json
 SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
   python3 scripts/build_report6_dark.py                  # -> data/10MA_uptrend_watchlistGit_R7.00_*.html
+
+# R15（最新交易日 2026-09-10）
+TRADE_DATE=2026-09-10 IN_SERIES=series11.pkl OUT_SERIES=series12.pkl python3 scripts/extend_series.py
+IN_SERIES=series12.pkl OUT_SERIES=series13.pkl OUT_REPORT=yahoo_crosscheck15.json \
+  YAHOO=./data/yahoo/eod_2025-12-26_2026-09-11.csv.gz python3 scripts/yahoo_crosscheck.py
+SERIES=series13.pkl OUT_JSON=screen_results15.json python3 scripts/screener9.py
+PREV_NEWS=news14.json OUT_NEWS=news15.json SCREEN_JSON=screen_results15.json SERIES=series13.pkl AGENT_PREFIX=r15 \
+  python3 scripts/merge_news9.py
+REVISION=R15 DAY_NOTE=周四 PREV_REV_LABEL=R14 BASE_SCREEN=screen_results12.json BASE_LABEL="R12（09-04 收盤）" \
+  SENS_TXT="<剝走各日嘅重算>" FREEZE_TXT="<凍結測試>" OIL_TXT="<宏觀代理>" OBS_TITLE="<觀察標題>" SPLIT_NOTE="<公司行動>" \
+  SCREEN_JSON=screen_results15.json PREV_SCREEN=screen_results14.json NEWS_JSON=news15.json PREV_REVIEW=review14.json \
+  OUT_REVIEW=review15.json SERIES=series13.pkl XCHK_JSON=yahoo_crosscheck15.json MACRO_ZH="<當日宏觀>" \
+  python3 scripts/apply_review11.py
+SCREEN_JSON=screen_results15.json NEWS_JSON=news15.json PREV_SCREEN=screen_results14.json PREV_NEWS=news14.json \
+  PREV_REV=R14 REV=R15.00 REVIEW_JSON=review15.json MODEL_TAG=claudeopus5xhigh python3 scripts/build_report_r10.py
 
 # R14（最新交易日 2026-09-09）
 #   跑 fetch_eod_snapshot.yml（trade_date=2026-09-09）同 fetch_yahoo_eod.yml（end=2026-09-10）

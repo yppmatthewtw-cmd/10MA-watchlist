@@ -162,8 +162,14 @@ for sym in ("DFIN", "NOW", "CHRD"):
 for sym in listed:
     r = listed[sym]
     if r.get("hl") and r["close"] < r["hl"][-1][1] and sym not in flags:
+        fi_, cs_, vs_, ff_ = SER[sym]
+        under_run = 0
+        for c_ in reversed(cs_):
+            if c_ < r["hl"][-1][1]: under_run += 1
+            else: break
         flags[sym] = {"deal": False, "badge": "已跌穿底",
-                      "text": f"收市 ${r['close']:g} 已低過最後一個底 ${r['hl'][-1][1]:g}（{r['hl'][-1][0][5:]}），未夠三日確認所以仍然在榜；"
+                      "text": f"收市 ${r['close']:g} 已低過最後一個底 ${r['hl'][-1][1]:g}（{r['hl'][-1][0][5:]}），"
+                              f"連續 {under_run} 日收喺底下；規則要三個之後嘅交易日先認得出一個新底，所以未落榜，但「守底」已經名存實亡；"
                               f"{'收市亦低過 MA10；' if r['below_ma'] else ''}「突破」項{'仍然' if r['cert_c'].get('broke') else '已經唔'}滿分"
                               f"{'（高位落喺無量嘅 09-02）' if r['cert_c'].get('peak_no_vol') else ''}。"}
 
@@ -198,13 +204,20 @@ for sym in listed:
     if r is None:
         continue
     r_next = ret(sym, i + 1) if i + 1 < N else None
-    if r < -1.0: down_days.append((sym, CAL[i][5:], round(r, 1), r_next, "翌日" in line))
+    if r < -1.0: down_days.append((sym, CAL[i][5:], round(r, 1), r_next, "翌日" in line, i))
     elif abs(r) <= 1.0: flat_days.append(sym)
 after_close = []
-for sym, day, r, r_next, says_next in down_days:
+for sym, day, r, r_next, says_next, ev_i in down_days:
     if sym in warns:
         continue
     md = day.replace("-", "/")
+    if ev_i >= N - 1:
+        # the event is the data date itself: whatever the market does with it
+        # happens after this close, so it explains nothing on this page
+        warns[sym] = {"day": md, "ret": round(r, 1),
+                      "text": f"{md} 係本版數據日：呢單嘢喺收市之後先公布，"
+                              f"對本版任何一個收市價都冇解釋力（當日收 {r:+.1f}%），市場反應要下一版先睇到。"}
+        continue
     after_hours = "盤後" in ((news.get(sym) or {}).get("recovery_short", "") +
                             (news.get(sym) or {}).get("decline_short", ""))
     if (says_next or after_hours) and r_next is not None and r_next >= 1.5:
@@ -218,7 +231,7 @@ for sym, day, r, r_next, says_next in down_days:
     warns[sym] = {"day": md, "ret": r,
                   "text": f"催化欄所指嘅 {md} 收市跌 {abs(r):.1f}%：事件當日被市場沽售，回升係其後嘅事，"
                           "所以呢一句解釋唔到由底回升嘅起點。"}
-down_days = [(a, b, c) for a, b, c, _, _ in down_days]
+down_days = [(a, b, c) for a, b, c, _, _, _ in down_days]
 
 # ---- 2b. research text the series contradicts (checked by hand, see log) ----
 # SNDX 08-05 closed +4.4%, not -2.4%; TSLA 07-23 closed -14.5%, not -12.7%;
@@ -330,7 +343,7 @@ for s in out_syms:
         if dipped: ma_dipped.append(s)
 broke_and_ma = [s for s in broke if s in ma_only]
 udv = sorted(undercut_depth.values())
-und_med = udv[len(udv) // 2] if udv else 0.0
+und_med = statistics.median(udv) if udv else 0.0
 und_shallow = sum(1 for v in udv if v > -1.0)
 
 # the new day itself: page-1 rows vs the $1bn+ universe
@@ -407,7 +420,7 @@ notes = [
      "text": f"09-04 全體 $10 億市值以上股份中位數 {u_med:+.2f}%、{u_up:.1f}% 上升；總表 {len(listed)} 隻中位數 {p1_med:+.2f}%，"
              f"{len(p1_down)} 隻跌超過 1%（最弱：" + "、".join(f"{s} {r:+.1f}%" for s, r in worst) + "），"
              f"最強：" + "、".join(f"{s} {r:+.1f}%" for s, r in best) + f"。收市喺 MA10 之下嘅有 {len(p1_below_ma)} 隻"
-             f"（{J(p1_below_ma, 6)}），收市低過最後一個底嘅有 {len(p1_undercut)} 隻（{J(p1_undercut, 6)}）——後者未夠三日確認，"
+             f"（{J(p1_below_ma, 6)}），收市低過最後一個底嘅有 {len(p1_undercut)} 隻（{J(p1_undercut, 6)}）——一個新底要三個之後嘅交易日先認得出，"
              f"所以仍然喺榜，但「守底」已經名存實亡（已加「已跌穿底」標記）。{len(p1_peak_today)} 隻嘅底部後最高位就係 09-04 當日。"
              f"總表 top 60 入面收市貼住或低過 MA10 嘅有 {len(top60_under)} 行：{'、'.join(top60_under)}。"
              f"新上榜 {n_new} 隻只有 {len(new_in_top50)} 隻入 top 50（{J(new_in_top50, 6)}），其餘排 {new_ranks[len(new_in_top50)] if len(new_ranks) > len(new_in_top50) else '—'}–{new_ranks[-1]}"
@@ -457,7 +470,7 @@ for n in open_notes:
                      f"「均線」{sat['ma']}/50，即係確定性一半權重根本冇分辨力，實際排序由守底日數同量比決定；"
                      f"另外全表 {len(wiggle_all)} 隻（top 50 佔 {len(wiggle)} 隻）嘅中間高位只高過上一個底 <1%（{J(wiggle_all, 6)}），三項自動接近滿分。"
                      f"併購釘價股佔 top 50 嘅 {len(pinned)} 隻（{J(pinned, 8)}）{'，包括第 1 位' if pinned and top[0]['sym'] == pinned[0] else ''}。"
-                     f"top 50 距離中間高位嘅中位數 {above[len(above)//2]:+.2f}%。建議（會改規則）：突破需 ≥ 中間高位 ×1.01、去掉均線項重新加權、釘價股另置區塊 —— 三項都要你拍板。")
+                     f"top 50 距離中間高位嘅中位數 {statistics.median(above):+.2f}%。建議（會改規則）：突破需 ≥ 中間高位 ×1.01、去掉均線項重新加權、釘價股另置區塊 —— 三項都要你拍板。")
         n["tickers"] = pinned[:8]
     elif t.startswith("[待你決定] 部分行嘅「一底高於一底」"):
         thin_txt = "、".join(f"{s} {(listed[s]['hl'][-1][1] / listed[s]['hl'][-2][1] - 1) * 100:+.2f}%"
@@ -509,7 +522,7 @@ headline = (
     f"R11 建基於 {last}（周五）收盤。當日 8 月非農增 16.2 萬遠勝預期，「數據強＝加息」反應令 9 月加息機率回升至 58%、10 年期息率升至 4.79%，"
     f"標普跌 0.38%、納指跌 0.29%；本掃描 $10 億以上股份中位數 {u_med:+.2f}%、{u_up:.0f}% 上升。總表 {len(listed)} 隻：{n_new} 隻新上榜、{n_out} 隻跌出"
     f"（{len(broke)} 隻跌穿最後一個底、{len(struct_lower) + len(struct_aged)} 隻 MA 仍達標但結構斷咗或過咗窗口、{len(ma_only)} 隻 MA 條件唔再成立）。名單本身當日中位數 {p1_med:+.2f}%，{len(p1_down)} 隻跌超過 1%，"
-    f"{len(p1_undercut)} 隻收市已低過最後一個底但未夠三日確認、top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
+    f"{len(p1_undercut)} 隻收市已低過最後一個底（新底未確認）、top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
     f"新上榜以 {'、'.join(new_sectors.split('、')[:3])} 為主（{new_caps}），催化劑 {new_kinds.split('、')[0] if new_kinds else '無'} 佔多，"
     f"但只有 {len(new_in_top50)}/{n_new} 隻入 top 50 —— 多數係啱啱夠條件，唔係強勢突破。"
     f"審視層全部重新量度：釘價股 {len(deal_all)} 隻有標記、催化欄 {len(down_days)} 句事件日係跌市已加標記、{len(novol_peak)} 行嘅高位仍落喺有價無量嘅 09-02。"
@@ -612,6 +625,13 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
                         f"跌出嗰 {len(left)} 行中位數 {statistics.median(mv_left):+.1f}%，留低嗰 {len(stay)} 行只係 "
                         f"{statistics.median(mv_stay):+.1f}% —— 所以總表今日「中位 {p1_med:+.2f}%」睇落穩陣，"
                         f"其實係篩走咗傷兵之後嘅倖存者偏差，唔可以當成名單抗跌。")
+    # How much cushion is left: a row drops out when its MA test fails, so the
+    # honest measure is not today's move but how many rows would fail if the
+    # price simply stopped moving. FREEZE_TXT is computed by the caller.
+    FREEZE = os.environ.get("FREEZE_TXT", "")
+    ma_gaps = sorted((listed[sym]["close"] / listed[sym]["ma"] - 1) * 100 for sym in listed)
+    ma_med = statistics.median(ma_gaps)
+    ma_within1 = sum(1 for g in ma_gaps if 0 <= g < 1)
     OILC = [t for t in ("VTS", "RES", "ACDC", "AESI") if t in new_syms]
     OILC_HELD = [t for t in ("VTS", "RES", "ACDC", "AESI") if t in listed and t not in new_syms]
     energy_rows = [sym for sym in listed if listed[sym].get("sector_zh") == "能源"]
@@ -641,13 +661,16 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
     headline = (
         f"{REVISION} 建基於 {last}（{DAY_NOTE or '周二'}）收盤。{macro}"
         f"本掃描 $10 億以上股份中位數 {u_med:+.2f}%、{u_up:.1f}% 上升；總表 {len(listed)} 隻本身中位數 {p1_med:+.2f}%，"
-        f"{len(p1_down)} 隻跌超過 1%、{len(p1_undercut)} 隻收市已低過最後一個底但未夠三日確認、另有 {len(near_bot)} 行只高過最後一個底 1% 以內"
-        f"（最貼嘅：{'、'.join(f'{sym} #{rk} +{g:.2f}%' for rk, sym, g, _ in near_bot[:3])}），"
+        f"{len(p1_down)} 隻跌超過 1%、{len(p1_undercut)} 隻收市已低過最後一個底（新底要三日先認得出）、另有 {len(near_bot)} 行只高過最後一個底 1% 以內"
+        f"（最貼嘅：{'、'.join(f'{sym} #{rk} +{g:.2f}%' for rk, sym, g, _ in sorted(near_bot, key=lambda x: x[2])[:3])}），"
         f"top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
+        f"但最該睇嘅係緩衝：全表 {len(p1_below_ma)}/{len(listed)} 行（{len(p1_below_ma) / len(listed) * 100:.0f}%）收市已經低過自己嘅 MA10，"
+        f"中位行只高出 MA10 {ma_med:+.2f}%，再有 {ma_within1} 行喺 +1% 以內 —— 即係 {len(p1_below_ma) + ma_within1}/{len(listed)} 行基本上冇緩衝。"
+        f"{FREEZE or ''}"
         f"相對 {PREV_LABEL}：{n_new} 隻新上榜、{n_out} 隻跌出 —— {len(ma_only)} 隻係四個時間框嘅 MA 條件全部唔再成立"
         f"（當中 {len(broke_and_ma)} 隻同時收市跌穿最後一個底，但跌穿幅度中位只有 {und_med:.1f}%、{und_shallow} 隻唔夠 1%），"
         f"另 {len(struct_lower) + len(struct_aged)} 隻 MA 仍達標但造出更低嘅底。要留意：收市跌穿底本身唔會令一行落榜"
-        f"（底部要三日先重新確認）{'，所以 ' + J(p1_undercut, 3) + ' 跌穿咗都仲喺榜' if p1_undercut else ''} —— 真正落榜機制係 MA。"
+        f"（一個新底要三個之後嘅交易日先認得出）{'，所以 ' + J(p1_undercut, 3) + ' 跌穿咗都仲喺榜' if p1_undercut else ''} —— 真正落榜機制係 MA。"
         f"新上榜以 {'、'.join(new_sectors.split('、')[:3])} 為主（{new_caps}），只有 {len(new_in_top50)}/{n_new} 隻入 top 50。"
         + (f"新上榜當中 {len(OILC)} 隻（{'、'.join(OILC)}）係同一注油價交易、同一星期見底。" if OILC else "")
         + (f"上一版點名嘅油價一注（{'、'.join(OILC_HELD)}）仍然在榜，連同全部 {len(energy_rows)} 行能源股，"
@@ -657,21 +680,21 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
         f"而上一版欠低嘅 {prev_day[5:]} 全量核對今次補做咗（{dprev.get('n', 0)} 隻、100% 喺 0.5% 之內）。序列本身冇補值日、冇有價無量日。審視層全部按本版重新量度：釘價股 {len(deal_all)} 隻有標記、"
         f"催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
     review_rule = (f"{REVISION}（唔改規則）：數據更新至 {last} 收盤，Nasdaq 快照反推對賬中位偏差 0.000%、Yahoo 日線逐隻交叉核對；"
-                   f"5 隻合股按比例重算歷史；審視層所有數字按本版重新量度，「已跌穿底」標記每版重算、唔會沿用。")
+                   f"公司行動見「本版數據」一節；審視層所有數字按本版重新量度，「已跌穿底」標記每版重算、唔會沿用。")
     notes[1] = {
-        "title": f"[本版觀察] {last[5:]} 油價＋關稅雙重衝擊，名單點反應",
+        "title": os.environ.get("OBS_TITLE", "") or f"[本版觀察] {last[5:]} 名單點反應",
         "text": (f"{last[5:]} 全體 $10 億市值以上股份中位數 {u_med:+.2f}%、{u_up:.1f}% 上升；總表 {len(listed)} 隻中位數 {p1_med:+.2f}%，"
                  f"{len(p1_down)} 隻跌超過 1%（最弱：" + "、".join(f"{a} {b:+.1f}%" for a, b in worst_rows) + "），"
                  f"最強：" + "、".join(f"{a} {b:+.1f}%" for a, b in best_rows) + f"。收市喺 MA10 之下嘅有 {len(p1_below_ma)} 隻，"
                  f"top 60 入面有 {len(top60_under)} 行收市貼住或低過 MA10：{'、'.join(top60_under)}。"
-                 f"「守底」嘅安全邊際基本上冇晒：除咗 {len(p1_undercut)} 隻收市已跌穿最後一個底（{J(p1_undercut)}，未夠三日確認所以仍然在榜，已加標記），"
+                 f"「守底」嘅安全邊際基本上冇晒：除咗 {len(p1_undercut)} 隻收市已跌穿最後一個底（{J(p1_undercut)}，一個新底要三個之後嘅交易日先認得出，所以仍然在榜，已加標記），"
                  f"另有 {len(near_bot)} 行只高過最後一個底 1% 以內 —— {nb_txt}。"
                  + (f"新上榜 {n_new} 隻嘅板塊分散係假象：{len(OILC)} 隻（{'、'.join(OILC)}）其實係同一注油價交易，"
                     f"全部喺 7 月 27 日布蘭特單日插 8.7% 之後嘅一星期內見底（07-28 至 07-29）。" if OILC else "")
                  + (f"上一版點名嘅油價一注（{'、'.join(OILC_HELD)}）仍然在榜；" if OILC_HELD else "")
-                 + f"榜上合共 {len(energy_rows)} 行能源股（佔 {len(energy_rows) / len(listed) * 100:.0f}%），"
-                   f"09-09 布蘭特結算 $101.21、企穩 100 美元係佢哋企硬嘅原因，油價一轉頭會一次過失守。"
-                 f"{len(p1_peak_today)} 隻嘅底部後最高位就係 {last[5:]} 當日。"),
+                 + (os.environ.get("OIL_TXT", "")
+                    or f"榜上合共 {len(energy_rows)} 行能源股（佔 {len(energy_rows) / len(listed) * 100:.0f}%），油價一轉頭會一次過失守。")
+                 + f"{len(p1_peak_today)} 隻嘅底部後最高位就係 {last[5:]} 當日。"),
         "tickers": (p1_undercut + [x[1] for x in near_bot])[:10]}
     for n in notes:
         if n["title"].startswith("[已修正] 催化欄"):
@@ -693,9 +716,12 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
             from collections import Counter as _C
             bd_c = _C(listed[sym]["hl"][-1][0] for sym in listed if listed[sym].get("hl"))
             bd_txt = "、".join(f"{d[5:]} {c} 行（已守 {N - 1 - IDX[d]} 日）"
-                              for d, c in sorted(bd_c.items(), reverse=True)[:3] if d in IDX)
-            n["text"] = (f"最後一個底最集中嘅三日：{bd_txt}（規則最少值係 3 日）。"
-                         f"敏感度測試（本版重算）：剝走 09-02 呢一日，{dep}/{len(listed)} 行就唔會通過佢哋現有排名嗰個時間框嘅 MA 條件；"
+                              for d, c in sorted(((d, c) for d, c in bd_c.items() if d in IDX),
+                                                 key=lambda kv: -kv[1])[:3])
+            youngest = sorted(((d, c) for d, c in bd_c.items() if d in IDX), key=lambda kv: -IDX[kv[0]])[0]
+            n["text"] = (f"最後一個底最集中嘅三日：{bd_txt}。確認期最短嘅係 {youngest[0][5:]} 嗰 {youngest[1]} 行，"
+                         f"只守咗 {N - 1 - IDX[youngest[0]]} 日（規則最少值係 3 日）。"
+                         f"敏感度測試（本版重算）：剝走 09-02 呢一日，{dep}/{len(listed)} 行連佢哋現時上榜嘅四個時間框都全部唔通過；"
                          f"{SENS_TXT or '獨立覆核按四個時間框一齊計係 13 行，而剝走其他近期交易日（09-03／09-01／08-31／08-26）分別係 13／12／14／9 行'}。"
                          f"即係話呢個敏感度唔係邊一日特有，而係 45／25 日窗口邊界效應；要唔要收緊（例如底部確認由 3 日加到 5 日、"
                          f"或者窗口用固定日曆長度），由你決定。")

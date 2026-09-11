@@ -6116,7 +6116,7 @@
  },
  "LAND": {
   "decline_short": "農地REIT基本面疲弱、AFFO持續見紅，股價由4/14高位10.65反覆跌至8/3的8.06（-24.3%），無單一事件。",
-  "recovery_short": "8/11公布Q2 AFFO按年改善54%至每股-0.04美元、指杏仁價十年最強；惟無單日急升，回升主要隨減息預期下的REIT板塊，至9/4累升22%。",
+  "recovery_short": "8/11公布Q2 AFFO按年改善54%至每股-0.04美元、指杏仁價十年最強；惟無單日急升，回升主要隨利率預期下的REIT板塊，至9/4累升22%。",
   "hot": [
    "8/11公布Q2 AFFO按年改善54%至每股-0.04美元",
    "指杏仁價十年最強"
@@ -6129,7 +6129,7 @@
    "https://www.investing.com/news/transcripts/earnings-call-transcript-gladstone-land-posts-q2-2026-eps-miss-revenue-edge-93CH-4855120",
    "https://simplywall.st/stocks/us/real-estate/nasdaq-land/gladstone-land/news/gladstone-land-land-stock-climbs-as-participation-rent-impro"
   ],
-  "cat_line": "無個股催化 · 隨減息預期REIT板塊回升"
+  "cat_line": "無個股催化 · 8/11 Q2 AFFO升54%但無單日反應"
  },
  "NEM": {
   "decline_short": "金價上半年錄2013年來最大調整，6月底失守4,000美元；NEM由4/10高位120.90跌至7/20的89.20（-26.2%）。",
@@ -6201,7 +6201,7 @@
    "https://www.investing.com/news/transcripts/earnings-call-transcript-transmedics-q1-2026-earnings-miss-sends-stock-tumbling-93CH-4677462",
    "https://simplywall.st/stocks/us/healthcare/nasdaq-tmdx/transmedics-group/news/transmedics-group-tmdx-is-up-56-after-raising-2026-revenue-g"
   ],
-  "cat_line": "8/4 Q2收入新高、升指引 → 三日累升15.6%"
+  "cat_line": "8/4盤後Q2升指引 → 翌日先挫5.3%，至8/10淨升9.5%"
  },
  "VEEV": {
   "decline_short": "7/20起連跌三日至7/23的179.58（-9.0%）；KeyBanc渠道調查指大藥廠CRM選型偏向Salesforce，多行下調目標價。",
