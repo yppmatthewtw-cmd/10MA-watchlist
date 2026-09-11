@@ -571,7 +571,7 @@ if REVISION != "R11":                # every revision since R12 has a cross-chec
         f"審視層全部按補完嘅序列重新量度：釘價股 {len(deal_all)} 隻有標記、催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
     review_rule = (f"R12（唔改規則）：鏡像補值日、有價無量日同成交量不完整日改用 Yahoo Finance 日線（{x['yahoo_symbols']} 隻），其餘日子只對照不改動；"
                    f"{last} 收市價經 Yahoo 交叉核對。")
-if REVISION in ("R13", "R14"):
+if REVISION not in ("R11", "R12"):   # every new-trading-day revision
     dl = ds.get(last, {})
     prev_day = CAL[-2]
     dprev = ds.get(prev_day, {})
