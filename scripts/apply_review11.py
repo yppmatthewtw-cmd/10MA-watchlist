@@ -63,7 +63,7 @@ def ret(sym, i):
 # tickers that have left, plus TECH (Merck $73 cash, German clearance 08-17)
 # from the R11 research
 OFFERS = {"ITGR": 127.0, "OGN": 14.0, "NATH": 102.0, "GBTG": 9.50, "TXNM": 61.25,
-          "DBRG": 16.0, "TECH": 73.0, "BWMN": 43.0}
+          "DBRG": 16.0, "TECH": 73.0, "BWMN": 43.0, "DV": 13.60}
 # offers paid in cash + acquirer stock: the value moves with the acquirer, so it
 # is computed from that day's close rather than pinned to a headline number
 STOCK_OFFERS = {"SMTI": ("MiMedx", 33.0, 0.4735, "MDXG"),
@@ -125,6 +125,8 @@ for sym in listed:
             flags[sym] = {"deal": True, "badge": "併購目標",
                           "text": f"研究文字顯示本身係被收購／私有化目標（現價 ${c:g}）：走勢受交易進度牽制，"
                                   "突破同收縮指標量度緊價差而唔係基本面；如果現價已高於作價，市場係喺度賭加價。"}
+computed_flags = {sym for sym in listed
+                  if sym in OFFERS or sym in STOCK_OFFERS or sym in STOCK_DEALS or sym in RUMOURS}
 for fl in flags.values():
     if "deal" not in fl:
         fl["deal"] = any(k in fl.get("badge", "") for k in ("釘價", "併購", "合併", "作價"))
@@ -283,11 +285,16 @@ if os.path.exists(AGENT):
     for sym, fl in (a.get("flag_additions") or {}).items():
         if sym not in listed:
             problems.append(f"{sym}: flag for an unlisted ticker"); continue
-        if sym in flags or not fl.get("badge") or not fl.get("text"):
+        if not fl.get("badge") or not fl.get("text"):
             continue
+        if sym in computed_flags:
+            # this run measured that badge from today's closes; a review text
+            # written against the same data must not overwrite it
+            problems.append(f"{sym}: flag override ignored (measured this run)"); continue
+        was = sym in flags
         flags[sym] = {"badge": fl["badge"][:14], "text": fl["text"],
                       "deal": bool(fl.get("deal") or any(k in fl["badge"] for k in ("釘價", "併購", "合併", "作價")))}
-        log.append(f"{sym}: flag added by the review — {fl['badge']}")
+        log.append(f"{sym}: flag {'replaced' if was else 'added'} by the review — {fl['badge']}")
     agent_notes = [f for f in (a.get("findings") or []) if f.get("severity") in ("major", "minor")]
     review_summary = a.get("summary")
 
@@ -370,8 +377,10 @@ p1_below_ma = [s for s in listed if listed[s]["below_ma"]]
 p1_peak_today = [s for s in listed if listed[s]["cert_c"].get("peak_day") == last]
 p1_undercut = [s for s in listed if listed[s].get("hl") and listed[s]["close"] < listed[s]["hl"][-1][1]]
 RANK = {r["sym"]: i for i, r in enumerate(scr["page1"], 1)}
-top60_under = [f"{r['sym']} #{i}（{'=MA' if r['close'] >= r['ma'] * 0.999 else format((r['close'] / r['ma'] - 1) * 100, '+.1f') + '%'}）"
-               for i, r in enumerate(scr["page1"][:60], 1) if r["close"] <= r["ma"] * 1.0001]
+# "sitting on or under the MA": a symmetric +/-0.1% band, so a row 0.04% above
+# it is counted the same way as one 0.08% below (it was excluded before)
+top60_under = [f"{r['sym']} #{i}（{'=MA' if abs(r['close'] / r['ma'] - 1) <= 0.001 else format((r['close'] / r['ma'] - 1) * 100, '+.1f') + '%'}）"
+               for i, r in enumerate(scr["page1"][:60], 1) if r["close"] <= r["ma"] * 1.001]
 new_ranks = sorted(RANK[s] for s in new_syms)
 new_in_top50 = [f"{s} #{RANK[s]}" for s in new_syms if RANK[s] <= 50]
 bot_0901 = [s for s in listed if listed[s].get("hl") and listed[s]["hl"][-1][0] == "2026-09-01"]
@@ -481,7 +490,7 @@ for n in open_notes:
         n["title"] = "[待你決定] 確定性飽和同釘價股仍然主導榜首（本版重新量度）"
         n["text"] = (f"喺 {last} 嘅數據上一樣成立：總表 top 50 入面「突破」項有 {sat['break']}/50 係滿分、「回補」{sat['retr']}/50、"
                      f"「均線」{sat['ma']}/50，即係確定性一半權重根本冇分辨力，實際排序由守底日數同量比決定；"
-                     f"另外全表 {len(wiggle_all)} 隻（top 50 佔 {len(wiggle)} 隻）嘅中間高位只高過上一個底 <1%（{J(wiggle_all, 6)}），三項自動接近滿分。"
+                     f"另外全表 {len(wiggle_all)} 隻（top 50 佔 {len(wiggle)} 隻）嘅中間高位只高過上一個底 <1%（{J(wiggle_all, 20)}），三項自動接近滿分。"
                      f"併購釘價股佔 top 50 嘅 {len(pinned)} 隻（{J(pinned, 8)}）{'，包括第 1 位' if pinned and top[0]['sym'] == pinned[0] else ''}。"
                      f"top 50 距離中間高位嘅中位數 {statistics.median(above):+.2f}%。建議（會改規則）：突破需 ≥ 中間高位 ×1.01、去掉均線項重新加權、釘價股另置區塊 —— 三項都要你拍板。")
         n["tickers"] = pinned[:8]
@@ -500,14 +509,16 @@ for n in open_notes:
         pairs = [p for p in (("NWS", "NWSA"), ("GOOG", "GOOGL"), ("BRK.A", "BRK.B"), ("FOX", "FOXA"), ("LEN", "LEN.B")) if p[0] in listed and p[1] in listed]
         if not pairs:
             stayed = [x for x in ("NWS", "NWSA") if x in listed]
-            n["text"] = (f"本版總表已經冇同一公司嘅雙類股同時上榜：R9 同時上榜嘅 NWS／NWSA，{'、'.join(x for x in ('NWS', 'NWSA') if x not in listed)} 已跌出，"
-                         f"{'、'.join(f'{x} 仍在（#{RANK[x]}）' for x in stayed) if stayed else '兩隻都已跌出'}；但規則本身未改，將來仍會出現。"
+            n["text"] = (f"本版總表已經冇同一公司嘅雙類股同時上榜："
+                         + (f"R9 同時上榜嘅 NWS／NWSA 入面，{'、'.join(f'{x} 仍在（#{RANK[x]}）' for x in stayed)}，另一隻已跌出。"
+                            if stayed else "R9 同時上榜嘅 NWS／NWSA 兩隻都已跌出。")
+                         + "但規則本身未改，將來仍會出現。"
                          "建議：同一公司只計一個名額（保留流動性較高嗰類）—— 會改規則，由你決定。")
             n["tickers"] = stayed
     elif t.startswith("[待你決定] 確定性三項（45% 權重）"):
-        n["text"] = (f"當最後兩個底之間嘅中間高位只高過上一個底 <1%（本版全表 {len(wiggle_all)} 隻：{J(wiggle_all, 6)}），"
+        n["text"] = (f"當最後兩個底之間嘅中間高位只高過上一個底 <1%（本版全表 {len(wiggle_all)} 隻：{J(wiggle_all, 20)}），"
                      "突破、回補、守底三項會被一日小回全數攞滿。建議：中間高位需高過上一個底 ≥2% 先計 —— 會改規則，由你決定。")
-        n["tickers"] = wiggle_all[:6]
+        n["tickers"] = wiggle_all[:10]
     else:
         n["tickers"] = [x for x in (n.get("tickers") or []) if x in listed]
     if n["title"].startswith("[待你決定] MA 連升 3 日"):
@@ -671,6 +682,15 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
                  if full_today else
                  f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線要遲一日先出齊，所以 {last[5:]} 暫時只對到 {dl.get('n', 0)} 隻（全部零偏差），"
                  f"而上一版欠低嘅 {prev_day[5:]} 全量核對今次補做咗（{dprev.get('n', 0)} 隻、100% 喺 0.5% 之內）。")
+    # the $1bn+ cohort is the benchmark quoted above, but a third of the list is
+    # not in it, so state that cohort's own day rather than let the comparison stand
+    _sub = [s2 for s2 in listed if (listed[s2].get("mcap") or 0) < 1.0]
+    _u_sub = [(SER[s2][1][-1] / SER[s2][1][-2] - 1) * 100 for s2, m2 in mcap.items()
+              if 0 < m2 < 1e9 and s2 in SER and SER[s2][0] + len(SER[s2][1]) == N and len(SER[s2][1]) >= 2]
+    cap_txt = (f"要留意對照組：總表 {len(_sub)}/{len(listed)} 行（{len(_sub) / len(listed) * 100:.0f}%）市值細過 $10 億，"
+               f"而 {last[5:]} 全市場 $10 億以下嘅中位數係 {statistics.median(_u_sub):+.2f}%、只有 "
+               f"{sum(1 for v in _u_sub if v > 0) / len(_u_sub) * 100:.1f}% 上升，同 $10 億以上嗰組差好遠。"
+               if _sub and _u_sub else "")
     FREEZE = os.environ.get("FREEZE_TXT", "")
     ma_gaps = sorted((listed[sym]["close"] / listed[sym]["ma"] - 1) * 100 for sym in listed)
     ma_med = statistics.median(ma_gaps)
@@ -682,14 +702,32 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
     macro = os.environ.get("MACRO_ZH", "")
     ext = os.environ.get("EXT_NOTE", "")
     novol_days = [d for d, c in x["fill_days"].items() if c == "price_only"]
+    # 09-02's volumes were only refilled for the tickers Yahoo was pulled for, so
+    # say how many holes are left rather than claiming the series has none
+    zrest = x.get("zero_volume_remaining") or {}
+    zfill = x.get("zero_volume_cells_filled") or {}
+    zsyms = x.get("zero_volume_symbols_filled") or []
+    zlisted = [z for z in zsyms if z in listed]
+    zero_txt = ("成交量方面冇一日係全市場零成交。" if not zrest else
+                "、".join(f"{d[5:]} 仍有 {v['symbols']:,}/{v.get('of_traded', len(SER)):,} 隻冇成交量數據"
+                          f"（其中 {v['of_which_in_yahoo']} 隻喺 Yahoo 名單之內）" for d, v in zrest.items())
+                + "——" + ("Yahoo 名單（合資格股＋所有上榜股）以外嘅股票從來冇拉過 Yahoo，所以佢哋嘅窿冇得補；"
+                          "名單之內已經冇窿。" if all(v["of_which_in_yahoo"] == 0 for v in zrest.values())
+                          else "名單之內仍有未補嘅窿。")
+                + (f"本版新補咗 {sum(zfill.values())} 個零成交量格"
+                   f"（{'、'.join(zsyms[:5])}{'…' if len(zsyms) > 5 else ''}"
+                   f"{'，全部喺榜' if zlisted and len(zlisted) == len(zsyms) else ('，當中 ' + J(zlisted) + ' 喺榜') if zlisted else '，冇一隻喺榜'}）："
+                   f"呢啲窿走唔到日層面嘅偵測（要 >90% 股票零成交先當『有價無量日』），所以逐格對 Yahoo 補返。"
+                   if zfill else "")
+                + "上榜行嘅底部同底部後最高位冇一個落喺零成交量日，所以「·無量」符號本版冇對象。")
     notes[0] = {
         "title": f"[本版數據] 更新至 {last} 收盤（新增一個交易日，兩個來源核對過）",
         "text": (f"新增 {last[5:]}（{DAY_NOTE or '周二'}{('；' + ext) if ext else ''}），合共 {scr['meta']['n_days']} 個交易日。"
                  f"當日收市價嘅主要驗證係 Nasdaq screener 快照（本 repo 嘅 GitHub Actions 抓）反推前收，"
                  f"同對上一個交易日（{prev_day[5:]}）嘅序列逐隻對賬：{n_recon:,} 隻中位偏差 0.000%、p99 0.000%。"
                  f"{xchk_note}"
-                 f"R12 補回嘅日子（鏡像補值 4 日、09-02 成交量、02-25／08-27 兩個未收齊嘅快照）繼續生效，所以本版序列已經冇補值日、"
-                 f"冇有價無量日{'' if novol_days else '（09-02 亦已有成交量）'}——「·無量」符號本版冇對象。"
+                 f"R12 補回嘅日子（鏡像補值 4 日、09-02 成交量、02-25／08-27 兩個未收齊嘅快照）繼續生效，所以本版序列已經冇補值日。"
+                 f"{zero_txt}"
                  f"{SPLIT_NOTE or '公司行動：本次接駁冇股票需要重算歷史，亦冇股票因為對唔上而剔除。'}"
                  f"重新掃描：總表 {len(listed)} 隻，相對 {PREV_LABEL} 有 {n_new} 隻新上榜、{n_out} 隻跌出"
                  f"（{len(broke)} 隻收市跌穿最後一個底、{len(struct_lower) + len(struct_aged)} 隻 MA 仍達標但底部序列斷咗或過咗 25 日窗口、"
@@ -702,6 +740,7 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
         f"{len(p1_down)} 隻跌超過 1%、{len(p1_undercut)} 隻收市已低過最後一個底（新底要三日先認得出）、另有 {len(near_bot)} 行只高過最後一個底 1% 以內"
         f"（最貼嘅：{'、'.join(f'{sym} #{rk} +{g:.2f}%' for rk, sym, g, _ in sorted(near_bot, key=lambda x: x[2])[:3])}），"
         f"top 60 有 {len(top60_under)} 行收市貼住或低過 MA10。"
+        f"{cap_txt}"
         f"但最該睇嘅係緩衝：全表 {len(p1_below_ma)}/{len(listed)} 行（{len(p1_below_ma) / len(listed) * 100:.0f}%）收市已經低過自己嘅 MA10，"
         f"中位行只高出 MA10 {ma_med:+.2f}%，再有 {ma_within1} 行喺 +1% 以內 —— 即係 {len(p1_below_ma) + ma_within1}/{len(listed)} 行基本上冇緩衝。"
         f"{FREEZE or ''}"
@@ -733,7 +772,9 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
                  + (f"上一版點名嘅油價一注（{'、'.join(OILC_HELD)}）仍然在榜；" if OILC_HELD else "")
                  + (os.environ.get("OIL_TXT", "")
                     or f"榜上合共 {len(energy_rows)} 行能源股（佔 {len(energy_rows) / len(listed) * 100:.0f}%），油價一轉頭會一次過失守。")
-                 + f"{len(p1_peak_today)} 隻嘅底部後最高位就係 {last[5:]} 當日。"),
+                 + f"另外 {len(listed)} 行入面有 {len(p1_peak_today)} 行"
+                 f"（{len(p1_peak_today) / len(listed) * 100:.0f}%）嘅底部後最高位就係 {last[5:]} 當日 —— "
+                 f"即係話呢批行嘅「突破」同「回補」分數全部靠最後一日撐住，多跌一日就唔同講法。"),
         "tickers": (p1_undercut + [x[1] for x in near_bot])[:10]}
     for n in notes:
         if n["title"].startswith("[已修正] 催化欄"):
@@ -747,8 +788,19 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
                          f"(2) 效果數字本來容許「事件日之後三日任何一日」對得上就放行，RES 就係靠 07-31 嘅 +3.5% 蒙混過關。")
         if n["title"].startswith("[已加標記] 突破高位落喺冇成交量嗰日"):
             n["title"] = "[備註] 本版冇任何「無量」高位或底部"
-            n["text"] = (f"09-02 嘅成交量喺 R12 已由 Yahoo 補回，所以本版冇任何一行嘅底部後最高位或底部落喺無成交量嘅日子，"
-                         f"「·無量」符號冇對象。仍然有 {len(peak_0902)} 行嘅底部後最高位落喺 09-02 —— 嗰日嘅收市價係官方 net-change 反推、"
+            n["text"] = (f"09-02 嘅成交量喺 R12 由 Yahoo 補回，但只補咗 Yahoo 名單（{x['yahoo_symbols']:,} 隻合資格股＋上榜股）之內嗰批；"
+                         + ("全序列今日仍然有"
+                            + "、".join(f" {d[5:]} {v['symbols']:,}/{v.get('of_traded', 0):,} 隻"
+                                       for d, v in (x.get('zero_volume_remaining') or {}).items())
+                            + "冇成交量數據，不過全部喺名單以外（即係唔會入任何頁面）。"
+                            if x.get('zero_volume_remaining') else "全序列已經冇零成交量嘅格。")
+                         + (f"本版逐格補返嘅有 {sum((x.get('zero_volume_cells_filled') or {}).values())} 個"
+                            f"（{J(x.get('zero_volume_symbols_filled') or [])}），"
+                            f"{'全部喺榜' if all(z in listed for z in (x.get('zero_volume_symbols_filled') or [])) else '當中 ' + (J([z for z in (x.get('zero_volume_symbols_filled') or []) if z in listed]) or '冇一隻') + ' 喺榜'}；"
+                            f"呢種單格嘅窿走得甩日層面嘅偵測（要 >90% 股票零成交先算『有價無量日』，09-02 實際係 46%），所以改為逐格對 Yahoo 補。"
+                            if x.get('zero_volume_cells_filled') else "")
+                         + f"上榜行入面冇任何一行嘅底部或底部後最高位落喺零成交量嘅格，「·無量」符號冇對象；"
+                         f"仍然有 {len(peak_0902)} 行嘅底部後最高位落喺 09-02 —— 嗰日嘅收市價係官方 net-change 反推、"
                          f"成交量係 Yahoo 補回，兩樣都有數據，同「無量」係兩回事。")
         if n["title"].startswith("[已加標記] 靠 09-02"):
             n["title"] = "[待你決定] 底部確認只需三日，窗口邊界令名單對單日數據敏感"

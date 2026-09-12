@@ -186,6 +186,7 @@ for k, day in enumerate(CAL):
 out = {}
 fills = {CAL[k]: {"close_and_volume": 0, "volume_only": 0, "skipped_basis": 0, "no_yahoo": 0} for k in sorted(FILL_DAYS)}
 filled_syms = set()
+zero_cells, zero_syms = {}, set()
 for s, (fi, cs, vs, ff) in SER.items():
     cs, vs = list(cs), list(vs)
     m = Y.get(s)
@@ -210,9 +211,38 @@ for s, (fi, cs, vs, ff) in SER.items():
             if yv > 0:
                 vs[j] = yv; rec["volume_only"] += 1
         filled_syms.add(s)
+    # An isolated zero-volume cell on a day the rest of the market traded: the
+    # day-level classifier only fires when nearly every symbol is missing volume
+    # (09-02 is 46%), so a single hole would otherwise sit in the volume ratio
+    # and the VCP untouched. Fill it wherever Yahoo has a volume and the two
+    # closes agree, which is the same evidence a day-level fill needs.
+    if m:
+        for j, v in enumerate(vs):
+            if v or (fi + j) in FILL_DAYS:
+                continue
+            yr = m.get(CAL[fi + j])
+            if yr and yr[1] > 0 and cs[j] > 0 and abs(yr[0] / cs[j] - 1) <= CLOSE_TOL:
+                vs[j] = yr[1]
+                zero_cells[CAL[fi + j]] = zero_cells.get(CAL[fi + j], 0) + 1
+                zero_syms.add(s)
     out[s] = (fi, cs, vs, ff)
 
 pickle.dump({"cal": CAL, "series": out}, open(f"{SCRATCH}/{OUT_SERIES}", "wb"))
+
+# what is still missing a volume after the fills, by day: the tickers Yahoo was
+# never pulled for (everything outside the eligible universe) keep their holes,
+# so the report can say so instead of claiming the series has none
+zero_rest, day_bars = {}, {}
+for s2, (fi, cs, vs, ff) in out.items():
+    for j, v in enumerate(vs):
+        d2 = CAL[fi + j]
+        day_bars[d2] = day_bars.get(d2, 0) + 1
+        if not v:
+            r2 = zero_rest.setdefault(d2, [0, 0])
+            r2[0] += 1
+            r2[1] += (s2 in Y)
+zero_rest = {d2: {"symbols": a, "of_which_in_yahoo": b, "of_traded": day_bars[d2]}
+             for d2, (a, b) in sorted(zero_rest.items()) if a}
 
 worst = sorted(((s, max(abs(x[3]) for x in v), len(v)) for s, v in tick_bad.items()), key=lambda x: -x[1])
 report = {
@@ -220,6 +250,8 @@ report = {
     "compared_symbols": sum(1 for s in cur if s in Y),
     "fill_days": {CAL[k]: ("copied" if k in SYN else "price_only" if k in NOVOL else "partial_vol") for k in sorted(FILL_DAYS)},
     "fills": fills, "filled_symbols": len(filled_syms),
+    "zero_volume_cells_filled": zero_cells, "zero_volume_symbols_filled": sorted(zero_syms),
+    "zero_volume_remaining": zero_rest,
     "day_stats": day_stats,
     "splits_rescaled": {s: [{"from": a, "to": b, "factor": f, "days": n} for a, b, f, n in v] for s, v in splits.items()},
     "unclean_tickers": unclean,

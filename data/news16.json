@@ -1001,7 +1001,7 @@
   ],
   "decline_full": "6月底低位主要跟隨能源板塊同油價於年中偏弱，加上大市六月底回調，未見明確個股利淡消息。",
   "recovery_full": "7月23日公布Q2分派每單位$1.27（royalty收款約$5,040萬）；8月3日宣布收購礦權及特許權益，上半年多賺$6,000萬、現金充裕，帶動回升。",
-  "cat_line": "7/23 Q2分派$1.27、8/3收購礦權 → 自8/4底回升14.8%"
+  "cat_line": "7/23 Q2分派$1.27、8/3收購礦權 → 自8/4底回升16.0%"
  },
  "LUNG": {
   "decline_short": "收入連季倒退（Q1跌9%、Q2跌5%）兼持續虧損，分析師接連下調目標價，深度尋底至1.17美元。",
@@ -1812,7 +1812,7 @@
    "https://www.investing.com/news/analyst-ratings/canaccord-raises-pulse-biosciences-stock-price-target-on-clinical-progress-93CH-4849079",
    "https://www.marketbeat.com/instant-alerts/pulse-biosciences-eyes-afib-breakthrough-with-nanosecond-pfa-platform-2026-08-16/"
   ],
-  "cat_line": "7/29 NANOPULSE-AF入組過半提前3個月 → 升6.4%、創5年新高"
+  "cat_line": "7/29 NANOPULSE-AF入組過半 → 事件日−3.4%"
  },
  "INCY": {
   "decline_short": "7月中業績前無明確個股利淡，隨大市回落；市場憂佔收入約60%嘅Jakafi 2028年專利到期",
@@ -2612,7 +2612,7 @@
    "https://news.alphastreet.com/docusign-jumps-8-4-amid-sector-wide-rally/",
    "https://metaversestreetjournal.com/2026/08/29/docusigns-google-cloud-partnership-signals-a-new-era-for-ai-powered-legal-agreement-management/"
   ],
-  "cat_line": "8/13 夥Google Cloud推法務AI → 隨軟件股彈7.5%"
+  "cat_line": "8/13 夥Google Cloud推法務AI → 單日+10.3%"
  },
  "GLIBK": {
   "decline_short": "7月中未見公司特定利淡消息，主要跟隨大市高估值回調，7月14日低見21.54美元。",
@@ -4260,7 +4260,7 @@
  },
  "DGICA": {
   "decline_short": "7月15日Progressive急跌9%引發財險定價轉軟憂慮，小型財險股受壓；7月22日隨大市回落，業績前觀望",
-  "recovery_short": "7月30日Q2淨利潤升32%至$2,230萬，EPS $0.60勝預期$0.07，股價升5.13%；Donegal Mutual 8月7、19、24日連續增持",
+  "recovery_short": "7月30日Q2淨利潤升32%至$2,230萬，EPS $0.60勝預期$0.07，股價升2.33%；Donegal Mutual 8月7、19、24日連續增持",
   "hot": [
    "Q2淨利潤升32%至$2,230萬",
    "Donegal Mutual 8月7、19、24日連續增持"
@@ -4772,7 +4772,7 @@
    "https://finance.yahoo.com/markets/stocks/articles/helmerich-payne-q3-earnings-call-130403649.html",
    "https://seekingalpha.com/article/4942048-helmerich-and-payne-a-real-recovery-the-market-hasnt-confirmed-yet"
   ],
-  "cat_line": "8/6 FQ3勝預期、分部超指引 → 累升47.5%"
+  "cat_line": "8/6 FQ3勝預期、分部超指引 → 自底累升33.0%"
  },
  "BKR": {
   "decline_short": "7月初美伊停火令油價跌回戰前水平，油服股跟跌；市場亦憂慮2026年上游勘探開發開支下滑，BKR 7/2低見52.78美元。",
@@ -5018,7 +5018,7 @@
    "https://www.gurufocus.com/news/8977606/is-republic-bancorp-inc-rbcaa-overvalued-after-q2-earnings-beat-eps-at-168-gf-score-67100",
    "https://mercercapital.com/insights/newsletters/bank-watch-newsletter/2026/july-2026-banks-join-the-risk-on-trade/"
   ],
-  "cat_line": "7/24 核心銀行盈利升22% → 升8.9%"
+  "cat_line": "7/24 核心銀行盈利升22% → 自底累升6.2%"
  },
  "DG": {
   "decline_short": "由2/26高位158.23美元累跌逾30%，憂低收入客群消費受壓、油價升穿4美元/加侖，密大消費者信心48.2創1952年新低，兼遭降評級。",
@@ -5129,7 +5129,7 @@
    "https://www.tipranks.com/news/swks-stock-plummets-23-as-apple-aapl-reduces-its-content-reliance-for-iphone-17",
    "https://www.semiconductor-today.com/news_items/2026/aug/skyworks-060826.shtml"
   ],
-  "cat_line": "7/28 Q3 EPS 1.08勝預期兼$20億回購 → 自底累升26.4%"
+  "cat_line": "7/28 Q3 EPS 1.08勝預期兼$20億回購 → 自底累升56.2%"
  },
  "ASH": {
   "decline_short": "5月初財季Q2遜預期、單日插7.7%：Hopewell廠爬坡受阻，EBITDA指引降至3.85-4.00億美元，7/8見底63.70。",
@@ -5220,7 +5220,7 @@
    "https://www.admis.com/ag-market-view-for-aug-31-2026/",
    "https://www.quiverquant.com/news/ADM+slips+as+investors+appear+to+take+profits+after+earnings-driven+rally"
   ],
-  "cat_line": "8/4 Q2勝預期、上調全年指引 → 升10.2%"
+  "cat_line": "8/4 Q2勝預期、上調全年指引 → 自底累升13.2%"
  },
  "CENX": {
   "decline_short": "7/17 見底41.50美元前查無公司特定壞消息：LME鋁價及原材料板塊調整，加上股本按年攤薄近5%令估值受壓，股價由7月初高位回落。",
@@ -5371,7 +5371,7 @@
  },
  "IOVA": {
   "decline_short": "7/14低見$3.93；未搵到明確7月跌因，市場憂Amtagvi歐洲／英國審批延遲及全年$3.5-3.7億銷售指引難達標，股價長期低迷。",
-  "recovery_short": "8/6 Q2收入創紀錄$9,930萬升66%勝預期$8,700萬、毛利率56%，翌日8/7升43%；TD Cowen、Mizuho上調目標價至$10-11。",
+  "recovery_short": "8/6 Q2收入創紀錄$9,930萬升66%勝預期$8,700萬、毛利率56%，8/6當日升43.1%、翌日8/7再升2.1%；TD Cowen、Mizuho上調目標價至$10-11。",
   "hot": [
    "8/6 Q2收入創紀錄$9,930萬升66%勝預期$8,700萬",
    "TD Cowen、Mizuho上調目標價至$10-11"
@@ -5791,7 +5791,7 @@
  },
  "RES": {
   "decline_short": "7/27布油單日插8.7%至88.36美元，油服股捱沽；壓裂活動同定價低迷，公司表明不會重啟壓裂機隊，RES 7/29跌至5.12美元。",
-  "recovery_short": "7/30公布Q2經調整EPS 0.08美元、勝預期一倍，收入4.609億美元，EBITDA利潤率升250點子，單日升3.2%收5.285美元。",
+  "recovery_short": "7/30公布Q2經調整EPS 0.08美元、勝預期一倍，收入4.609億美元，EBITDA利潤率升250點子，單日升5.9%收5.42美元。",
   "hot": [
    "Q2經調整EPS 0.08美元、勝預期一倍",
    "EBITDA利潤率升250點子"
@@ -6078,7 +6078,7 @@
    "https://www.globenewswire.com/news-release/2026/09/10/3359957/7746/en/frequency-electronics-inc-announces-first-quarter-of-fiscal-year-2027-financial-results.html",
    "https://www.chartmill.com/news/FEIM/Chartmill-54677-Frequency-Electronics-NASDAQFEIM-Stock-Jumps-26-After-Q1-Earnings-Beat-and-Strong-Backlog"
   ],
-  "cat_line": "9/10收市後Q1收入+70% → 收市價未反映"
+  "cat_line": "9/10收市後Q1收入+70% → 翌日+42.4%"
  },
  "GEN": {
   "decline_short": "7/21–7/23連跌三日共-6.1%（由7/16的27.01計），屬6/1高位27.76後回吐，無公司特定利淡消息。",

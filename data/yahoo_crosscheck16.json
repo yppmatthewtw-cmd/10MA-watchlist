@@ -7,6 +7,19 @@
  "fill_days": {},
  "fills": {},
  "filled_symbols": 0,
+ "zero_volume_cells_filled": {
+  "2026-09-02": 1
+ },
+ "zero_volume_symbols_filled": [
+  "NAKA"
+ ],
+ "zero_volume_remaining": {
+  "2026-09-02": {
+   "symbols": 2344,
+   "of_which_in_yahoo": 0,
+   "of_traded": 5102
+  }
+ },
  "day_stats": {
   "2025-12-26": {
    "n": 2665,

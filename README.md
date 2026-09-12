@@ -9,6 +9,7 @@
 
 | 版本 | 內容 |
 |------|------|
+| R16.00 | 數據更新至 **2026-09-11 收盤**（周五，178 個交易日）：09-11 快照反推對賬 5,079 隻中位偏差 0.000%（GOSS 1 合 80 已重算，拆股比例上限由 1 合 40 放寬到 1 合 100）；**Yahoo 今次已出齊同日日線，第一次做到同日全量核對**（2,758 隻、100% 喺 0.5% 之內），唔使等下一版。當日 8 月 CPI 整體按月 +0.4%／按年 3.4% 符預期、核心按月 0.3% 略高，油價因伊朗下周赴阿曼談判回落 2.4% 至 $100.05，**四連跌打斷**：標普 +0.86%、納指 +0.96%、道指 +0.98%，$10 億以上股份中位 +0.36%、62.8% 上升。**但總表 101 → 84 隻**（12 新上榜、29 跌出）—— **本版最重要嘅發現：上一版嘅「凍結測試」得到外樣本驗證**，R15 預測凍結一日會有 30 行跌出，實際跌出 29 行、命中 22 行（準確率 73%、召回 76%），而呢 22 行當日中位回報係 **+0.49%**（升咗都照落榜）；預測會跌出而守得住嘅 8 行要升中位 +2.72%，測試估唔到嘅 7 行當日跌中位 1.74%。**批判性覆核（獨立重寫規則、對 hits 零差異）修正**：FEIM 標記由 R15 逐字照搬（仍寫 $62.06／VCP 73.6／「零解釋力」，而佢 09-11 單日 +42.4%）已改寫；「油價急升佢哋唔升」同數據相反（09-10 佢哋中位 +0.26%、跑贏大市 0.95 點）已收回；**「09-02 已有成交量」係錯** —— 5,102 隻中仍有 2,345 隻零成交量、總表 #45 NAKA 就係其中一隻，已喺 `yahoo_crosscheck.py` 加逐格補漏（NAKA 量比 1.012 → 1.087）；六句催化欄累計升幅重算（DMLP／SWKS／HP／ADM／RBCAA／DOCU）；DV、QRVO、EFSI 三隻併購股改為每版重新量度價差 |
 | R15.00 | 數據更新至 **2026-09-10 收盤**（周四，177 個交易日）：09-10 快照反推對賬中位偏差 0.000%（LFT 10 合 1 已重算）；**上一版欠低嘅 09-09 全量 Yahoo 核對今次補做咗**（2,758 隻、100% 喺 0.5% 之內）；當日 8 月 PPI 按年 5.4%、WTI $102.48／布蘭特 $107.63 創 5 月以來新高、10 年期息 4.95%，加息機率抽升至 70% —— **四連跌**，$10 億以上股份中位 −0.69%、只 30.6% 上升；總表 102 → 101 隻（20 新上榜、21 跌出）；**本版最重要嘅發現（覆核提出）**：名單嘅緩衝已經冇晒 —— 48/101 行收市低過自己 MA10、中位行只高出 +0.11%、70/101 行冇緩衝，**凍結測試**（價格企定唔郁）顯示多一日 30 行、五日 45 行會自動跌出；**批判性覆核另修正**：QRVO 補回換股釘價標記（0.960 股 SWKS＋$32.50，價差 +0.7%，同 SWKS 相關系數 0.992，而 SWKS 自己都喺榜）、GEN 嘅「未夠三日確認」改為實測連續 3 日收喺底下、FEIM 標「催化晚過收市」（唯一催化係 09-10 收市後先公布）、TMDX 催化句改為「翌日先挫 5.3%」、底部日數改為按行數排序、AUGO／LAND 嘅口徑修正 |
 | R14.00 | 數據更新至 **2026-09-09 收盤**（周三，176 個交易日）：09-09 快照反推對賬 5,082 隻中位偏差 0.000%；**上一版欠低嘅 09-08 全量 Yahoo 核對今次補做咗**（2,758 隻、100% 喺 0.5% 之內、成交量比 1.00），09-09 因為 Yahoo 遲一日出齊暫時只對到 27 隻；**Yahoo 對照揪出 NAKA 1 拆 40 合股從未重算**，順帶發現舊重算邏輯會漏低夾喺中間嘅噪音日（留低 40 倍假跳空），已改為由最新一日向前掃；當日「油價破百」＋10 年期息 4.857% 雙重夾擊，$10 億以上股份中位 −0.97%、只 19.5% 上升 —— **總表 114 → 102 隻**（12 新上榜、24 跌出，全部 MA 失守、7 隻兼跌穿底）；**批判性覆核**：頭條同 notes 嘅版號、例子、敏感度數字全部改由本版數據計算（唔再照抄上一版），刪走重複 note，補上**累計倖存者偏差**（R12 158 行只剩 80 行，跌出批 −3.0% vs 留低批 −0.8%）、BWMN／BRK/B／DMLP 標記重算、NMIH 盤後公布用返正確寫法 |
 | R13.00 | 數據更新至 **2026-09-08 收盤**（周二，09-07 勞動節休市；175 個交易日）：09-08 快照反推對賬中位偏差 0.000%、5 隻合股按比例重算歷史，序列冇補值日／冇有價無量日；Yahoo 收市後兩次抓取都只出咗 32/2,757 隻嘅 09-08 日線（全部零偏差），全量核對留待下一版。當日「油價＋關稅」雙重衝擊（布蘭特見 $99.45、加拿大報復性關稅），$10 億以上股份中位 −0.74%、只 33% 上升 —— **總表由 158 隻縮到 114 隻**（12 新上榜、56 跌出）；**批判性覆核改正咗五處**：跌出分類（54 隻係 MA 落榜，跌穿底本身唔會落榜）、note 日期由 09-04 改 09-08、催化欄日期 regex（要求空格令 DDD／NVAX 避開檢查）、三句效果數字（DDD 25.8%、RES 5.9%、SRPT 11.0%）、SMTI 由「$35 全現金」改為現金＋MDXG 換股並按 MDXG 收市價計價差；新增：7 行只高過最後一個底 1% 以內（含 #1 ITGR）、新上榜 4 隻（VTS／RES／ACDC／AESI）係同一注油價交易 |
@@ -100,6 +101,23 @@ SERIES=series4.pkl OUT_JSON=screen_results7.json \
 python3 scripts/merge_news7.py                           # 沿用 news6 + 新上榜研究 -> data/news7.json
 SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
   python3 scripts/build_report6_dark.py                  # -> data/10MA_uptrend_watchlistGit_R7.00_*.html
+
+# R16（最新交易日 2026-09-11）
+#   跑 fetch_eod_snapshot.yml（trade_date=2026-09-11）同 fetch_yahoo_eod.yml（end=2026-09-12）
+TRADE_DATE=2026-09-11 IN_SERIES=series13.pkl OUT_SERIES=series14.pkl python3 scripts/extend_series.py
+IN_SERIES=series14.pkl OUT_SERIES=series15.pkl OUT_REPORT=yahoo_crosscheck16.json \
+  YAHOO=./data/yahoo/eod_2025-12-26_2026-09-12.csv.gz python3 scripts/yahoo_crosscheck.py
+SERIES=series15.pkl OUT_JSON=screen_results16.json python3 scripts/screener9.py
+PREV_NEWS=news15.json OUT_NEWS=news16.json SCREEN_JSON=screen_results16.json SERIES=series15.pkl AGENT_PREFIX=r16 \
+  python3 scripts/merge_news9.py
+REVISION=R16 DAY_NOTE=周五 PREV_REV_LABEL=R15 BASE_SCREEN=screen_results12.json BASE_LABEL="R12（09-04 收盤）" \
+  SENS_TXT="<剝走各日嘅重算>" FREEZE_TXT="<凍結測試同上一版嘅回測>" OIL_TXT="<能源股口徑>" OIL_HEAD="<頭條能源句>" \
+  OBS_TITLE="<觀察標題>" SPLIT_NOTE="<公司行動>" SCREEN_JSON=screen_results16.json PREV_SCREEN=screen_results15.json \
+  NEWS_JSON=news16.json PREV_REVIEW=review15.json OUT_REVIEW=review16.json SERIES=series15.pkl \
+  XCHK_JSON=yahoo_crosscheck16.json PREV_XCHK=yahoo_crosscheck15.json MACRO_ZH="<當日宏觀>" \
+  python3 scripts/apply_review11.py
+SCREEN_JSON=screen_results16.json NEWS_JSON=news16.json PREV_SCREEN=screen_results15.json PREV_NEWS=news15.json \
+  PREV_REV=R15 REV=R16.00 REVIEW_JSON=review16.json MODEL_TAG=claudeopus5xhigh python3 scripts/build_report_r10.py
 
 # R15（最新交易日 2026-09-10）
 TRADE_DATE=2026-09-10 IN_SERIES=series11.pkl OUT_SERIES=series12.pkl python3 scripts/extend_series.py
