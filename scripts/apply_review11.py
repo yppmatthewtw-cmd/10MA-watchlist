@@ -66,7 +66,8 @@ OFFERS = {"ITGR": 127.0, "OGN": 14.0, "NATH": 102.0, "GBTG": 9.50, "TXNM": 61.25
           "DBRG": 16.0, "TECH": 73.0, "BWMN": 43.0}
 # offers paid in cash + acquirer stock: the value moves with the acquirer, so it
 # is computed from that day's close rather than pinned to a headline number
-STOCK_OFFERS = {"SMTI": ("MiMedx", 33.0, 0.4735, "MDXG")}
+STOCK_OFFERS = {"SMTI": ("MiMedx", 33.0, 0.4735, "MDXG"),
+                "QRVO": ("Skyworks", 32.50, 0.960, "SWKS")}
 STOCK_DEALS = {"PSNL": "全股收購，換股比率浮動（上限 0.3356 股 TEM）；$16.25 係目標值而非固定現金價。",
                "BLFS": "作價 = $11.25 現金 + 0.1442 股 RGEN，並非固定 $31；股價跟 Repligen 走。",
                "CRBG": "換股合併目標：股價已被協議釘住，量度嘅係換股價差而非突破前收縮。",
@@ -178,6 +179,11 @@ warns = {}
 for sym, w in (prev.get("catalyst_warn") or {}).items():
     if sym not in listed or sym not in SER:
         continue
+    # "market reaction only shows in the next revision" is a promise about the
+    # revision now being built, so carrying it forward states the opposite of
+    # what the data now says: drop it and let the cat_line regenerate one.
+    if "要下一版先睇到" in w.get("text", ""):
+        continue
     day = "2026-" + w["day"].replace("/", "-")
     if day in IDX:
         r = ret(sym, IDX[day])
@@ -204,7 +210,10 @@ for sym in listed:
     if r is None:
         continue
     r_next = ret(sym, i + 1) if i + 1 < N else None
-    if r < -1.0: down_days.append((sym, CAL[i][5:], round(r, 1), r_next, "翌日" in line, i))
+    # -0.5%, matching the threshold news_checks.py uses: a catalyst line that
+    # names a day the stock closed down half a percent is already telling two
+    # different stories in one row
+    if r < -0.5: down_days.append((sym, CAL[i][5:], round(r, 1), r_next, "翌日" in line, i))
     elif abs(r) <= 1.0: flat_days.append(sym)
 after_close = []
 for sym, day, r, r_next, says_next, ev_i in down_days:
@@ -218,15 +227,16 @@ for sym, day, r, r_next, says_next, ev_i in down_days:
                       "text": f"{md} 係本版數據日：呢單嘢喺收市之後先公布，"
                               f"對本版任何一個收市價都冇解釋力（當日收 {r:+.1f}%），市場反應要下一版先睇到。"}
         continue
-    after_hours = "盤後" in ((news.get(sym) or {}).get("recovery_short", "") +
-                            (news.get(sym) or {}).get("decline_short", ""))
+    _e = news.get(sym) or {}
+    after_hours = any(k in (_e.get("recovery_short", "") + _e.get("decline_short", "")
+                            + _e.get("cat_line", "")) for k in ("盤後", "收市後"))
     if (says_next or after_hours) and r_next is not None and r_next >= 1.5:
         # an after-close print: the line already points at the next day, so the
         # event-day drop is the pre-print move, not the market's verdict
         after_close.append(sym)
         warns[sym] = {"day": md, "ret": r,
                       "text": f"{md} 係盤後公布：當日 −{abs(r):.1f}% 係公布前嘅跌幅，市場反應係翌日 {r_next:+.1f}%"
-                              f"{'，09-04 已回吐 ' + format(abs(ret(sym, N - 1)), '.1f') + '%' if ret(sym, N - 1) is not None and ret(sym, N - 1) < -3 else ''}。"}
+                              f"{'，' + last[5:] + ' 已回吐 ' + format(abs(ret(sym, N - 1)), '.1f') + '%' if ret(sym, N - 1) is not None and ret(sym, N - 1) < -3 else ''}。"}
         continue
     warns[sym] = {"day": md, "ret": r,
                   "text": f"催化欄所指嘅 {md} 收市跌 {abs(r):.1f}%：事件當日被市場沽售，回升係其後嘅事，"
@@ -431,7 +441,7 @@ notes = [
              f"其中 {len(down_days)} 句所指嗰日收市係跌市（最誇張：" + "、".join(f"{s} {r:+.1f}%" for s, _, r in sorted(down_days, key=lambda x: x[2])[:6]) + "）——"
              f"呢啲事件係造成低位嘅原因多過回升嘅原因，全部自動加「事件日 −X%」標記"
              f"{'（' + J(after_close, 4) + ' 係盤後公布、句子本身指住翌日，標記改為講明公布前跌幅同翌日反應）' if after_close else ''}；"
-             f"另有 {len(flat_days)} 句所指嗰日波幅喺 ±1% 之內（{sum(1 for x in flat_days if flags.get(x, {}).get('deal'))} 句係併購釘價股，其餘多數係盤後公布、反應落喺翌日）。"
+             f"另有 {len(flat_days)} 句所指嗰日收市喺 −0.5% 至 +1% 之間（{sum(1 for x in flat_days if flags.get(x, {}).get('deal'))} 句係併購釘價股，其餘多數係盤後公布、反應落喺翌日）。"
              + (f"新上榜嘅 30 句由獨立覆核逐句對照序列，{n_fixed} 句嘅效果數字改正（例如 WTTR「翌日約10%」實為 +20.3%、IOVA 嘅 +43% 係當日而非翌日、"
                 "SGHT 嘅 +27.7% 係 8/6 業績而非 8/4 FDA）；news_checks.py 嘅容差（±35%、唔分單日／翌日）放晒佢哋過，係下一步要收窄嘅檢查。"
                 if REVISION != "R12" else
@@ -592,6 +602,13 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
     n_recon = sum(1 for sym, (fi, cs, vs, ff) in SER.items() if fi + len(cs) == N and len(cs) >= 2)
     DAY_NOTE = os.environ.get("DAY_NOTE", "")            # e.g. 周三
     SPLIT_NOTE = os.environ.get("SPLIT_NOTE", "")        # corporate actions this extension
+    # how many symbols the PREVIOUS revision could check for that day, so the
+    # "now confirmed in full" sentence names the right revision and sample
+    PREV_XCHK = os.environ.get("PREV_XCHK", "")
+    prev_partial = "?"
+    if PREV_XCHK and os.path.exists(f"{SCRATCH}/{PREV_XCHK}"):
+        prev_partial = (json.load(open(f"{SCRATCH}/{PREV_XCHK}"))
+                        .get("day_stats", {}).get(prev_day, {}).get("n", "?"))
     # rows whose close sits within 1% above their last bottom — the hold is
     # technically intact but has no margin left
     RANKM = {r["sym"]: i for i, r in enumerate(scr["page1"], 1)}
@@ -628,6 +645,29 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
     # How much cushion is left: a row drops out when its MA test fails, so the
     # honest measure is not today's move but how many rows would fail if the
     # price simply stopped moving. FREEZE_TXT is computed by the caller.
+    # Yahoo publishes the daily bars roughly a day late, so until now the newest
+    # day could only be spot-checked and the full comparison landed one revision
+    # later. Say which of the two actually happened rather than assuming.
+    full_today = dl.get("n", 0) >= x["yahoo_symbols"]
+    xchk_note = (
+        (f"Yahoo 交叉核對：今次抓數據嗰陣 Yahoo 已經出齊 {last[5:]} 嘅日線，所以本版第一次做到同日全量核對 —— "
+         f"{dl.get('n', 0)}/{x['yahoo_symbols']} 隻逐隻對照，中位差 {dl.get('med_abs_pct', 0):.3f}%、"
+         f"{dl.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dl.get('vol_med_ratio')}，唔使等下一版補。"
+         f"對上一個交易日（{prev_day[5:]}）亦已全量核對（{dprev.get('n', 0)} 隻、中位差 {dprev.get('med_abs_pct', 0):.3f}%、"
+         f"{dprev.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內）—— {PREV_LABEL} 當時只對到 {prev_partial} 隻。"
+         if full_today else
+         f"Yahoo 交叉核對：Yahoo 嘅日線通常要收市後一日先出齊，所以 {last[5:]} 今次只對到 {dl.get('n', 0)}/{x['yahoo_symbols']} 隻"
+         f"（中位差 {dl.get('med_abs_pct', 0):.3f}%、{dl.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dl.get('vol_med_ratio')}），"
+         f"其餘要下一版先補齊。"
+         f"上一版欠低嘅 {prev_day[5:]} 全量核對今次做咗：{dprev.get('n', 0)} 隻逐隻對照，中位差 {dprev.get('med_abs_pct', 0):.3f}%、"
+         f"{dprev.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dprev.get('vol_med_ratio')} —— "
+         f"即係 {PREV_LABEL} 當時用 {prev_partial} 隻樣本講嘅嘢，而家全量證實咗。"))
+    xchk_head = (f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線今次已經出齊，"
+                 f"所以 {last[5:]} 係第一次做到同日全量核對（{dl.get('n', 0)} 隻、100% 喺 0.5% 之內），"
+                 f"{prev_day[5:]} 亦已全量核對。"
+                 if full_today else
+                 f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線要遲一日先出齊，所以 {last[5:]} 暫時只對到 {dl.get('n', 0)} 隻（全部零偏差），"
+                 f"而上一版欠低嘅 {prev_day[5:]} 全量核對今次補做咗（{dprev.get('n', 0)} 隻、100% 喺 0.5% 之內）。")
     FREEZE = os.environ.get("FREEZE_TXT", "")
     ma_gaps = sorted((listed[sym]["close"] / listed[sym]["ma"] - 1) * 100 for sym in listed)
     ma_med = statistics.median(ma_gaps)
@@ -644,12 +684,7 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
         "text": (f"新增 {last[5:]}（{DAY_NOTE or '周二'}{('；' + ext) if ext else ''}），合共 {scr['meta']['n_days']} 個交易日。"
                  f"當日收市價嘅主要驗證係 Nasdaq screener 快照（本 repo 嘅 GitHub Actions 抓）反推前收，"
                  f"同對上一個交易日（{prev_day[5:]}）嘅序列逐隻對賬：{n_recon:,} 隻中位偏差 0.000%、p99 0.000%。"
-                 f"Yahoo 交叉核對：Yahoo 嘅日線通常要收市後一日先出齊，所以 {last[5:]} 今次只對到 {dl.get('n', 0)}/{x['yahoo_symbols']} 隻"
-                 f"（中位差 {dl.get('med_abs_pct', 0):.3f}%、{dl.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dl.get('vol_med_ratio')}），"
-                 f"其餘要下一版先補齊。"
-                 f"上一版欠低嘅 {prev_day[5:]} 全量核對今次做咗：{dprev.get('n', 0)} 隻逐隻對照，中位差 {dprev.get('med_abs_pct', 0):.3f}%、"
-                 f"{dprev.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dprev.get('vol_med_ratio')} —— "
-                 f"即係 R13 當時用 32 隻樣本講嘅嘢，而家全量證實咗。"
+                 f"{xchk_note}"
                  f"R12 補回嘅日子（鏡像補值 4 日、09-02 成交量、02-25／08-27 兩個未收齊嘅快照）繼續生效，所以本版序列已經冇補值日、"
                  f"冇有價無量日{'' if novol_days else '（09-02 亦已有成交量）'}——「·無量」符號本版冇對象。"
                  f"{SPLIT_NOTE or '公司行動：本次接駁冇股票需要重算歷史，亦冇股票因為對唔上而剔除。'}"
@@ -676,8 +711,8 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
         + (f"上一版點名嘅油價一注（{'、'.join(OILC_HELD)}）仍然在榜，連同全部 {len(energy_rows)} 行能源股，"
            f"油價一轉頭會一次過失守。" if OILC_HELD else "")
         + (surv_txt if surv_txt else "")
-        + f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線要遲一日先出齊，所以 {last[5:]} 暫時只對到 {dl.get('n', 0)} 隻（全部零偏差），"
-        f"而上一版欠低嘅 {prev_day[5:]} 全量核對今次補做咗（{dprev.get('n', 0)} 隻、100% 喺 0.5% 之內）。序列本身冇補值日、冇有價無量日。審視層全部按本版重新量度：釘價股 {len(deal_all)} 隻有標記、"
+        + xchk_head
+        + f"序列本身冇補值日、冇有價無量日。審視層全部按本版重新量度：釘價股 {len(deal_all)} 隻有標記、"
         f"催化欄 {len(down_days)} 句事件日係跌市已加標記。版面同 R10。")
     review_rule = (f"{REVISION}（唔改規則）：數據更新至 {last} 收盤，Nasdaq 快照反推對賬中位偏差 0.000%、Yahoo 日線逐隻交叉核對；"
                    f"公司行動見「本版數據」一節；審視層所有數字按本版重新量度，「已跌穿底」標記每版重算、唔會沿用。")
@@ -700,7 +735,7 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
         if n["title"].startswith("[已修正] 催化欄"):
             n["text"] = (f"{dated} 句有日期、{undated} 句冇日期（原文本身冇提日期，唔憑空補）、{no_cat} 句係「無個股催化」。"
                          f"其中 {len(down_days)} 句所指嗰日收市係跌市，全部自動加「事件日 −X%」標記；"
-                         f"另有 {len(flat_days)} 句所指嗰日波幅喺 ±1% 之內。"
+                         f"另有 {len(flat_days)} 句所指嗰日收市喺 −0.5% 至 +1% 之間。"
                          f"本版獨立覆核逐句對照序列，改正咗 3 句效果數字：DDD「翌日升23.9%」實為 +25.8%、RES「單日升3.2%」實為 +5.9%、"
                          f"SRPT「單日彈14.1%」實為 +11.0%（08-27，亦係佢 8 月最大單日升幅）。"
                          f"同時修好兩個檢查漏洞：(1) 日期 regex 本來要求「8/3 」後面有空格，令 DDD、NVAX 呢類冇空格嘅句子完全避開檢查"
@@ -759,7 +794,7 @@ print(f"wrote {SCRATCH}/{OUT} · flags {len(flags)} (dropped {len(dropped_flags)
       f"broken-bottom flags recomputed for {recomputed}) · "
       f"catalyst warnings {len(warns)} · notes {len(notes)} · new {n_new} · out {n_out} "
       f"(broke {len(broke)}, struct {struct_lower}+{struct_aged}, ma {len(ma_only)}, gone {len(gone)})")
-print(f"09-04: universe med {u_med:+.2f}% up {u_up:.1f}% · p1 med {p1_med:+.2f}% down>1% {len(p1_down)} · below MA {len(p1_below_ma)} · undercut {p1_undercut}")
+print(f"{last[5:]}: universe med {u_med:+.2f}% up {u_up:.1f}% · p1 med {p1_med:+.2f}% down>1% {len(p1_down)} · below MA {len(p1_below_ma)} · undercut {p1_undercut}")
 print(f"novol_peak {len(novol_peak)} · dep_bottom {len(dep_bottom)} · dep(MA w/o 09-02) {dep} · hl_thin {len(hl_thin)} · pinned top50 {pinned} · sat {sat} · near_cut {near_cut}")
 print("flags:", {k: v["badge"] for k, v in flags.items()})
 for l in log: print("  -", l)

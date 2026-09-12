@@ -45,6 +45,11 @@ def run_checks(news, need, series_path, screen=None):
         fi, cs, vs, ff = SER[sym]; j = i - fi
         return (cs[j] / cs[j - 1] - 1) * 100 if 0 < j < len(cs) else None
 
+    def cum(sym, i):
+        """That day's close, for cumulative ("三日累升X%") claims."""
+        fi, cs, vs, ff = SER[sym]; j = i - fi
+        return cs[j] if 0 <= j < len(cs) else None
+
     for sym in need:
         e = news.get(sym)
         if not e or sym not in SER: continue
@@ -104,7 +109,7 @@ def run_checks(news, need, series_path, screen=None):
             if i is not None:
                 days = [k for k in range(i, min(i + 4, len(CAL))) if CAL[k] not in copied]
                 r0 = ret(sym, i) if CAL[i] not in copied else None
-                if r0 is not None and r0 < -1.0:
+                if r0 is not None and r0 < -0.5:
                     warns.append(f"{sym}: cat_line names {CAL[i][5:]}, a day the stock closed {r0:+.1f}%")
                 em = CATL_EFFECT.search(line.split("→")[-1]) if "→" in line else None
                 if em:
@@ -115,6 +120,16 @@ def run_checks(news, need, series_path, screen=None):
                         if got and not any(abs(abs(x) - abs(claim)) <= max(0.35 * abs(claim), 1.5) for x in got):
                             warns.append(f"{sym}: cat_line claims {word}{claim:g}% but the series shows "
                                          + ", ".join(f"{CAL[k][5:]} {ret(sym, k):+.1f}%" for k in days[:3] if ret(sym, k) is not None))
+                    elif word == "累":
+                        # a cumulative claim is measured from the event day's own
+                        # close, not from whatever low the event itself produced
+                        base = cum(sym, i)
+                        got = [(cum(sym, k) / base - 1) * 100
+                               for k in days[1:5] if cum(sym, k) is not None] if base else []
+                        if got and not any(abs(abs(x) - abs(claim)) <= max(0.35 * abs(claim), 1.5) for x in got):
+                            warns.append(f"{sym}: cat_line claims 累{claim:g}% but from {CAL[i][5:]}'s close the series shows "
+                                         + ", ".join(f"{CAL[k][5:]} {(cum(sym, k) / base - 1) * 100:+.1f}%"
+                                                     for k in days[1:5] if cum(sym, k) is not None))
     return warns
 
 

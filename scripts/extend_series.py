@@ -23,7 +23,7 @@ IN_SERIES = os.environ.get("IN_SERIES", "series2.pkl")
 OUT_SERIES = os.environ.get("OUT_SERIES", "series3.pkl")
 SPLIT_TOL = 0.20        # beyond this the day-over-day move is a corporate action
 SPLIT_FIT = 0.005       # a real split ratio is exact, so demand a tight fit
-SPLIT_MAX_TERM = 40     # largest side of the ratio (1-for-30 reverse splits happen)
+SPLIT_MAX_TERM = 100    # largest side of the ratio (GOSS did 1-for-80 on 2026-09-11)
 SPLIT_MIN_TERM = 5      # ... and the other side is always small (n:1, 3:2, 5:4)
 
 def split_factor(ratio):
