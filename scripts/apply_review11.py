@@ -67,7 +67,8 @@ OFFERS = {"ITGR": 127.0, "OGN": 14.0, "NATH": 102.0, "GBTG": 9.50, "TXNM": 61.25
 # offers paid in cash + acquirer stock: the value moves with the acquirer, so it
 # is computed from that day's close rather than pinned to a headline number
 STOCK_OFFERS = {"SMTI": ("MiMedx", 33.0, 0.4735, "MDXG"),
-                "QRVO": ("Skyworks", 32.50, 0.960, "SWKS")}
+                "QRVO": ("Skyworks", 32.50, 0.960, "SWKS"),
+                "EFSI": ("John Marshall Bancorp", 0.0, 2.0, "JMSB")}
 STOCK_DEALS = {"PSNL": "全股收購，換股比率浮動（上限 0.3356 股 TEM）；$16.25 係目標值而非固定現金價。",
                "BLFS": "作價 = $11.25 現金 + 0.1442 股 RGEN，並非固定 $31；股價跟 Repligen 走。",
                "CRBG": "換股合併目標：股價已被協議釘住，量度嘅係換股價差而非突破前收縮。",
@@ -107,9 +108,11 @@ for sym in listed:
         flags[sym] = {
             "deal": True,
             "badge": (f"換股釘價 · 距作價{gap:+.1f}%" if gap >= 0 else f"高於作價 {abs(gap):.1f}%"),
-            "text": (f"作價係每股 ${cash:g} 現金 ＋ {ratio} 股 {acq}，唔係固定現金價：以 {acq} 收 ${apx:g} 計，"
-                     f"作價值 ${val:.2f}，現價 ${c:g}（{'低過作價 ' + format(abs(gap), '.2f') + '%' if gap >= 0 else '高過作價 ' + format(abs(gap), '.2f') + '%'}）。"
-                     f"股價跟 {acq} 走，波幅收縮係交易釘價所致，VCP／確定性量度緊套利價差而唔係蓄勢突破。"),
+            "text": ((f"作價係每股 {ratio} 股 {acq} 全股票，冇現金部分，所以作價唔係固定數：以 {acq} 收 ${apx:g} 計，"
+                      if not cash else
+                      f"作價係每股 ${cash:g} 現金 ＋ {ratio} 股 {acq}，唔係固定現金價：以 {acq} 收 ${apx:g} 計，")
+                     + f"作價值 ${val:.2f}，現價 ${c:g}（{'低過作價 ' + format(abs(gap), '.2f') + '%' if gap >= 0 else '高過作價 ' + format(abs(gap), '.2f') + '%'}）。"
+                     + f"股價跟 {acq} 走，波幅收縮係交易釘價所致，VCP／確定性量度緊套利價差而唔係蓄勢突破。"),
         }
     elif sym in STOCK_DEALS:
         flags[sym] = {"deal": True, "badge": "換股併購目標", "text": STOCK_DEALS[sym]}
@@ -708,8 +711,9 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
         f"（一個新底要三個之後嘅交易日先認得出）{'，所以 ' + J(p1_undercut, 3) + ' 跌穿咗都仲喺榜' if p1_undercut else ''} —— 真正落榜機制係 MA。"
         f"新上榜以 {'、'.join(new_sectors.split('、')[:3])} 為主（{new_caps}），只有 {len(new_in_top50)}/{n_new} 隻入 top 50。"
         + (f"新上榜當中 {len(OILC)} 隻（{'、'.join(OILC)}）係同一注油價交易、同一星期見底。" if OILC else "")
-        + (f"上一版點名嘅油價一注（{'、'.join(OILC_HELD)}）仍然在榜，連同全部 {len(energy_rows)} 行能源股，"
-           f"油價一轉頭會一次過失守。" if OILC_HELD else "")
+        + (os.environ.get("OIL_HEAD", "")
+           or (f"上一版點名嘅油價一注（{'、'.join(OILC_HELD)}）仍然在榜，連同全部 {len(energy_rows)} 行能源股，"
+               f"油價一轉頭會一次過失守。" if OILC_HELD else ""))
         + (surv_txt if surv_txt else "")
         + xchk_head
         + f"序列本身冇補值日、冇有價無量日。審視層全部按本版重新量度：釘價股 {len(deal_all)} 隻有標記、"
