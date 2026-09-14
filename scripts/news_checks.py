@@ -16,6 +16,7 @@ import json, os, pickle, re, sys
 MOVE = re.compile(r"(\d{1,2})月(\d{1,2})日[^。；;，]{0,30}?"
                   r"(?:股價|單日|當日|翌日|盤後|盤前|收市|收)?(?:急|暴|狂)?"
                   r"(升|飆|彈|抽|漲|瀉|挫|跌|插)(?:逾|近|約|超)?(\d+(?:\.\d+)?)%")
+CUMFROM = re.compile(r"[較由自自從]$|[較由自]\s*$")
 OTHER = re.compile(r"原油|油價|以太幣|比特幣|銅價|金價|指數|標普|納指|Progressive|同業|板塊|對手|競爭"
                    r"|年內|今年|年初至今|一年|月內|一個月|一週|週內|30日|三日|兩日|以來")
 METRIC = re.compile(r"收入|EPS|盈|利潤|指引|ARR|ASV|銷|按年|按季|同店|EBITDA|毛利|現金流|流量|訂閱|出貨|存款|貸款|價至|美元|億|萬")
@@ -61,6 +62,21 @@ def run_checks(news, need, series_path, screen=None):
                 clause = m.group(0); head = clause.rsplit(verb, 1)[0]
                 if METRIC.search(head) or "累" in head or OTHER.search(head):
                     continue  # "收入升11%", "累跌39%", "原油飆5%" are not this stock's daily move
+                # "較7月20日升26.9%" / "由7月20日底部升26.9%" measures that date to
+                # the last close, not a move on it: verify it that way instead of
+                # reporting it as a mismatched daily move
+                if CUMFROM.search(e[fld][max(0, m.start() - 12):m.start()]):
+                    i = day_index(mo, dd)
+                    if i is None:
+                        continue
+                    base, now = cum(sym, i), cum(sym, len(CAL) - 1)
+                    if base and now:
+                        got = (now / base - 1) * 100
+                        sign = -1 if verb in "瀉挫跌插" else 1
+                        if not (got * sign > 0 and abs(abs(got) - pct) <= max(0.25 * pct, 1.0)):
+                            warns.append(f"{sym}: «{clause}» measured from {CAL[i][5:]} to the last close "
+                                         f"is {got:+.1f}%, not {pct:g}%")
+                    continue
                 # a clause that documents the mirror gap explains its own offset
                 if "鏡像無快照" in e[fld][m.end():m.end() + 60]:
                     continue

@@ -63,7 +63,7 @@ def ret(sym, i):
 # tickers that have left, plus TECH (Merck $73 cash, German clearance 08-17)
 # from the R11 research
 OFFERS = {"ITGR": 127.0, "OGN": 14.0, "NATH": 102.0, "GBTG": 9.50, "TXNM": 61.25,
-          "DBRG": 16.0, "TECH": 73.0, "BWMN": 43.0, "DV": 13.60}
+          "DBRG": 16.0, "TECH": 73.0, "BWMN": 43.0, "DV": 13.60, "MKTX": 167.0}
 # offers paid in cash + acquirer stock: the value moves with the acquirer, so it
 # is computed from that day's close rather than pinned to a headline number
 STOCK_OFFERS = {"SMTI": ("MiMedx", 33.0, 0.4735, "MDXG"),
