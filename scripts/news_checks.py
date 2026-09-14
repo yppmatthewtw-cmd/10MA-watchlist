@@ -23,6 +23,10 @@ METRIC = re.compile(r"收入|EPS|盈|利潤|指引|ARR|ASV|銷|按年|按季|同
 PRICE_IN_BADGE = re.compile(r"\$(\d+(?:\.\d+)?)(?![\d\.]*(?:億|萬|B|M|bn|m))")
 # the 催化 column writes its date as "8/5" and its effect after an arrow
 CATL = re.compile(r"^(\d{1,2})/(\d{1,2})(?=\D)")
+# a date anywhere in the line, so a line that does not start with one still
+# gets its effect figure checked instead of skipping every check
+CATL_ANY = re.compile(r"(\d{1,2})/(\d{1,2})(?=\D)")
+PCT = re.compile(r"\d+(?:\.\d+)?%")
 CATL_EFFECT = re.compile(r"(單日|翌日|當日|其後|自底|累)?[^0-9]{0,8}([+\-]?\d+(?:\.\d+)?)%")
 
 
@@ -117,9 +121,11 @@ def run_checks(news, need, series_path, screen=None):
         # (f) the 催化 line: the day it names must exist in the series, must not be
         # a day the stock closed down, and a single-day figure it quotes must match
         line = (e.get("cat_line") or "").strip()
-        m = CATL.match(line)
+        m = CATL.match(line) or CATL_ANY.search(line)
         if line and not m and not line.startswith("無個股催化"):
             warns.append(f"{sym}: cat_line has no date «{line}»")
+            if PCT.search(line.split("→")[-1]):
+                warns.append(f"{sym}: cat_line quotes an effect with no date to check it against «{line}»")
         if m:
             i = day_index(m.group(1), m.group(2))
             if i is not None:
@@ -127,15 +133,31 @@ def run_checks(news, need, series_path, screen=None):
                 r0 = ret(sym, i) if CAL[i] not in copied else None
                 if r0 is not None and r0 < -0.5:
                     warns.append(f"{sym}: cat_line names {CAL[i][5:]}, a day the stock closed {r0:+.1f}%")
-                em = CATL_EFFECT.search(line.split("→")[-1]) if "→" in line else None
+                # The optional keyword group only binds when the percentage sits
+                # right after it; at any other offset the regex matches it empty
+                # and every 自底 / 累 claim silently skipped its check. Find the
+                # keyword in the clause itself instead.
+                eff = line.split("→")[-1] if "→" in line else ""
+                em = CATL_EFFECT.search(eff) if eff else None
                 if em:
                     claim = float(em.group(2))
-                    word = em.group(1) or ""
+                    word = next((w for w in ("單日", "翌日", "當日", "自底", "累", "其後") if w in eff), "")
                     if word in ("單日", "翌日", "當日"):
                         got = [ret(sym, k) for k in days[:3] if ret(sym, k) is not None]
                         if got and not any(abs(abs(x) - abs(claim)) <= max(0.35 * abs(claim), 1.5) for x in got):
                             warns.append(f"{sym}: cat_line claims {word}{claim:g}% but the series shows "
                                          + ", ".join(f"{CAL[k][5:]} {ret(sym, k):+.1f}%" for k in days[:3] if ret(sym, k) is not None))
+                    elif word == "自底":
+                        # measured from the first bottom of the higher-low series
+                        # to the last close, so it changes every revision
+                        b0 = (hl.get(sym) or [[None, None]])[0][0]
+                        base = cum(sym, IDX[b0]) if b0 in IDX else None
+                        now = cum(sym, len(CAL) - 1)
+                        if base and now:
+                            got = (now / base - 1) * 100
+                            if abs(abs(got) - claim) > max(0.08 * claim, 1.0):
+                                warns.append(f"{sym}: cat_line claims 自底{claim:g}% but from {b0[5:]} "
+                                             f"to the last close it is {got:+.1f}%")
                     elif word == "累":
                         # a cumulative claim is measured from the event day's own
                         # close, not from whatever low the event itself produced

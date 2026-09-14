@@ -896,7 +896,7 @@
  },
  "EPAM": {
   "decline_short": "年內曾腰斬，IT服務需求疲弱；8月6日Q2雖勝預期但全年收入指引大削至3.2-4.2%，單日收瀉15.3%。",
-  "recovery_short": "一個月反彈約19%：AI原生業務加速、成為OpenAI Advanced Partner、完成大型回購，重估AI前景。",
+  "recovery_short": "未查到可考嘅事件日期；到 09-14 嘅 21 日回報係 +21.7%、自第一個底（07-23）起 +43.5%：AI原生業務加速、成為OpenAI Advanced Partner、完成大型回購，重估AI前景。",
   "hot": [
    "成為OpenAI Advanced Partner",
    "完成大型回購"
@@ -910,7 +910,7 @@
   ],
   "decline_full": "年內曾腰斬（YTD一度-50%），IT服務需求疲弱；8月6日Q2雖勝預期但全年收入增長指引由4.0-6.5%大削至3.2-4.2%，盤前曾瀉9%。",
   "recovery_full": "其後一個月反彈約19%：AI原生業務加速增長、成為OpenAI合作夥伴網絡Advanced Partner、完成大型回購，市場重估AI服務前景。",
-  "cat_line": "成OpenAI Advanced Partner兼完成回購 → 一個月反彈19%"
+  "cat_line": "未有可考日期：AI業務重估、成OpenAI夥伴兼回購"
  },
  "LH": {
   "decline_short": "未見個股利空：年初累升約34%後高位獲利回吐，7月15日低見$271.99，Q2業績前觀望。",
@@ -1001,7 +1001,7 @@
   ],
   "decline_full": "6月底低位主要跟隨能源板塊同油價於年中偏弱，加上大市六月底回調，未見明確個股利淡消息。",
   "recovery_full": "7月23日公布Q2分派每單位$1.27（royalty收款約$5,040萬）；8月3日宣布收購礦權及特許權益，上半年多賺$6,000萬、現金充裕，帶動回升。",
-  "cat_line": "7/23 Q2分派$1.27、8/3收購礦權 → 自8/4底回升16.0%"
+  "cat_line": "7/23 Q2分派$1.27、8/3收購礦權 → 事件日+0.6%"
  },
  "LUNG": {
   "decline_short": "收入連季倒退（Q1跌9%、Q2跌5%）兼持續虧損，分析師接連下調目標價，深度尋底至1.17美元。",
@@ -1021,7 +1021,7 @@
  },
  "NAVI": {
   "decline_short": "年內累跌約三成，7月9日低見$8.03；Q2淨利息收入按年跌逾8%遜預期，8月7日跌4.8%。",
-  "recovery_short": "8月初學貸股借Sweet v. McMahon $23B和解（借款人訴教育部，Navient並非當事方）獲上訴法院維持而炒上，8月3–4日累升12%；核心EPS按年升45%，貸款發放量增63%，維持派息",
+  "recovery_short": "8月初學貸股借Sweet v. McMahon $23B和解（借款人訴教育部，Navient並非當事方）獲上訴法院維持而炒上，8月3日 +5.24%、8月4日 +6.00%，兩日累升11.6%；核心EPS按年升45%，貸款發放量增63%，維持派息",
   "hot": [
    "核心EPS按年升45%",
    "貸款發放量增63%"
@@ -1045,7 +1045,7 @@
   ],
   "decline_full": "7月9日低見$8.03未見單一明確利空，主要係股價年內累跌約三成、核心貸款業務利息收入受壓嘅跌勢延續，加上部分大行維持偏淡評級；8月6日收市後公布Q2業績，淨利息收入約$120M按年跌逾8%、遜市場預期，8月7日股價跌4.8%，8月10日回落至$8.47。",
   "recovery_full": "8月3日上訴法院裁決令涉及約45萬借款人、約$23B減免嘅學貸和解（Sweet v. Cardona）得以推進，掃除法律不確定性，股價單日升約6%；Q2核心EPS $0.29按年升45%（去年同期$0.20）、貸款發放量$815M按年增63%，8月13日董事會再批准每股$0.16第三季股息，配合8月下旬大市創新高，股價回升至8月28日$9.46。",
-  "cat_line": "8/3–4 學貸$23B和解憧憬（非當事方）→ 兩日累升12%"
+  "cat_line": "8/4 學貸$23B和解憧憬（非當事方）→ 單日+6.0%"
  },
  "KFY": {
   "decline_short": "六月底隨大市回調見底$66.58；招聘板塊受勞動力放緩及AI衝擊憂慮拖累，非個股利空。",
@@ -1726,7 +1726,7 @@
  },
  "INSP": {
   "decline_short": "5月因Inspire V CPT編碼失效、報銷混亂下調全年指引挫18.8%，7月續受壓於低位",
-  "recovery_short": "8月初Q2收入2.006億美元勝預期、EBITDA勝40.5%，全年指引上調至8.55億，單日彈22.8%",
+  "recovery_short": "8月4日Q2收入2.006億美元勝預期、EBITDA勝40.5%，全年指引上調至8.55億，單日彈22.8%",
   "hot": [
    "EBITDA勝40.5%",
    "全年指引上調至8.55億"
@@ -1740,7 +1740,7 @@
    "https://www.stocktitan.net/news/INSP/inspire-medical-systems-inc-announces-second-quarter-2026-financial-zyeoyjzy3nl8.html",
    "https://finance.yahoo.com/sectors/healthcare/articles/inspire-medical-systems-insp-down-042750054.html"
   ],
-  "cat_line": "8月初 Q2勝預期、全年指引上調至8.55億 → 單日彈22.8%"
+  "cat_line": "8/4 Q2勝預期、指引上調至8.55億 → 單日+22.8%"
  },
  "EFX": {
   "decline_short": "7月21日公布Q2後三日累挫7.4%，Q3收入指引中位低於市場預期，長息回升令按揭需求轉弱",
@@ -1980,7 +1980,7 @@
    "https://www.quiverquant.com/news/FB+Bancorp+Reports+Second+Quarter+2026+Net+Loss+of+$70+Thousand",
    "https://s204.q4cdn.com/565007929/files/doc_news/2026/Jul/28/Fidelity_8-K_Q2_2026-PR.pdf"
   ],
-  "cat_line": "6/12 第三輪10%回購托價 → 股價緩升至$15.8"
+  "cat_line": "6/12 第三輪10%回購托價 → 股價緩升至$15.97"
  },
  "MLAB": {
   "decline_short": "滅菌控制分部交付及積壓問題持續拖累有機收入，新CEO未給FY27指引，7月8日低見$91.36。",
@@ -2834,7 +2834,7 @@
  },
  "TALO": {
   "decline_short": "6月底美伊局勢降溫、油價由高位回落，能源股跟跌，6月30日低見$12.91；7月未見個股消息。",
-  "recovery_short": "Q2 EPS $0.57大勝預期$0.32、自由現金流$2.32億創新高，兼上調全年產量指引，股價單日升9.7%。",
+  "recovery_short": "Q2 EPS $0.57大勝預期$0.32、自由現金流$2.32億創新高，兼上調全年產量指引，但公布當日（8/6）收市反而跌0.71%；其後 8/10 單日升8.41%（全序列最大單日升幅）配合油輪運價走強。",
   "hot": [
    "Q2 EPS $0.57大勝預期$0.32",
    "自由現金流$2.32億創新高",
@@ -2849,7 +2849,7 @@
    "https://www.fool.com/earnings/call-transcripts/2026/08/11/talos-energy-talo-q2-2026-earnings-call-transcript/",
    "https://finance.yahoo.com/energy/articles/talos-energy-talo-9-1-111115642.html"
   ],
-  "cat_line": "Q2 EPS $0.57大勝$0.32、上調全年產量指引 → 單日升9.7%"
+  "cat_line": "8/6 Q2 EPS $0.57大勝$0.32 → 事件日−0.7%"
  },
  "GLOB": {
   "decline_short": "7月初無個股消息隨科技股回吐；8月14日Q2 $1.40遜預期$1.50兼削全年指引，單日收瀉8.8%。",
@@ -3553,7 +3553,7 @@
  },
  "QMCO": {
   "decline_short": "6月1日每股9.42美元配售1,060萬股籌1億美元，股權攤薄兼傳統業務弱，7月16日跌至9.6美元。",
-  "recovery_short": "8月10日Q1收入升26%、非GAAP EPS 0.18美元轉盈（預期蝕錢），清零1.448億美元債務，單日飆53%。",
+  "recovery_short": "8月10日Q1收入升26%、非GAAP EPS 0.18美元轉盈（預期蝕錢），清零1.448億美元債務，但公布當日（8/10）收市反而跌2.16%，市場反應係翌日 8/11 單日 +64.69%，到 8/13 三日累計 +109.5%。",
   "hot": [
    "清零1.448億美元債務"
   ],
@@ -3566,7 +3566,7 @@
    "https://seekingalpha.com/news/4630849-quantum-shares-surge-after-q1-beat-strong-revenue-guidance",
    "https://www.marketbeat.com/articles/quantum-leaps-debt-free-as-ai-storage-demand-accelerates/"
   ],
-  "cat_line": "8/10 Q1轉盈兼清零$1.45億債 → 8/13補回+109.5%"
+  "cat_line": "8/10 Q1轉盈兼清零$1.45億債 → 翌日+64.7%"
  },
  "DNOW": {
   "decline_short": "併購MRC後ERP整合失靈，2月20日曾插19.1%，證券集體訴訟陰霾未散，7月2日跌至12.6美元。",
@@ -3653,7 +3653,7 @@
    "https://www.investing.com/news/company-news/integer-holdings-q1-2026-slides-outlook-cut-on-new-product-headwinds-93CH-4650269",
    "https://www.gurufocus.com/news/8965586/is-integer-holdings-corp-itgr-a-bargain-after-42-drop-gf-value-says-undervalued"
   ],
-  "cat_line": "8/3 KKR $127現金全購、溢價51.8% → 急抽至$125"
+  "cat_line": "7/31 KKR $127現金全購、溢價51.8% → 單日+20.2%"
  },
  "CQP": {
   "decline_short": "天然氣價疲弱兼6月下旬大市回調，單位價曾跌穿$58；7月15日再挫3.5%見底$62.18",
@@ -4595,7 +4595,7 @@
    "https://www.stocktitan.net/news/FMAO/farmers-merchants-bancorp-inc-reports-2026-second-quarter-and-year-8gsjvgyo9zxm.html",
    "https://finance.yahoo.com/markets/stocks/articles/farmers-merchants-bancorp-inc-reports-203000518.html"
   ],
-  "cat_line": "7/27 Q2純利升53%破紀錄 → 回升19%"
+  "cat_line": "7/27 Q2純利升53%破紀錄 → 自7/27回升14.8%"
  },
  "NUTX": {
   "decline_short": "急升後獲利回吐；巿場憂盈利主要靠仲裁費用一次性下降而非核心增長，7月底無新催化下遭沽壓，7/29回落至140.49美元。",
@@ -4648,7 +4648,7 @@
    "https://www.biospace.com/press-releases/tarsus-pharmaceuticals-to-acquire-alkeus-pharmaceuticals-and-advance-eye-care-leadership-position",
    "https://finance.yahoo.com/healthcare/articles/tarsus-pharmaceuticals-inc-tars-q2-190211100.html"
   ],
-  "cat_line": "8/6 銷售升69%、收購Alkeus → 升五成"
+  "cat_line": "8/6 銷售升69%、收購Alkeus → 自底升42.5%"
  },
  "SBAC": {
   "decline_short": "7月塔式REIT偏弱，市場憂慮營運商資本開支放緩、租戶流失率高及國際業務承壓；加上早前收購憧憬降溫，7/27低見172.61美元。",
@@ -4759,7 +4759,7 @@
  },
  "HP": {
   "decline_short": "北美陸上鑽井活動放緩，加上收購KCA Deutag後負債高企需去槓桿；7月初美伊停火令油價回落、能源股受壓，HP 7/6低見30.53美元。",
-  "recovery_short": "8/6 公布FQ3：收入10.35億美元勝預期約5%、三大分部全部超指引，調整後EBITDA 2.36億美元，積壓訂單61億美元，自底累升47.5%。",
+  "recovery_short": "8/6 公布FQ3：收入10.35億美元勝預期約5%、三大分部全部超指引，調整後EBITDA 2.36億美元，積壓訂單61億美元，由 07-28 底計最多曾升 43.9%（09-02 收 $47.64），到 09-14 已回落至 +28.8%。",
   "hot": [
    "收入10.35億美元勝預期約5%",
    "三大分部全部超指引"
@@ -4773,7 +4773,7 @@
    "https://finance.yahoo.com/markets/stocks/articles/helmerich-payne-q3-earnings-call-130403649.html",
    "https://seekingalpha.com/article/4942048-helmerich-and-payne-a-real-recovery-the-market-hasnt-confirmed-yet"
   ],
-  "cat_line": "8/6 FQ3勝預期、分部超指引 → 自底累升33.0%"
+  "cat_line": "8/6 FQ3勝預期、三分部超指引 → 單日+11.4%"
  },
  "BKR": {
   "decline_short": "7月初美伊停火令油價跌回戰前水平，油服股跟跌；市場亦憂慮2026年上游勘探開發開支下滑，BKR 7/2低見52.78美元。",
@@ -5019,7 +5019,7 @@
    "https://www.gurufocus.com/news/8977606/is-republic-bancorp-inc-rbcaa-overvalued-after-q2-earnings-beat-eps-at-168-gf-score-67100",
    "https://mercercapital.com/insights/newsletters/bank-watch-newsletter/2026/july-2026-banks-join-the-risk-on-trade/"
   ],
-  "cat_line": "7/24 核心銀行盈利升22% → 自底累升6.2%"
+  "cat_line": "7/24 核心銀行盈利升22% → 三日累升10.8%"
  },
  "DG": {
   "decline_short": "由2/26高位158.23美元累跌逾30%，憂低收入客群消費受壓、油價升穿4美元/加侖，密大消費者信心48.2創1952年新低，兼遭降評級。",
@@ -5130,7 +5130,7 @@
    "https://www.tipranks.com/news/swks-stock-plummets-23-as-apple-aapl-reduces-its-content-reliance-for-iphone-17",
    "https://www.semiconductor-today.com/news_items/2026/aug/skyworks-060826.shtml"
   ],
-  "cat_line": "7/28 Q3 EPS 1.08勝預期兼$20億回購 → 自底累升56.2%"
+  "cat_line": "7/28 Q3 EPS 1.08勝預期兼$20億回購 → 事件日只+2.0%"
  },
  "ASH": {
   "decline_short": "5月初財季Q2遜預期、單日插7.7%：Hopewell廠爬坡受阻，EBITDA指引降至3.85-4.00億美元，7/8見底63.70。",
@@ -5221,7 +5221,7 @@
    "https://www.admis.com/ag-market-view-for-aug-31-2026/",
    "https://www.quiverquant.com/news/ADM+slips+as+investors+appear+to+take+profits+after+earnings-driven+rally"
   ],
-  "cat_line": "8/4 Q2勝預期、上調全年指引 → 自底累升13.2%"
+  "cat_line": "8/4 Q2勝預期、上調全年指引 → 事件日+2.3%"
  },
  "CENX": {
   "decline_short": "7/17 見底41.50美元前查無公司特定壞消息：LME鋁價及原材料板塊調整，加上股本按年攤薄近5%令估值受壓，股價由7月初高位回落。",
@@ -6398,7 +6398,7 @@
    "https://www.businesswire.com/news/home/20260730809991/en/Intercontinental-Exchange-to-Acquire-MarketAxess-Creating-a-Premier-Fixed-Income-Marketplace",
    "https://www.investing.com/news/analyst-ratings/ubs-downgrades-marketaxess-stock-rating-on-ice-acquisition-deal-93CH-4826932"
   ],
-  "cat_line": "7/30 ICE每股167美元現金收購→+29%"
+  "cat_line": "7/30 ICE每股167美元現金收購→+29.5%"
  },
  "MTDR": {
   "decline_short": "7月油價偏軟（EIA：布蘭特7月均價約84美元/桶）拖累頁岩股，MTDR由6月高位回落，7月28日收市見底46.12美元。",
@@ -6558,7 +6558,7 @@
    "https://ir.fubo.tv/news/news-details/2026/Fubo-Closed-Q2-Fiscal-2026-With-Record-Global-Revenue-Reaffirms-Fiscal-Year-2026-Guidance-and-Long-Term-Financial-Targets/default.aspx",
    "https://thedesk.net/2026/08/fubo-fiscal-q3-2026-earnings-report/"
   ],
-  "cat_line": "9/2 迪士尼Hulu協同獲重估→+7.0%"
+  "cat_line": "9/2 迪士尼Hulu協同獲重估→+6.9%"
  },
  "AMPH": {
   "decline_short": "盈利能力持續受壓（Q1純利由去年同期2,529萬美元跌至642萬美元），半年內股價累跌27.6%至約18.92美元，7月24日收市見底18.72美元。",

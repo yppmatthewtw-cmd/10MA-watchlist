@@ -9,6 +9,7 @@
 
 | 版本 | 內容 |
 |------|------|
+| R17.00 | 數據更新至 **2026-09-14 收盤**（周一，179 個交易日）：09-14 快照反推對賬 5,078 隻中位偏差 0.000%（四隻反向合股自動重算：NFE 1 合 50、NXXT 1 合 10、OPTT 1 合 30、IPDN 1 合 30）；**Yahoo 連續第二版出齊同日日線**（2,758 隻、100% 喺 0.5% 之內）。當日 AI 安全風暴（Amodei 撰文促請放慢前沿擴張）令 SOX 挫 5.9%，指數全線回吐，$10 億以上股份中位只 +0.04%、51.1% 上升；總表 84 → **90 隻**（25 新上榜、19 跌出）。**上一版點名嘅能源集中度第二個交易日兌現**：16 行能源股 7 行一次過跌出 —— 但覆核證明共同因子唔係油價（當日油價再抽、布蘭特盤中逾 108 美元），而係**資本設備**一條線：全市場電氣產品 −6.80%、半導體 −6.57%、電子零件 −5.25%、油田服務 −5.16%，而油氣生產商只 −0.64%；7 個跌出者入面 4 隻係油田服務股。**凍結測試今次講相反嘅故事**：R16 預測凍結一日 9 行跌出，實際 19 行、命中 8 行，另 11 行估唔到（當日中位跌 4.00%）—— 對比 R16 嗰次「22/29 係 MA 滯後、當日仲升 +0.49%」，證明兩個機制輪流主導，凍結測試只係落榜下限。**批判性覆核修正**：FEIM 標記又係逐字照搬（+42.4% 係 09-11 嘅事，09-14 已回吐 3.25%）；**四句「自底累升」cat_line 每版都會自然過期**（SWKS 寫 56.2%、實際 40.1%），今次改為一律用事件當日／翌日嘅固定效果，並喺 `news_checks.py` 加入 自底 口徑核對；修好效果核對嘅一個真 bug（關鍵詞 regex 喺非零偏移會空匹配，令所有「自底／累」聲稱靜靜跳過檢查）；冇日期開頭嘅催化句唔再豁免核對（TALO「單日升9.7%」全序列最大單日只有 +8.41%）；QRVO −7.43% 證實純屬換股數學（SWKS −10.29%，價差由 +0.571% 只郁到 +0.565%）而收購方 SWKS 同時佔另一個名額；併購標記改為引用實測 VCP（QRVO 6.1、EFSI 14.7 —— 連收縮都冇）；點出**醫療保健 23/90（26%）先係本版最大集中度**、油相關實為 15/90（17%）；另修好 CI：抓數 workflow push 輸 race 就報廢成次抓數，改為重試 pull＋push 五次 |
 | R16.00 | 數據更新至 **2026-09-11 收盤**（周五，178 個交易日）：09-11 快照反推對賬 5,079 隻中位偏差 0.000%（GOSS 1 合 80 已重算，拆股比例上限由 1 合 40 放寬到 1 合 100）；**Yahoo 今次已出齊同日日線，第一次做到同日全量核對**（2,758 隻、100% 喺 0.5% 之內），唔使等下一版。當日 8 月 CPI 整體按月 +0.4%／按年 3.4% 符預期、核心按月 0.3% 略高，油價因伊朗下周赴阿曼談判回落 2.4% 至 $100.05，**四連跌打斷**：標普 +0.86%、納指 +0.96%、道指 +0.98%，$10 億以上股份中位 +0.36%、62.8% 上升。**但總表 101 → 84 隻**（12 新上榜、29 跌出）—— **本版最重要嘅發現：上一版嘅「凍結測試」得到外樣本驗證**，R15 預測凍結一日會有 30 行跌出，實際跌出 29 行、命中 22 行（準確率 73%、召回 76%），而呢 22 行當日中位回報係 **+0.49%**（升咗都照落榜）；預測會跌出而守得住嘅 8 行要升中位 +2.72%，測試估唔到嘅 7 行當日跌中位 1.74%。**批判性覆核（獨立重寫規則、對 hits 零差異）修正**：FEIM 標記由 R15 逐字照搬（仍寫 $62.06／VCP 73.6／「零解釋力」，而佢 09-11 單日 +42.4%）已改寫；「油價急升佢哋唔升」同數據相反（09-10 佢哋中位 +0.26%、跑贏大市 0.95 點）已收回；**「09-02 已有成交量」係錯** —— 5,102 隻中仍有 2,345 隻零成交量、總表 #45 NAKA 就係其中一隻，已喺 `yahoo_crosscheck.py` 加逐格補漏（NAKA 量比 1.012 → 1.087）；六句催化欄累計升幅重算（DMLP／SWKS／HP／ADM／RBCAA／DOCU）；DV、QRVO、EFSI 三隻併購股改為每版重新量度價差 |
 | R15.00 | 數據更新至 **2026-09-10 收盤**（周四，177 個交易日）：09-10 快照反推對賬中位偏差 0.000%（LFT 10 合 1 已重算）；**上一版欠低嘅 09-09 全量 Yahoo 核對今次補做咗**（2,758 隻、100% 喺 0.5% 之內）；當日 8 月 PPI 按年 5.4%、WTI $102.48／布蘭特 $107.63 創 5 月以來新高、10 年期息 4.95%，加息機率抽升至 70% —— **四連跌**，$10 億以上股份中位 −0.69%、只 30.6% 上升；總表 102 → 101 隻（20 新上榜、21 跌出）；**本版最重要嘅發現（覆核提出）**：名單嘅緩衝已經冇晒 —— 48/101 行收市低過自己 MA10、中位行只高出 +0.11%、70/101 行冇緩衝，**凍結測試**（價格企定唔郁）顯示多一日 30 行、五日 45 行會自動跌出；**批判性覆核另修正**：QRVO 補回換股釘價標記（0.960 股 SWKS＋$32.50，價差 +0.7%，同 SWKS 相關系數 0.992，而 SWKS 自己都喺榜）、GEN 嘅「未夠三日確認」改為實測連續 3 日收喺底下、FEIM 標「催化晚過收市」（唯一催化係 09-10 收市後先公布）、TMDX 催化句改為「翌日先挫 5.3%」、底部日數改為按行數排序、AUGO／LAND 嘅口徑修正 |
 | R14.00 | 數據更新至 **2026-09-09 收盤**（周三，176 個交易日）：09-09 快照反推對賬 5,082 隻中位偏差 0.000%；**上一版欠低嘅 09-08 全量 Yahoo 核對今次補做咗**（2,758 隻、100% 喺 0.5% 之內、成交量比 1.00），09-09 因為 Yahoo 遲一日出齊暫時只對到 27 隻；**Yahoo 對照揪出 NAKA 1 拆 40 合股從未重算**，順帶發現舊重算邏輯會漏低夾喺中間嘅噪音日（留低 40 倍假跳空），已改為由最新一日向前掃；當日「油價破百」＋10 年期息 4.857% 雙重夾擊，$10 億以上股份中位 −0.97%、只 19.5% 上升 —— **總表 114 → 102 隻**（12 新上榜、24 跌出，全部 MA 失守、7 隻兼跌穿底）；**批判性覆核**：頭條同 notes 嘅版號、例子、敏感度數字全部改由本版數據計算（唔再照抄上一版），刪走重複 note，補上**累計倖存者偏差**（R12 158 行只剩 80 行，跌出批 −3.0% vs 留低批 −0.8%）、BWMN／BRK/B／DMLP 標記重算、NMIH 盤後公布用返正確寫法 |
@@ -101,6 +102,23 @@ SERIES=series4.pkl OUT_JSON=screen_results7.json \
 python3 scripts/merge_news7.py                           # 沿用 news6 + 新上榜研究 -> data/news7.json
 SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
   python3 scripts/build_report6_dark.py                  # -> data/10MA_uptrend_watchlistGit_R7.00_*.html
+
+# R17（最新交易日 2026-09-14）
+#   跑 fetch_eod_snapshot.yml（trade_date=2026-09-14）同 fetch_yahoo_eod.yml（end=2026-09-15）
+TRADE_DATE=2026-09-14 IN_SERIES=series15.pkl OUT_SERIES=series16.pkl python3 scripts/extend_series.py
+IN_SERIES=series16.pkl OUT_SERIES=series17.pkl OUT_REPORT=yahoo_crosscheck17.json \
+  YAHOO=./data/yahoo/eod_2025-12-26_2026-09-15.csv.gz python3 scripts/yahoo_crosscheck.py
+SERIES=series17.pkl OUT_JSON=screen_results17.json python3 scripts/screener9.py
+PREV_NEWS=news16.json OUT_NEWS=news17.json SCREEN_JSON=screen_results17.json SERIES=series17.pkl AGENT_PREFIX=r17 \
+  python3 scripts/merge_news9.py
+REVISION=R17 DAY_NOTE=周一 PREV_REV_LABEL=R16 BASE_SCREEN=screen_results12.json BASE_LABEL="R12（09-04 收盤）" \
+  SENS_TXT="<剝走各日嘅重算>" FREEZE_TXT="<凍結測試同上一版嘅回測>" OIL_TXT="<能源／集中度>" OIL_HEAD="<頭條能源句>" \
+  OBS_TITLE="<觀察標題>" SPLIT_NOTE="<公司行動>" SCREEN_JSON=screen_results17.json PREV_SCREEN=screen_results16.json \
+  NEWS_JSON=news17.json PREV_REVIEW=review16.json OUT_REVIEW=review17.json SERIES=series17.pkl \
+  XCHK_JSON=yahoo_crosscheck17.json PREV_XCHK=yahoo_crosscheck16.json MACRO_ZH="<當日宏觀>" \
+  python3 scripts/apply_review11.py
+SCREEN_JSON=screen_results17.json NEWS_JSON=news17.json PREV_SCREEN=screen_results16.json PREV_NEWS=news16.json \
+  PREV_REV=R16 REV=R17.00 REVIEW_JSON=review17.json MODEL_TAG=claudeopus5xhigh python3 scripts/build_report_r10.py
 
 # R16（最新交易日 2026-09-11）
 #   跑 fetch_eod_snapshot.yml（trade_date=2026-09-11）同 fetch_yahoo_eod.yml（end=2026-09-12）

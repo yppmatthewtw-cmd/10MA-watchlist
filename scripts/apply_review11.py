@@ -97,7 +97,9 @@ for sym in listed:
             "deal": True,
             "badge": (f"套利釘價 · 距作價{gap:+.1f}%" if gap >= 0 else f"高於作價 {abs(gap):.1f}%"),
             "text": (f"現金作價 ${off:g}，現價 ${c:g}（{'剩餘升幅只有 ' + format(gap, '+.1f') + '%' if gap >= 0 else '已高於作價 ' + format(abs(gap), '.1f') + '%'}）；"
-                     "波幅收縮係交易釘價所致，唔係蓄勢突破，VCP／確定性高分屬機械假象。"),
+                     + (f"VCP {listed[sym]['vcp']:.1f}，呢個「收縮」係交易釘價所致，唔係蓄勢突破，VCP／確定性高分屬機械假象。"
+                        if listed[sym]["vcp"] >= 50 else
+                        f"VCP 只有 {listed[sym]['vcp']:.1f}，即係連收縮都冇 —— 股價由交易進度而唔係基本面主導，確定性分數量度緊套利價差。")),
         }
     elif sym in STOCK_OFFERS and STOCK_OFFERS[sym][3] in SER:
         who, cash, ratio, acq = STOCK_OFFERS[sym]
@@ -112,7 +114,11 @@ for sym in listed:
                       if not cash else
                       f"作價係每股 ${cash:g} 現金 ＋ {ratio} 股 {acq}，唔係固定現金價：以 {acq} 收 ${apx:g} 計，")
                      + f"作價值 ${val:.2f}，現價 ${c:g}（{'低過作價 ' + format(abs(gap), '.2f') + '%' if gap >= 0 else '高過作價 ' + format(abs(gap), '.2f') + '%'}）。"
-                     + f"股價跟 {acq} 走，波幅收縮係交易釘價所致，VCP／確定性量度緊套利價差而唔係蓄勢突破。"),
+                     + (f"股價跟 {acq} 走，VCP {listed[sym]['vcp']:.1f}，呢個「收縮」係交易釘價所致，"
+                        f"VCP／確定性量度緊套利價差而唔係蓄勢突破。"
+                        if listed[sym]["vcp"] >= 50 else
+                        f"股價跟 {acq} 走，VCP 只有 {listed[sym]['vcp']:.1f}，即係連收縮都冇："
+                        f"佢嘅波幅係 {acq} 帶嚟嘅，確定性同 VCP 量度緊套利價差而唔係蓄勢突破。")),
         }
     elif sym in STOCK_DEALS:
         flags[sym] = {"deal": True, "badge": "換股併購目標", "text": STOCK_DEALS[sym]}
@@ -664,7 +670,7 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
     # later. Say which of the two actually happened rather than assuming.
     full_today = dl.get("n", 0) >= x["yahoo_symbols"]
     xchk_note = (
-        (f"Yahoo 交叉核對：今次抓數據嗰陣 Yahoo 已經出齊 {last[5:]} 嘅日線，所以本版第一次做到同日全量核對 —— "
+        (f"Yahoo 交叉核對：今次抓數據嗰陣 Yahoo 已經出齊 {last[5:]} 嘅日線，所以本版做到同日全量核對 —— "
          f"{dl.get('n', 0)}/{x['yahoo_symbols']} 隻逐隻對照，中位差 {dl.get('med_abs_pct', 0):.3f}%、"
          f"{dl.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dl.get('vol_med_ratio')}，唔使等下一版補。"
          f"對上一個交易日（{prev_day[5:]}）亦已全量核對（{dprev.get('n', 0)} 隻、中位差 {dprev.get('med_abs_pct', 0):.3f}%、"
@@ -677,7 +683,7 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
          f"{dprev.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dprev.get('vol_med_ratio')} —— "
          f"即係 {PREV_LABEL} 當時用 {prev_partial} 隻樣本講嘅嘢，而家全量證實咗。"))
     xchk_head = (f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線今次已經出齊，"
-                 f"所以 {last[5:]} 係第一次做到同日全量核對（{dl.get('n', 0)} 隻、100% 喺 0.5% 之內），"
+                 f"所以 {last[5:]} 做到同日全量核對（{dl.get('n', 0)} 隻、100% 喺 0.5% 之內），"
                  f"{prev_day[5:]} 亦已全量核對。"
                  if full_today else
                  f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線要遲一日先出齊，所以 {last[5:]} 暫時只對到 {dl.get('n', 0)} 隻（全部零偏差），"
