@@ -41,6 +41,12 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/yahoo
           git commit -m "data: Yahoo daily bars $START -> $END" || { echo "nothing to commit"; exit 0; }
-          # the branch may have moved while the fetch ran; replay this commit on top
-          git pull --rebase --quiet origin "${GITHUB_REF_NAME}"
-          git push
+          # The branch may have moved while the fetch ran, and it can move again
+          # between the pull and the push, so retry the pair rather than the pull
+          # alone: a lost race here throws away the whole fetch.
+          for i in 1 2 3 4 5; do
+            git pull --rebase --quiet origin "${GITHUB_REF_NAME}" && git push && exit 0
+            echo "push attempt $i lost a race; retrying in $((i * 5))s"
+            sleep $((i * 5))
+          done
+          echo "could not push after 5 attempts"; exit 1
