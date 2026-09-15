@@ -948,7 +948,7 @@
   ],
   "decline_full": "七月低位未見明確個股利淡，主要隨大市七月及八月中回調整固；市場對利潤率受壓（純利率由8.4%降至7.2%）略有戒心。",
   "recovery_full": "8月5日Q2業績：收入20.5億美元按年升逾10%、EPS $2.39勝去年同期，需求穩健兼防守性消費板塊資金流入，公布後升1.9%並延續升勢。",
-  "cat_line": "8/5 Q2收入20.5億升逾10%、EPS $2.39 → 公布後升1.9%"
+  "cat_line": "8/5 Q2收入20.5億、EPS $2.39 → 事件日+2.1%"
  },
  "HCA": {
   "decline_short": "7月14日下調2026全年EPS指引，保險組合轉差、無保險病人增加，稅前利潤受$4億影響，連跌五日見底。",
@@ -1980,7 +1980,7 @@
    "https://www.quiverquant.com/news/FB+Bancorp+Reports+Second+Quarter+2026+Net+Loss+of+$70+Thousand",
    "https://s204.q4cdn.com/565007929/files/doc_news/2026/Jul/28/Fidelity_8-K_Q2_2026-PR.pdf"
   ],
-  "cat_line": "6/12 第三輪10%回購托價 → 股價緩升至$15.97"
+  "cat_line": "6/12 第三輪10%回購托價 → 事件日只+0.1%"
  },
  "MLAB": {
   "decline_short": "滅菌控制分部交付及積壓問題持續拖累有機收入，新CEO未給FY27指引，7月8日低見$91.36。",
@@ -2317,7 +2317,7 @@
    "https://www.iea.org/reports/oil-market-report-august-2026",
    "https://www.vantagemarkets.com/en/market-analysis/brent-wti-crude-oil-price-chart-august-28-2026/"
   ],
-  "cat_line": "8/5 Q2自由現金流$4.14億、回購$1.47億 → 油價企穩升至$150"
+  "cat_line": "8/5 Q2自由現金流$4.14億 → 事件日−5.1%"
  },
  "UFI": {
   "decline_short": "7月30日跌至6.14美元，冇個股利淡消息；美洲區銷量疲弱兼關稅陰霾拖累小型紡織股。",
@@ -2596,7 +2596,7 @@
    "https://www.globenewswire.com/news-release/2026/08/10/3342227/0/en/red-violet-reports-second-quarter-2026-financial-results.html",
    "https://investors.redviolet.com/news-releases/news-release-details/red-violet-reports-second-quarter-2026-financial-results/"
   ],
-  "cat_line": "8/10 Q2收入升23%、EBITDA升48% → 三日累彈12.3%"
+  "cat_line": "8/10 Q2收入升23%、EBITDA升48% → 翌日+8.5%"
  },
  "DOCU": {
   "decline_short": "增長放緩（FY26收入只升8%）估值受壓，6月5日插7.2%、6月累跌25%",
@@ -3990,7 +3990,7 @@
    "https://invezz.com/news/2026/08/24/nucor-steel-dynamics-cleveland-cliffs-stocks-rise-as-us-canada-trade-talks-fail/",
    "https://simplywall.st/stocks/us/materials/nyse-nue/nucor/news/nucor-nue-stock-drops-as-record-shipments-meet-valuation-dou"
   ],
-  "cat_line": "8/24 美加談判破裂、關稅減免憂慮消退 → 一週累升2.9%"
+  "cat_line": "8/24 關稅減免憂慮消退 → 一週累升2.8%"
  },
  "S": {
   "decline_short": "7月下旬受增長放緩同大型保安廠商競爭壓力拖累，估值被壓，7月23日隨大市回調見17.38美元。",
@@ -4595,7 +4595,7 @@
    "https://www.stocktitan.net/news/FMAO/farmers-merchants-bancorp-inc-reports-2026-second-quarter-and-year-8gsjvgyo9zxm.html",
    "https://finance.yahoo.com/markets/stocks/articles/farmers-merchants-bancorp-inc-reports-203000518.html"
   ],
-  "cat_line": "7/27 Q2純利升53%破紀錄 → 自7/27回升14.8%"
+  "cat_line": "7/27 Q2純利升53%破紀錄 → 翌日+10.4%"
  },
  "NUTX": {
   "decline_short": "急升後獲利回吐；巿場憂盈利主要靠仲裁費用一次性下降而非核心增長，7月底無新催化下遭沽壓，7/29回落至140.49美元。",
@@ -4648,7 +4648,7 @@
    "https://www.biospace.com/press-releases/tarsus-pharmaceuticals-to-acquire-alkeus-pharmaceuticals-and-advance-eye-care-leadership-position",
    "https://finance.yahoo.com/healthcare/articles/tarsus-pharmaceuticals-inc-tars-q2-190211100.html"
   ],
-  "cat_line": "8/6 銷售升69%、收購Alkeus → 自底升42.5%"
+  "cat_line": "8/6 銷售升69%、收購Alkeus → 單日+6.6%"
  },
  "SBAC": {
   "decline_short": "7月塔式REIT偏弱，市場憂慮營運商資本開支放緩、租戶流失率高及國際業務承壓；加上早前收購憧憬降溫，7/27低見172.61美元。",
@@ -5019,7 +5019,7 @@
    "https://www.gurufocus.com/news/8977606/is-republic-bancorp-inc-rbcaa-overvalued-after-q2-earnings-beat-eps-at-168-gf-score-67100",
    "https://mercercapital.com/insights/newsletters/bank-watch-newsletter/2026/july-2026-banks-join-the-risk-on-trade/"
   ],
-  "cat_line": "7/24 核心銀行盈利升22% → 三日累升10.8%"
+  "cat_line": "7/24 核心銀行盈利升22% → 三日累升10.9%"
  },
  "DG": {
   "decline_short": "由2/26高位158.23美元累跌逾30%，憂低收入客群消費受壓、油價升穿4美元/加侖，密大消費者信心48.2創1952年新低，兼遭降評級。",
@@ -6342,7 +6342,7 @@
    "https://www.morningstar.com/news/pr-newswire/20260723ph11105/eagle-financial-services-inc-announces-2026-second-quarter-financial-results-and-quarterly-dividend",
    "https://www.globenewswire.com/news-release/2026/09/09/3358905/0/en/brodsky-smith-shareholder-update-notifying-investors-of-the-following-investigations-eagle-financial-services-inc-nasdaq-efsi-safety-insurance-group-inc-nasdaq-saft-utz-brands-inc-.html"
   ],
-  "cat_line": "9/8 全股票被併購，2股JMSB作價$46.1"
+  "cat_line": "9/8 全股票被併購（2股JMSB）→ 單日+10.4%"
  },
  "FWRD": {
   "decline_short": "5月警告一名佔約10%收入（2025年約2.5億美元）嘅合約物流大客戶要分散物流夥伴，兼且全公司私有化要約告吹，股價一度插逾40%；7/10執行主席Jerome Lorrain辭任後再受壓，7/15收市跌至12.62美元見底。",
@@ -6576,7 +6576,7 @@
    "https://www.sec.gov/Archives/edgar/data/0001297184/000129718426000045/amph-20260806x8k.htm",
    "https://simplywall.st/stocks/us/pharmaceuticals-biotech/nasdaq-amph/amphastar-pharmaceuticals"
   ],
-  "cat_line": "無個股催化，業績後遭降級仍緩升28%"
+  "cat_line": "無個股催化，業績後遭降級仍緩升26.3%"
  },
  "NMAX": {
   "decline_short": "7月無查到確認的重大個股利淡消息，股價由6月水平反覆下滑，7月24日收市見底7.50美元。",
@@ -6742,7 +6742,7 @@
    "https://www.prnewswire.com/news-releases/array-reports-second-quarter-2026-results-302845747.html",
    "https://simplywall.st/stocks/us/telecom/nyse-ad/array-digital-infrastructure/news/array-digital-infrastructure-ad-what-is-behind-the-fresh-att"
   ],
-  "cat_line": "無個股催化，9/1 TDS撤回換股建議當日只+0.7%"
+  "cat_line": "無個股催化，9/1 TDS撤回換股建議當日+0.7%"
  },
  "CHYM": {
   "decline_short": "2025年6月以$27 IPO後估值持續收縮，2025年fintech新股整體被殺估值（市場只畀約3.1倍預測市銷率），7/22收$21.82、7/24跌至$20.69見底，基本面其實冇轉差（Q1收入按年+25%至$6.47億並首度GAAP盈利）。",

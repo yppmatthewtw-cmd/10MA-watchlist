@@ -138,6 +138,28 @@ for fl in flags.values():
         fl["deal"] = any(k in fl.get("badge", "") for k in ("釘價", "併購", "合併", "作價"))
 
 
+# A carried flag often states how far the close sits from its MA10. That number
+# moves every session, so re-measure it in place rather than letting last
+# revision's figure stand (AESI read "已低過 MA10 −2.80%" on a close 0.43% above it).
+_MAGAP = re.compile(r"(高出|低過)\s*MA10\s*([+\-−]?\d+(?:\.\d+)?)%")
+
+
+def _remeasure_ma_gaps(sym, text):
+    r = listed.get(sym)
+    if not r or not r.get("ma"):
+        return text
+    gap = (r["close"] / r["ma"] - 1) * 100
+
+    def sub(m):
+        return (f"高出 MA10 +{gap:.1f}%" if gap >= 0 else f"低過 MA10 {gap:.1f}%")
+    return _MAGAP.sub(sub, text)
+
+
+for _sym, _fl in flags.items():
+    if _sym not in computed_flags and _MAGAP.search(_fl.get("text", "")):
+        _fl["text"] = _remeasure_ma_gaps(_sym, _fl["text"])
+
+
 def pct(sym, a, b):
     """% move of sym from calendar day a to day b (b defaults to the last day)."""
     fi, cs, vs, ff = SER[sym]
@@ -693,9 +715,13 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
     _sub = [s2 for s2 in listed if (listed[s2].get("mcap") or 0) < 1.0]
     _u_sub = [(SER[s2][1][-1] / SER[s2][1][-2] - 1) * 100 for s2, m2 in mcap.items()
               if 0 < m2 < 1e9 and s2 in SER and SER[s2][0] + len(SER[s2][1]) == N and len(SER[s2][1]) >= 2]
+    # name the basis: this cohort is every symbol carrying a market cap, funds and
+    # preferreds included, not the screener's eligible universe
     cap_txt = (f"要留意對照組：總表 {len(_sub)}/{len(listed)} 行（{len(_sub) / len(listed) * 100:.0f}%）市值細過 $10 億，"
-               f"而 {last[5:]} 全市場 $10 億以下嘅中位數係 {statistics.median(_u_sub):+.2f}%、只有 "
-               f"{sum(1 for v in _u_sub if v > 0) / len(_u_sub) * 100:.1f}% 上升，同 $10 億以上嗰組差好遠。"
+               f"而 {last[5:]} $10 億以下嘅中位數係 {statistics.median(_u_sub):+.2f}%、"
+               f"{sum(1 for v in _u_sub if v > 0) / len(_u_sub) * 100:.1f}% 上升"
+               f"（呢個口徑係全市場所有有市值嘅股票 {len(_u_sub):,} 隻，包括基金同優先股，唔係篩選後嘅合資格股，"
+               f"所以同 $10 億以上嗰組嘅差距會偏大）。"
                if _sub and _u_sub else "")
     FREEZE = os.environ.get("FREEZE_TXT", "")
     ma_gaps = sorted((listed[sym]["close"] / listed[sym]["ma"] - 1) * 100 for sym in listed)
