@@ -17,6 +17,9 @@ MOVE = re.compile(r"(\d{1,2})月(\d{1,2})日[^。；;，]{0,30}?"
                   r"(?:股價|單日|當日|翌日|盤後|盤前|收市|收)?(?:急|暴|狂)?"
                   r"(升|飆|彈|抽|漲|瀉|挫|跌|插)(?:逾|近|約|超)?(\d+(?:\.\d+)?)%")
 CUMFROM = re.compile(r"[較由自自從]$|[較由自]\s*$")
+# a clause head naming another instrument in latin letters ("同日UiPath升7.1%")
+# is about that instrument, not this ticker
+PEER = re.compile(r"[A-Za-z]{3,}")
 OTHER = re.compile(r"原油|油價|以太幣|比特幣|銅價|金價|指數|標普|納指|Progressive|同業|板塊|對手|競爭"
                    r"|年內|今年|年初至今|一年|月內|一個月|一週|週內|30日|三日|兩日|以來")
 METRIC = re.compile(r"收入|EPS|盈|利潤|指引|ARR|ASV|銷|按年|按季|同店|EBITDA|毛利|現金流|流量|訂閱|出貨|存款|貸款|價至|美元|億|萬")
@@ -64,7 +67,7 @@ def run_checks(news, need, series_path, screen=None):
             for m in MOVE.finditer(e[fld]):
                 mo, dd, verb, pct = m.groups(); pct = float(pct)
                 clause = m.group(0); head = clause.rsplit(verb, 1)[0]
-                if METRIC.search(head) or "累" in head or OTHER.search(head):
+                if METRIC.search(head) or "累" in head or OTHER.search(head) or PEER.search(head):
                     continue  # "收入升11%", "累跌39%", "原油飆5%" are not this stock's daily move
                 # "較7月20日升26.9%" / "由7月20日底部升26.9%" measures that date to
                 # the last close, not a move on it: verify it that way instead of
