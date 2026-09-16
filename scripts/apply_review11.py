@@ -133,6 +133,17 @@ for sym in listed:
                                   "突破同收縮指標量度緊價差而唔係基本面；如果現價已高於作價，市場係喺度賭加價。"}
 computed_flags = {sym for sym in listed
                   if sym in OFFERS or sym in STOCK_OFFERS or sym in STOCK_DEALS or sym in RUMOURS}
+# A carried non-deal flag that quotes a percentage, a rank or a VCP is a
+# statement about the session it was written on. Every revision since R15 has
+# published at least one of them a day or more out of date, so drop them here
+# and let this revision's review re-state the ones that still hold.
+_MEASURED = re.compile(r"\d+(?:\.\d+)?%|排\s*#\d+|#\d+\s*[／/]|VCP\s*\d|綜合\s*\d")
+stale_flags = []
+for _sym in list(flags):
+    if _sym in computed_flags or flags[_sym].get("deal"):
+        continue
+    if _MEASURED.search(flags[_sym].get("badge", "") + flags[_sym].get("text", "")):
+        stale_flags.append(_sym); del flags[_sym]
 for fl in flags.values():
     if "deal" not in fl:
         fl["deal"] = any(k in fl.get("badge", "") for k in ("釘價", "併購", "合併", "作價"))
@@ -195,7 +206,7 @@ for sym in ("DFIN", "NOW", "CHRD"):
 # a listed row whose close is already under its last bottom: the hold is over
 for sym in listed:
     r = listed[sym]
-    if r.get("hl") and r["close"] < r["hl"][-1][1] and sym not in flags:
+    if r.get("hl") and r["close"] < r["hl"][-1][1] and not flags.get(sym, {}).get("deal"):
         fi_, cs_, vs_, ff_ = SER[sym]
         under_run = 0
         for c_ in reversed(cs_):
@@ -579,8 +590,13 @@ lineage = {"title": "[備註] R8–R10 嘅修正同做法繼續生效",
 # (leaver classes, the 8 catalyst lines, flag texts, the after-close warnings,
 # the 09-01 bottoms and the broken-bottom flag), so they are shown as fixed
 for f in agent_notes[:9]:
-    notes.append({"title": f"[覆核 · 已修正] {f.get('title', '')[:60]}",
-                  "text": (f.get("evidence", "")[:400] + " → 處理：" + f.get("proposed_fix", "")[:200]).strip()})
+    # a finding that would change the screening rules is the user's call, so it
+    # ships as an open decision rather than as something already fixed
+    spec = f.get("changes_user_spec")
+    notes.append({"title": f"[覆核 · {'待你決定（會改規則）' if spec else '已修正'}] {f.get('title', '')[:60]}",
+                  "text": (f.get("evidence", "")[:400]
+                           + (" → 本版冇改規則（改規則要你拍板）；文件措辭已對齊實作。建議：" if spec else " → 處理：")
+                           + f.get("proposed_fix", "")[:200]).strip()})
 # the previous revision's copy of a note this one rewrites would otherwise ship twice
 _rewritten = {n["title"] for n in notes}
 open_notes = [n for n in open_notes if n["title"] not in _rewritten]
@@ -896,7 +912,7 @@ if review_summary:
 json.dump(news, open(f"{SCRATCH}/{NEWS}", "w"), ensure_ascii=False, indent=1)
 json.dump(review, open(f"{SCRATCH}/{OUT}", "w"), ensure_ascii=False, indent=1)
 print(f"wrote {SCRATCH}/{OUT} · flags {len(flags)} (dropped {len(dropped_flags)}: {dropped_flags}; "
-      f"broken-bottom flags recomputed for {recomputed}) · "
+      f"broken-bottom flags recomputed for {recomputed}; stale measured flags dropped: {stale_flags}) · "
       f"catalyst warnings {len(warns)} · notes {len(notes)} · new {n_new} · out {n_out} "
       f"(broke {len(broke)}, struct {struct_lower}+{struct_aged}, ma {len(ma_only)}, gone {len(gone)})")
 print(f"{last[5:]}: universe med {u_med:+.2f}% up {u_up:.1f}% · p1 med {p1_med:+.2f}% down>1% {len(p1_down)} · below MA {len(p1_below_ma)} · undercut {p1_undercut}")
