@@ -534,7 +534,10 @@ for n in open_notes:
                      "係咪索性剔除或者另置區塊，要你決定。")
         n["tickers"] = deal_all[:10]
     elif t.startswith("[待你決定] 同公司雙類股"):
-        pairs = [p for p in (("NWS", "NWSA"), ("GOOG", "GOOGL"), ("BRK.A", "BRK.B"), ("FOX", "FOXA"), ("LEN", "LEN.B")) if p[0] in listed and p[1] in listed]
+        pairs = [p for p in (("NWS", "NWSA"), ("GOOG", "GOOGL"), ("BRK.A", "BRK.B"), ("FOX", "FOXA"),
+                             ("LEN", "LEN.B"), ("LILA", "LILAK"), ("BRK/A", "BRK/B"), ("CWEN", "CWEN.A"),
+                             ("HEI", "HEI.A"), ("MOG.A", "MOG.B"), ("PARA", "PARAA"), ("UHAL", "UHAL.B"))
+                 if p[0] in listed and p[1] in listed]
         if not pairs:
             stayed = [x for x in ("NWS", "NWSA") if x in listed]
             n["text"] = (f"本版總表已經冇同一公司嘅雙類股同時上榜："
@@ -543,6 +546,20 @@ for n in open_notes:
                          + "但規則本身未改，將來仍會出現。"
                          "建議：同一公司只計一個名額（保留流動性較高嗰類）—— 會改規則，由你決定。")
             n["tickers"] = stayed
+        else:
+            # a pair is actually listed this revision: name it with ranks and the
+            # slot it costs, instead of leaving the generic carried wording
+            def _liq(sym):
+                return listed[sym].get("cert_c", {}).get("dv_ratio")
+            txt = "、".join(f"{a} #{RANK[a]} 同 {b} #{RANK[b]}" for a, b in pairs)
+            n["text"] = (f"本版有 {len(pairs)} 對同一公司嘅雙類股同時上榜：{txt} —— "
+                         f"兩隻嘅走勢由同一盤生意驅動，等於用兩個名額買同一個風險，"
+                         f"而總表嘅分散度睇落會好過實際。"
+                         + "".join(f"（{a}／{b} 收 ${listed[a]['close']:g}／${listed[b]['close']:g}，"
+                                   f"當日 {(SER[a][1][-1] / SER[a][1][-2] - 1) * 100:+.1f}%／"
+                                   f"{(SER[b][1][-1] / SER[b][1][-2] - 1) * 100:+.1f}%）" for a, b in pairs)
+                         + "建議：同一公司只計一個名額（保留流動性較高嗰類）—— 會改規則，由你決定。")
+            n["tickers"] = [x for p2 in pairs for x in p2]
     elif t.startswith("[待你決定] 確定性三項（45% 權重）"):
         n["text"] = (f"當最後兩個底之間嘅中間高位只高過上一個底 <1%（本版全表 {len(wiggle_all)} 隻：{J(wiggle_all, 20)}），"
                      "突破、回補、守底三項會被一日小回全數攞滿。建議：中間高位需高過上一個底 ≥2% 先計 —— 會改規則，由你決定。")
