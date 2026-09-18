@@ -684,6 +684,10 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
     if PREV_XCHK and os.path.exists(f"{SCRATCH}/{PREV_XCHK}"):
         prev_partial = (json.load(open(f"{SCRATCH}/{PREV_XCHK}"))
                         .get("day_stats", {}).get(prev_day, {}).get("n", "?"))
+    # the previous revision may ALREADY have had the full same-day comparison
+    # (four in a row did), in which case "the check it was missing is now done"
+    # is simply false — say we re-ran it and it still agrees
+    prev_full = isinstance(prev_partial, int) and prev_partial >= x["yahoo_symbols"]
     # rows whose close sits within 1% above their last bottom — the hold is
     # technically intact but has no margin left
     RANKM = {r["sym"]: i for i, r in enumerate(scr["page1"], 1)}
@@ -733,16 +737,23 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
          if full_today else
          f"Yahoo 交叉核對：Yahoo 嘅日線通常要收市後一日先出齊，所以 {last[5:]} 今次只對到 {dl.get('n', 0)}/{x['yahoo_symbols']} 隻"
          f"（中位差 {dl.get('med_abs_pct', 0):.3f}%、{dl.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dl.get('vol_med_ratio')}），"
-         f"其餘要下一版先補齊。"
-         f"上一版欠低嘅 {prev_day[5:]} 全量核對今次做咗：{dprev.get('n', 0)} 隻逐隻對照，中位差 {dprev.get('med_abs_pct', 0):.3f}%、"
-         f"{dprev.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dprev.get('vol_med_ratio')} —— "
-         f"即係 {PREV_LABEL} 當時用 {prev_partial} 隻樣本講嘅嘢，而家全量證實咗。"))
+         f"其餘要下一版先補齊 —— 連續四版做到同日全量核對嘅紀錄到今版為止斷咗，"
+         f"唔係數據有問題，係抓數嘅時候 Yahoo 未出齊。"
+         + (f"{prev_day[5:]} 今次重新全量核對（{dprev.get('n', 0)} 隻、中位差 {dprev.get('med_abs_pct', 0):.3f}%、"
+            f"{dprev.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dprev.get('vol_med_ratio')}）"
+            f"結果同 {PREV_LABEL} 當日嗰次一樣 —— 嗰版已經係 {prev_partial} 隻全量，唔係樣本。"
+            if prev_full else
+            f"上一版欠低嘅 {prev_day[5:]} 全量核對今次做咗：{dprev.get('n', 0)} 隻逐隻對照，中位差 {dprev.get('med_abs_pct', 0):.3f}%、"
+            f"{dprev.get('within_tol_pct', 0):.1f}% 喺 0.5% 之內、成交量中位比 {dprev.get('vol_med_ratio')} —— "
+            f"即係 {PREV_LABEL} 當時用 {prev_partial} 隻樣本講嘅嘢，而家全量證實咗。")))
     xchk_head = (f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線今次已經出齊，"
                  f"所以 {last[5:]} 做到同日全量核對（{dl.get('n', 0)} 隻、100% 喺 0.5% 之內），"
                  f"{prev_day[5:]} 亦已全量核對。"
                  if full_today else
                  f"當日收市價由 Nasdaq 快照反推對賬確認（中位偏差 0.000%）；Yahoo 日線要遲一日先出齊，所以 {last[5:]} 暫時只對到 {dl.get('n', 0)} 隻（全部零偏差），"
-                 f"而上一版欠低嘅 {prev_day[5:]} 全量核對今次補做咗（{dprev.get('n', 0)} 隻、100% 喺 0.5% 之內）。")
+                 + (f"而 {prev_day[5:]} 重新核對仍然係 {dprev.get('n', 0)} 隻全量、100% 喺 0.5% 之內。"
+                    if prev_full else
+                    f"而上一版欠低嘅 {prev_day[5:]} 全量核對今次補做咗（{dprev.get('n', 0)} 隻、100% 喺 0.5% 之內）。"))
     # the $1bn+ cohort is the benchmark quoted above, but a third of the list is
     # not in it, so state that cohort's own day rather than let the comparison stand
     _sub = [s2 for s2 in listed if (listed[s2].get("mcap") or 0) < 1.0]
