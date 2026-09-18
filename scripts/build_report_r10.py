@@ -48,6 +48,12 @@ CAP_SHORT = {"a": "大型", "b": "中型", "c": "小型", "x": "未分類"}
 SUBS = [f"{t}{c}" for t, _, _ in TF for c, _, _ in CAPS]
 
 def esc(s): return html.escape(str(s), quote=True)
+_BOLD = re.compile(r"\*\*(.+?)\*\*")
+
+def esc_md(t):
+    """esc() then re-open the ** ... ** spans as <b>: the market narrative is
+    written with emphasis and R19 shipped two pairs of literal asterisks."""
+    return _BOLD.sub(r"<b>\1</b>", esc(t))
 
 # ---------------- previous-revision index ----------------
 PREV_PAGE = {}     # pid -> {sym: (rank, row)}
@@ -698,7 +704,7 @@ section[hidden]{display:none}
 """
 
 # ---------------- cards ----------------
-rule_notes = "".join(f'<br><span class="chg">✎ {esc(n)}</span>' for n in (REVIEW.get("rule_notes") or []))
+rule_notes = "".join(f'<br><span class="chg">✎ {esc_md(n)}</span>' for n in (REVIEW.get("rule_notes") or []))
 rules_html = f"""
 <div class="card rules">
 <h2>篩選規則（10MA {RNAME} · 數據更新至 {int(M["last_date"][5:7])}月{int(M["last_date"][8:])}日收盤；每個時間框再分大／中／小型股，共 12 個子頁）</h2>
@@ -717,12 +723,6 @@ rules_html = f"""
 
 def sentences(t): return [s for s in t.replace("。", "。\n").split("\n") if s.strip()]
 
-_BOLD = re.compile(r"\*\*(.+?)\*\*")
-
-def esc_md(t):
-    """esc() then re-open the ** ... ** spans as <b>: the market narrative is
-    written with emphasis and R19 shipped two pairs of literal asterisks."""
-    return _BOLD.sub(r"<b>\1</b>", esc(t))
 mkt_html = ""
 if MKT:
     prev_sum = PMKT["summary_zh"] if PMKT else MKT["summary_zh"]
@@ -783,7 +783,7 @@ if PREV:
                  else f'數據終點 <b>{M["last_date"]}</b>，與 {esc(PREV_REV)} 相同 —— 本版變動全部來自審視後嘅修正，唔係新交易日')
     notes = REVIEW.get("notes") or []
     notes_html = "".join(
-        f'<li><span class="k">{esc(n.get("title", ""))}</span> {esc(n.get("text", ""))}'
+        f'<li><span class="k">{esc(n.get("title", ""))}</span> {esc_md(n.get("text", ""))}'
         + (f' <span class="mut">［{esc("、".join(n["tickers"]))}］</span>' if n.get("tickers") else "") + '</li>'
         for n in notes)
     headline = REVIEW.get("headline") or ""
@@ -791,8 +791,8 @@ if PREV:
 <h2>本版更新 · {esc(REV)} 對比 {esc(PREV_REV)}（更新內容以灰色小字標示，唔再用高亮）</h2>
 <div class="ul">{date_line}。<br>
 新上榜 <span class="k">{totals["new"]}</span> 行 · 跌出 <span class="k">{totals["dropped"]}</span> 行 · 其他有更新 <span class="k">{totals["chg"]}</span> 行（跨 13 頁合計；同一股票喺多頁出現會重複計）。
-{("<br><b>批判性審視結論：</b>" + esc(headline)) if headline else ""}
-{("<br><b>獨立覆核：</b>" + esc(REVIEW["review_summary"])) if REVIEW.get("review_summary") else ""}
+{("<br><b>批判性審視結論：</b>" + esc_md(headline)) if headline else ""}
+{("<br><b>獨立覆核：</b>" + esc_md(REVIEW["review_summary"])) if REVIEW.get("review_summary") else ""}
 {("<ul>" + notes_html + "</ul>") if notes_html else ""}</div></div>'''
 
 tf_btns = '<button data-t="1" class="on">PAGE 1 · 總表<span class="s">爆發潛力排名</span></button>' + "".join(

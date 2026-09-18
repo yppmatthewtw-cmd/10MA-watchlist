@@ -523,6 +523,17 @@ if os.path.exists(VERIFY):
 
 open_notes = [n for n in (prev.get("notes") or []) if n["title"].startswith(("[待你決定]", "[已標記 · 待你決定]"))]
 STALE_MARK = "（下列數字係 R7／R8 時期嘅量度，例子股票部分已經跌出名單；建議本身仍然成立）"
+# R19 corrected the README's description of the MA test but the carried open
+# decisions still quote the old wording, so the report contradicted its own
+# rules panel. Rewrite the phrasing wherever it was carried forward.
+_OLD_RULE = "MA 最後 3 日逐日上升"
+_NEW_RULE = "最後 3 個 MA 值逐個遞升"
+for n in open_notes:
+    for k in ("title", "text"):
+        if _OLD_RULE in (n.get(k) or ""):
+            n[k] = n[k].replace(_OLD_RULE, _NEW_RULE)
+    if n.get("title", "").startswith("[待你決定] MA 連升 3 日門檻"):
+        n["title"] = "[待你決定] MA 遞升門檻無最低幅度"
 for n in open_notes:
     t = n["title"]
     if t.startswith("[待你決定] 確定性飽和"):
@@ -806,8 +817,11 @@ if REVISION not in ("R11", "R12"):   # every new-trading-day revision
                  f"{zero_txt}"
                  f"{SPLIT_NOTE or '公司行動：本次接駁冇股票需要重算歷史，亦冇股票因為對唔上而剔除。'}"
                  f"重新掃描：總表 {len(listed)} 隻，相對 {PREV_LABEL} 有 {n_new} 隻新上榜、{n_out} 隻跌出"
-                 f"（{len(broke)} 隻收市跌穿最後一個底、{len(struct_lower) + len(struct_aged)} 隻 MA 仍達標但底部序列斷咗或過咗 25 日窗口、"
-                 f"{len(ma_only)} 隻 MA 條件唔再成立{'，' + J(gone) + ' 冇報價' if gone else ''}），冇一隻因為數據問題。"
+                 f"（{len(ma_only)} 隻係四個時間框嘅 MA 條件全部唔再成立 —— 當中 {len(broke_and_ma)} 隻同時收市跌穿最後一個底；"
+                 f"另 {len(struct_lower) + len(struct_aged)} 隻 MA 仍達標但底部序列斷咗或過咗 25 日窗口"
+                 f"{'；另 ' + J(gone) + ' 冇報價' if gone else ''}"
+                 f"；呢 {3 if gone else 2} 類加埋等於 {len(out_syms)} —— 跌穿底嗰 {len(broke_and_ma)} 隻唔係獨立一類、"
+                 f"係 MA 落榜嗰批嘅子集，唔可以同上面兩個數相加），冇一隻因為數據問題。"
                  f"跌出：{J(out_syms, 30)}。新上榜：{J(new_syms, 30)}。"),
         "tickers": new_syms[:10]}
     headline = (
