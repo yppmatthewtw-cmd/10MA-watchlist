@@ -131,8 +131,40 @@ for sym in listed:
             flags[sym] = {"deal": True, "badge": "併購目標",
                           "text": f"研究文字顯示本身係被收購／私有化目標（現價 ${c:g}）：走勢受交易進度牽制，"
                                   "突破同收縮指標量度緊價差而唔係基本面；如果現價已高於作價，市場係喺度賭加價。"}
+# The acquirer side of a stock deal was the one carried flag nothing re-measured:
+# deal flags are exempt from the staleness drop, so SWKS kept publishing the
+# ranks, the VCP and the worked example of the revision it was written on.
+# Generate it from this close like the target side.
+_RANK_NOW = {r["sym"]: i for i, r in enumerate(scr["page1"], 1)}
+for _t, (_who, _cash, _ratio, _acq) in STOCK_OFFERS.items():
+    if _t not in listed or _acq not in listed:
+        continue
+    _days = [CAL[N - 1 - k] for k in (2, 1, 0)]
+    def _mv(sym, d):
+        i = IDX[d]; fi, cs = SER[sym][0], SER[sym][1]
+        j = i - fi
+        return (cs[j] / cs[j - 1] - 1) * 100 if 0 < j < len(cs) else None
+    _ex = "、".join(f"{d[5:]} {_mv(_acq, d):+.2f}%／{_mv(_t, d):+.2f}%"
+                    for d in _days if _mv(_acq, d) is not None and _mv(_t, d) is not None)
+    flags[_acq] = {
+        "deal": True,
+        "badge": f"{_t}收購方",
+        "text": (f"{_acq} 係 {_t} 嘅收購方（{_t} 作價 = "
+                 + (f"${_cash:g} 現金 ＋ " if _cash else "")
+                 + f"{_ratio} 股 {_acq}），兩隻同時上榜（{_acq} #{_RANK_NOW[_acq]}、{_t} #{_RANK_NOW[_t]}），"
+                 f"等於用兩個名額買同一單交易。最近三個交易日（收購方／目標）：{_ex} —— 走勢由同一單交易帶動。"
+                 f"{_acq} 自己嘅 VCP 只有 {listed[_acq]['vcp']:.1f}，波幅根本冇收縮。"
+                 if listed[_acq]["vcp"] < 50 else
+                 f"{_acq} 係 {_t} 嘅收購方（{_t} 作價 = "
+                 + (f"${_cash:g} 現金 ＋ " if _cash else "")
+                 + f"{_ratio} 股 {_acq}），兩隻同時上榜（{_acq} #{_RANK_NOW[_acq]}、{_t} #{_RANK_NOW[_t]}），"
+                 f"等於用兩個名額買同一單交易。最近三個交易日（收購方／目標）：{_ex} —— 走勢由同一單交易帶動。"
+                 f"{_acq} 自己嘅 VCP 係 {listed[_acq]['vcp']:.1f}。"),
+    }
+
 computed_flags = {sym for sym in listed
-                  if sym in OFFERS or sym in STOCK_OFFERS or sym in STOCK_DEALS or sym in RUMOURS}
+                  if sym in OFFERS or sym in STOCK_OFFERS or sym in STOCK_DEALS or sym in RUMOURS
+                  or sym in {v[3] for v in STOCK_OFFERS.values()}}
 # A carried non-deal flag that quotes a percentage, a rank or a VCP is a
 # statement about the session it was written on. Every revision since R15 has
 # published at least one of them a day or more out of date, so drop them here
