@@ -580,8 +580,50 @@ for n in open_notes:
                          + "".join(f"（{a}／{b} 收 ${listed[a]['close']:g}／${listed[b]['close']:g}，"
                                    f"當日 {(SER[a][1][-1] / SER[a][1][-2] - 1) * 100:+.1f}%／"
                                    f"{(SER[b][1][-1] / SER[b][1][-2] - 1) * 100:+.1f}%）" for a, b in pairs)
+                         + "".join(
+                             (lambda va, vb: (f"流動性差天共地：{a} 當日只成交 {va:,.0f} 股、"
+                                              f"{b} 成交 {vb:,.0f} 股（{vb / va:,.0f} 倍），"
+                                              f"所以要保留嘅係 {b}。")
+                              if va and vb and vb > va else
+                              (f"流動性差天共地：{b} 當日只成交 {vb:,.0f} 股、"
+                               f"{a} 成交 {va:,.0f} 股（{va / vb:,.0f} 倍），所以要保留嘅係 {a}。")
+                              if va and vb else "")(SER[a][2][-1], SER[b][2][-1])
+                             for a, b in pairs)
                          + "建議：同一公司只計一個名額（保留流動性較高嗰類）—— 會改規則，由你決定。")
             n["tickers"] = [x for p2 in pairs for x in p2]
+    elif t.startswith("[待你決定] MA 遞升門檻"):
+        _FR = [(5, 5), (10, 10), (10, 21), (10, 42)]
+        def _sma(cs, L):
+            out = [None] * len(cs); run = 0.0
+            for i, c in enumerate(cs):
+                run += c
+                if i >= L: run -= cs[i - L]
+                if i >= L - 1: out[i] = run / L
+            return out
+        tiny = []
+        for _rk, _r in enumerate(scr["page1"], 1):
+            _s = _r["sym"]
+            if _s not in SER: continue
+            cs = list(SER[_s][1]); worst = None
+            for L, W in _FR:
+                ma = _sma(cs, L)
+                if len(ma) < W + 1 or ma[-1] is None or ma[-1 - W] is None: continue
+                if not (ma[-1] > ma[-1 - W] and ma[-1] > ma[-2] > ma[-3]): continue
+                if sum(1 for k in range(1, W + 1) if ma[-k] > ma[-k - 1]) / W < 0.70: continue
+                m = min((ma[-1] / ma[-2] - 1) * 1e4, (ma[-2] / ma[-3] - 1) * 1e4)
+                worst = m if worst is None else min(worst, m)
+            if worst is not None and worst < 5:
+                tiny.append((_rk, _s, worst))
+        tiny.sort()
+        n["text"] = (f"本版重新量度：總表 {len(tiny)}/{len(scr['page1'])} 行（top 50 佔 "
+                     f"{sum(1 for x in tiny if x[0] <= 50)} 行）至少有一個時間框係靠細過 5 個基點嘅"
+                     f"兩步 MA 升幅通過 —— "
+                     + "、".join(f"{x[1]} #{x[0]} {x[2]:.2f}bp" for x in tiny[:6])
+                     + f"。當中第 1 位 {tiny[0][1]} 都只係 {tiny[0][2]:.2f} 個基點。"
+                     f"每個時間框喺總表值 5 分覆蓋度，所以呢啲行嘅時間框數目近乎隨機。"
+                     f"建議：日升幅需 ≥0.01%（1 個基點），或直接剔除釘價股 —— 會改規則，由你決定。"
+                     if tiny else n.get("text", ""))
+        n["tickers"] = [x[1] for x in tiny[:10]]
     elif t.startswith("[待你決定] 確定性三項（45% 權重）"):
         n["text"] = (f"當最後兩個底之間嘅中間高位只高過上一個底 <1%（本版全表 {len(wiggle_all)} 隻：{J(wiggle_all, 20)}），"
                      "突破、回補、守底三項會被一日小回全數攞滿。建議：中間高位需高過上一個底 ≥2% 先計 —— 會改規則，由你決定。")

@@ -105,6 +105,24 @@ python3 scripts/merge_news7.py                           # 沿用 news6 + 新上
 SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
   python3 scripts/build_report6_dark.py                  # -> data/10MA_uptrend_watchlistGit_R7.00_*.html
 
+# R20（最新交易日 2026-09-17，議息翌日）
+#   跑 fetch_eod_snapshot.yml（trade_date=2026-09-17）同 fetch_yahoo_eod.yml（end=2026-09-18）
+TRADE_DATE=2026-09-17 IN_SERIES=series21.pkl OUT_SERIES=series22.pkl python3 scripts/extend_series.py
+IN_SERIES=series22.pkl OUT_SERIES=series23.pkl OUT_REPORT=yahoo_crosscheck20.json \
+  YAHOO=./data/yahoo/eod_2025-12-26_2026-09-18.csv.gz python3 scripts/yahoo_crosscheck.py
+SERIES=series23.pkl OUT_JSON=screen_results20.json python3 scripts/screener9.py
+PREV_NEWS=news19.json OUT_NEWS=news20.json SCREEN_JSON=screen_results20.json SERIES=series23.pkl AGENT_PREFIX=r20 \
+  python3 scripts/merge_news9.py
+REVISION=R20 DAY_NOTE=周四 PREV_REV_LABEL=R19 BASE_SCREEN=screen_results12.json BASE_LABEL="R12（09-04 收盤）" \
+  SENS_TXT="<敏感度同凍結測試口徑差異>" FREEZE_TXT="<凍結測試：非包含關係＋五版回測>" OIL_TXT="<能源收檔／科技接手>" \
+  OIL_HEAD="<頭條集中度句>" OBS_TITLE="<觀察標題>" SPLIT_NOTE="<公司行動>" \
+  SCREEN_JSON=screen_results20.json PREV_SCREEN=screen_results19.json \
+  NEWS_JSON=news20.json PREV_REVIEW=review19.json OUT_REVIEW=review20.json SERIES=series23.pkl \
+  XCHK_JSON=yahoo_crosscheck20.json PREV_XCHK=yahoo_crosscheck19.json MACRO_ZH="<當日宏觀>" \
+  python3 scripts/apply_review11.py
+SCREEN_JSON=screen_results20.json NEWS_JSON=news20.json PREV_SCREEN=screen_results19.json PREV_NEWS=news19.json \
+  PREV_REV=R19 REV=R20.00 REVIEW_JSON=review20.json MODEL_TAG=claudeopus5xhigh python3 scripts/build_report_r10.py
+
 # R19（最新交易日 2026-09-16，議息日）
 #   跑 fetch_eod_snapshot.yml（trade_date=2026-09-16）同 fetch_yahoo_eod.yml（end=2026-09-17）
 TRADE_DATE=2026-09-16 IN_SERIES=series19.pkl OUT_SERIES=series20.pkl python3 scripts/extend_series.py
