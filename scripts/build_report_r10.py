@@ -704,7 +704,7 @@ rules_html = f"""
 <h2>篩選規則（10MA {RNAME} · 數據更新至 {int(M["last_date"][5:7])}月{int(M["last_date"][8:])}日收盤；每個時間框再分大／中／小型股，共 12 個子頁）</h2>
 ① <b>{esc(UNIVERSE_LINE)}</b>。<br>
 ② <b>市值分頁</b>：<b>a = 大型股 ≥$100億</b>、<b>b = 中型股 $20–100億</b>、<b>c = 小型股 &lt;$20億</b>；每個時間框各自取三組嘅 top 50（每組合資格數不足 50 就全部列出）。市值取自 Nasdaq 快照；無市值資料嘅（主要係封閉式基金）唔會硬塞入任何一組，改為喺各頁標示數目。<br>
-③ <b>MA 上升</b>：PAGE 2a/b/c：<b>5 天 MA</b> 較 <b>5 個交易日</b>前高；PAGE 3/4/5（a/b/c）：<b>10 天 MA</b> 分別較 <b>10 / 21 / 42 個交易日</b>前高；且 MA 最後 3 日逐日上升、期內 ≥70% 日子上升。<br>
+③ <b>MA 上升</b>：PAGE 2a/b/c：<b>5 天 MA</b> 較 <b>5 個交易日</b>前高；PAGE 3/4/5（a/b/c）：<b>10 天 MA</b> 分別較 <b>10 / 21 / 42 個交易日</b>前高；且<b>最後 3 個 MA 值逐個遞升</b>（MA[今日] &gt; MA[昨日] &gt; MA[前日]，即兩次上升）、期內 ≥70% 日子上升。<br>
 ④ <b>「底」</b>（用戶原話：「大約跌了三天，然後見底回升了大約三天」）：某日收盤係 ±3 日內最低，且 3 日前收盤高過佢、3 日後收盤高過佢；相鄰 ≤3 日去重。 ⑤ <b>一底高於一底</b>：45 個交易日內 ≥2 個底逐個遞升，最近一個底喺 25 日內。<br>
 ⑥ <b>VCP 指數（0–100）</b>：10日/前30日波幅（35%）＋近10日區間佔價（25%）＋近10日/前30日成交量（20%）＋近15日/前30–45日區間（20%），全體合資格股票百分位合成。<br>
 ⑦ <b>確定性分數（0–100，7 項量化，逐項分欄）</b>：<b>突破</b>（最近兩個底之間高位已被升穿？25%）· <b>回補</b>（收復最後一段跌幅%，10%）· <b>守底</b>（最後一個底已守日數，15 日滿分；曾跌穿×0.25，15%）· <b>量比</b>（近15日跌日/升日成交量比，百分位，越低越好，15%）· <b>遞減</b>（末段÷首段跌幅，百分位，越低越好，10%）· <b>RS</b>（21日回報 − 全體中位數，百分位，10%）· <b>均線</b>（價&gt;20MA ＋ 20MA&gt;50MA ＋ 50MA向上，15%）。<br>
@@ -716,12 +716,19 @@ rules_html = f"""
 </div>"""
 
 def sentences(t): return [s for s in t.replace("。", "。\n").split("\n") if s.strip()]
+
+_BOLD = re.compile(r"\*\*(.+?)\*\*")
+
+def esc_md(t):
+    """esc() then re-open the ** ... ** spans as <b>: the market narrative is
+    written with emphasis and R19 shipped two pairs of literal asterisks."""
+    return _BOLD.sub(r"<b>\1</b>", esc(t))
 mkt_html = ""
 if MKT:
     prev_sum = PMKT["summary_zh"] if PMKT else MKT["summary_zh"]
     prev_periods = {f["period"] for f in (PMKT or MKT).get("factors", [])}
     ps = set(sentences(prev_sum))
-    body = "".join(f'<span class="chg">{esc(s)}</span>' if s not in ps else esc(s) for s in sentences(MKT["summary_zh"]))
+    body = "".join(f'<span class="chg">{esc_md(s)}</span>' if s not in ps else esc_md(s) for s in sentences(MKT["summary_zh"]))
     factors = "".join(
         f'<span class="{"chg" if f["period"] not in prev_periods else ""}"><b>{esc(f["period"])}</b> {esc(f["factor_zh"])}</span>'
         for f in MKT.get("factors", []))

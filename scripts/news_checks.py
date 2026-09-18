@@ -17,6 +17,11 @@ MOVE = re.compile(r"(\d{1,2})月(\d{1,2})日[^。；;，]{0,30}?"
                   r"(?:股價|單日|當日|翌日|盤後|盤前|收市|收)?(?:急|暴|狂)?"
                   r"(升|飆|彈|抽|漲|瀉|挫|跌|插)(?:逾|近|約|超)?(\d+(?:\.\d+)?)%")
 CUMFROM = re.compile(r"[較由自自從]$|[較由自]\s*$")
+# "9月14日收3.79美元，較7月31日底部升32.5%" states the date it was measured ON.
+# Such a clause is true as of that date and must be checked against it, not
+# against the newest close, which is what made every dated cumulative claim
+# look wrong one session later.
+ASOF = re.compile(r"(\d{1,2})月(\d{1,2})日[^。；;]{0,14}?收(?:市|盤)?\s*\$?\d")
 # a clause head naming another instrument in latin letters ("同日UiPath升7.1%")
 # is about that instrument, not this ticker
 PEER = re.compile(r"[A-Za-z]{3,}")
@@ -76,13 +81,23 @@ def run_checks(news, need, series_path, screen=None):
                     i = day_index(mo, dd)
                     if i is None:
                         continue
-                    base, now = cum(sym, i), cum(sym, len(CAL) - 1)
+                    # an "as of <date> it closed <price>" head just before the
+                    # claim pins the far end of the measurement to that date
+                    j, asof = len(CAL) - 1, None
+                    am = None
+                    for am in ASOF.finditer(e[fld][:m.start()]):
+                        pass
+                    if am is not None:
+                        aj = day_index(am.group(1), am.group(2))
+                        if aj is not None:
+                            j, asof = aj, CAL[aj][5:]
+                    base, now = cum(sym, i), cum(sym, j)
                     if base and now:
                         got = (now / base - 1) * 100
                         sign = -1 if verb in "瀉挫跌插" else 1
                         if not (got * sign > 0 and abs(abs(got) - pct) <= max(0.25 * pct, 1.0)):
-                            warns.append(f"{sym}: «{clause}» measured from {CAL[i][5:]} to the last close "
-                                         f"is {got:+.1f}%, not {pct:g}%")
+                            warns.append(f"{sym}: «{clause}» measured from {CAL[i][5:]} to "
+                                         f"{asof or 'the last close'} is {got:+.1f}%, not {pct:g}%")
                     continue
                 # a clause that documents the mirror gap explains its own offset
                 if "鏡像無快照" in e[fld][m.end():m.end() + 60]:
@@ -125,7 +140,12 @@ def run_checks(news, need, series_path, screen=None):
         # a day the stock closed down, and a single-day figure it quotes must match
         line = (e.get("cat_line") or "").strip()
         m = CATL.match(line) or CATL_ANY.search(line)
-        if line and not m and not line.startswith("無個股催化"):
+        # a standing merger offer has no event day inside our window — the fact
+        # is the offer itself — and a line that says outright that no date could
+        # be established is already declaring the gap rather than hiding it
+        _NODATE_OK = ("釘價", "全現金", "換股", "收購待交割", "要約", "合併", "未有可考日期")
+        if line and not m and not line.startswith("無個股催化") \
+                and not any(k in line for k in _NODATE_OK):
             warns.append(f"{sym}: cat_line has no date «{line}»")
             if PCT.search(line.split("→")[-1]):
                 warns.append(f"{sym}: cat_line quotes an effect with no date to check it against «{line}»")
