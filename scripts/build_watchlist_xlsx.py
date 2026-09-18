@@ -54,6 +54,31 @@ BOLD = Font(name=FONT, size=10, bold=True)
 TITLE = Font(name=FONT, size=14, bold=True, color="1F3864")
 
 
+EXCH = {}
+for _src in (SCREEN, PREV_SCREEN):
+    for _r in json.load(open(f"{W}/{_src}"))["page1"]:
+        EXCH.setdefault(_r["sym"], _r.get("exch") or "—")
+
+LINK_FONT = Font(name=FONT, size=10, bold=True, color="0563C1", underline="single")
+
+
+def tv_url(sym):
+    """Same TradingView chart layout the HTML report's Ticker column opens."""
+    s2 = sym.replace("/", ".").lower()
+    ex = EXCH.get(sym, "—")
+    return (f"https://www.tradingview.com/chart/Q1c5VWwD/?symbol={ex.lower()}%3A{s2}"
+            if ex and ex != "—" else
+            f"https://www.tradingview.com/chart/Q1c5VWwD/?symbol={s2}")
+
+
+def link_ticker(ws_, row_, col_, sym):
+    c = ws_.cell(row=row_, column=col_)
+    c.value = sym
+    c.hyperlink = tv_url(sym)
+    c.font = LINK_FONT
+    return c
+
+
 def closes_pair(sym):
     """Both closes from the SAME source. The screener rounds its close to two
     decimals; three rows (CURI, CRVL, APPF) trade in half-cents, so pairing the
@@ -159,7 +184,7 @@ for i, r in enumerate(rows, 1):
     for _, j in SUBKEYS:
         ws.cell(row=rw, column=j).number_format = '0.000'
     ws.cell(row=rw, column=7).number_format = '#,##0.00'
-    ws.cell(row=rw, column=2).font = BOLD
+    link_ticker(ws, rw, 2, sym)
     ws.cell(row=rw, column=31).alignment = Alignment(wrap_text=False)
 
 n = len(rows)
@@ -230,7 +255,7 @@ for pg, title in TF:
             for j in (10, 11, 12):
                 w2.cell(row=rr, column=j).number_format = '0.0'
             w2.cell(row=rr, column=6).number_format = '#,##0.00'
-            w2.cell(row=rr, column=3).font = BOLD
+            link_ticker(w2, rr, 3, sym)
             rr += 1
     w2.cell(row=rr + 1, column=1,
             value=(f"{title}：MA(今日) > MA({pg if pg != '2' else '5'} 個交易日前) 嘅比較窗口見標題；"
@@ -308,7 +333,7 @@ for kind, syms in (("新上榜", [r["sym"] for r in rows if r["sym"] not in prev
             w3.cell(row=rr, column=j).number_format = '$#,##0.00##'
         w3.cell(row=rr, column=8).number_format = '0.00%;[Red](0.00%);-'
         w3.cell(row=rr, column=5).number_format = '#,##0.00'
-        w3.cell(row=rr, column=2).font = BOLD
+        link_ticker(w3, rr, 2, sym)
         rr += 1
 n_new_rows = len([r for r in rows if r["sym"] not in prev])
 new_first, new_last = 2, 1 + n_new_rows
@@ -342,7 +367,7 @@ for sym, fl in sorted(flags.items(), key=lambda kv: rank_now.get(kv[0], 999)):
         c.font = BASE
         c.border = BOX
         c.alignment = Alignment(wrap_text=(col == 5), vertical="top")
-    w4.cell(row=rr, column=1).font = BOLD
+    link_ticker(w4, rr, 1, sym)
     w4.row_dimensions[rr].height = 46
     rr += 1
 
@@ -357,36 +382,43 @@ if freeze:
                    "三個凍結長度嘅結果因此唔係包含關係。")
             ).font = Font(name=FONT, size=9, italic=True, color="666666")
     w5.column_dimensions["A"].width = 14
-    for j, wd in enumerate([14, 12, 12, 12, 70], 1):
+    for j, wd in enumerate([26, 14, 13, 16, 12, 12, 12, 12, 13, 22], 1):
         w5.column_dimensions[get_column_letter(j)].width = wd
-    H = ["凍結日數", "唔再通過行數", "佔總表", "", "名單"]
-    style_header(w5, H, [14, 14, 12, 4, 100], row=4, freeze_at="A5")
+    H = ["凍結日數", "唔再通過行數", "佔總表"]
+    style_header(w5, H, [26, 14, 12], row=4, freeze_at="A5")
     rr = 5
+    a, b, c5 = set(freeze.get("1", [])), set(freeze.get("2", [])), set(freeze.get("5", []))
     for k in ("1", "2", "5"):
         lst = freeze.get(k, [])
         w5.cell(row=rr, column=1, value=f"{k} 日")
         w5.cell(row=rr, column=2, value=len(lst))
         w5.cell(row=rr, column=3, value=f"=B{rr}/{len(rows)}").number_format = '0.0%'
-        w5.cell(row=rr, column=5, value="、".join(lst))
-        for j in range(1, 6):
+        for j in range(1, 4):
             c = w5.cell(row=rr, column=j)
             c.font = BASE
             c.border = BOX
-            c.alignment = Alignment(wrap_text=(j == 5), vertical="top")
-        w5.row_dimensions[rr].height = 44
         rr += 1
-    a, b, c5 = set(freeze.get("1", [])), set(freeze.get("2", [])), set(freeze.get("5", []))
-    rr += 1
-    for lbl, val, names in [("三個長度加埋（union）", len(a | b | c5), sorted(a | b | c5)),
-                            ("三個長度都唔通過（intersection）", len(a & b & c5), sorted(a & b & c5))]:
+    for lbl, val in [("三個長度加埋（union）", len(a | b | c5)),
+                     ("三個長度都唔通過（intersection）", len(a & b & c5))]:
         w5.cell(row=rr, column=1, value=lbl).font = BOLD
         w5.cell(row=rr, column=2, value=val).font = BOLD
         w5.cell(row=rr, column=2).fill = SUB_FILL
-        w5.cell(row=rr, column=5, value="、".join(names))
-        w5.cell(row=rr, column=5).alignment = Alignment(wrap_text=True, vertical="top")
-        w5.row_dimensions[rr].height = 44
+        w5.cell(row=rr, column=2).border = BOX
+        w5.cell(row=rr, column=1).border = BOX
         rr += 1
+    # one ticker per cell so each carries its own chart link
     rr += 1
+    w5.cell(row=rr, column=1, value="逐隻名單（點擊開 TradingView chart）").font = BOLD
+    rr += 1
+    COLS = [("凍結 1 日", sorted(a)), ("凍結 2 日", sorted(b)), ("凍結 5 日", sorted(c5)),
+            ("三個都唔通過", sorted(a & b & c5))]
+    style_header(w5, [t for t, _ in COLS], [14, 14, 14, 16], row=rr, freeze_at=f"A{rr + 1}")
+    head = rr
+    for j, (_, lst) in enumerate(COLS, 1):
+        for k2, sym2 in enumerate(lst, 1):
+            c = link_ticker(w5, head + k2, j, sym2)
+            c.border = BOX
+    rr = head + max(len(l) for _, l in COLS) + 2
     w5.cell(row=rr, column=1, value="五版回測（上一版嘅預測 vs 實際跌出）").font = BOLD
     rr += 1
     H2 = ["版本", "預測", "實際跌出", "命中", "準確率", "召回", "低估", "命中中位%", "估唔到中位%", "當日市況"]
@@ -469,6 +501,10 @@ for k, v, note in CHK:
         c.border = BOX
         c.alignment = Alignment(wrap_text=(j == 3), vertical="top")
     w6.cell(row=rr, column=1).font = BOLD
+    # the "which listed row is in the tail" value is itself a ticker
+    if isinstance(v, str) and v in EXCH:
+        link_ticker(w6, rr, 2, v)
+        w6.cell(row=rr, column=2).border = BOX
     w6.row_dimensions[rr].height = 30
     rr += 1
 
@@ -513,7 +549,7 @@ for i, r in enumerate(rows, 1):
         c.font = BASE
         c.border = BOX
         c.alignment = Alignment(wrap_text=(col in (5, 7, 8)), vertical="top")
-    w8.cell(row=rr, column=2).font = BOLD
+    link_ticker(w8, rr, 2, sym)
     if sym in warns:
         w8.cell(row=rr, column=5).comment = Comment(str(warns[sym].get("text", "")), "10MA review",
                                                     width=420, height=120)
