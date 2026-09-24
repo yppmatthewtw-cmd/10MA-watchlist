@@ -1,0 +1,131 @@
+{
+ "refiners": {
+  "syms": [
+   "CLMT",
+   "DINO",
+   "VLO",
+   "MPC",
+   "PSX"
+  ],
+  "text": "09-22 Jefferies 將 VLO、MPC 由買入降至持有（目標 $401／$413，理由係大升後估值偏高）；同日 Bloomberg 報道柴油出口禁令提案獲政治支持，煉油股升勢停頓。回調有明確評級同政策催化，唔係單純技術性回吐。",
+  "sources": [
+   "https://seekingalpha.com/news/4645636-valero-marathon-cut-at-jefferies-supporting-less-refining-exposure-after-big-gains",
+   "https://www.bloomberg.com/news/articles/2026-09-22/refining-stocks-rally-stalls-as-talk-of-diesel-export-ban-swirls"
+  ]
+ },
+ "flags": {
+  "IRD": [
+   [
+    "event",
+    "升浪同回調都係單一臨床事件：09 月第二個星期公佈 OPGx-BEST1 第一組三個月頂線數據，多間券商將目標價加到 $13–$20，股價高位喺 09-10；之後回吐約兩成。10 月 1–4 日 EURETINA 大會再公佈詳細數據 —— 二元事件風險仲未完。"
+   ]
+  ]
+ },
+ "research": {
+  "CLMT": [
+   "煉油／特種產品；循環信貸額增至 $6 億、能源部貸款最後 $3,400 萬到位（Montana Renewables 可持續航空燃料擴產）；分析員共識「持有」、目標 $51.75，低過現價。屬煉油股群組。",
+   "https://finance.yahoo.com/markets/stocks/articles/calumet-clmt-stock-may-trade-011303325.html"
+  ],
+  "DINO": [
+   "煉油股（HF Sinclair）；柴油零售價破 $6.50，煉油毛利大升；09-22 行業被降級同柴油出口禁令消息拖累。",
+   "https://www.benzinga.com/markets/commodities/26/09/61881898/diesel-squeeze-oil-refiners-stocks-four-top-performing-six-weeks-of-gains"
+  ],
+  "VLO": [
+   "煉油股；09-22 Jefferies 降至持有（目標 $401）；今年升幅超過 80%。",
+   "https://seekingalpha.com/news/4645636-valero-marathon-cut-at-jefferies-supporting-less-refining-exposure-after-big-gains"
+  ],
+  "MPC": [
+   "煉油股；09-22 Jefferies 降至持有（目標 $413）；今年升幅超過 80%。",
+   "https://seekingalpha.com/news/4645636-valero-marathon-cut-at-jefferies-supporting-less-refining-exposure-after-big-gains"
+  ],
+  "PSX": [
+   "煉油股；柴油價格帶動季度每股盈利按年接近四倍；09-22 同組受柴油出口禁令提案拖累。",
+   "https://www.benzinga.com/markets/commodities/26/09/61881898/diesel-squeeze-oil-refiners-stocks-four-top-performing-six-weeks-of-gains"
+  ],
+  "AMPL": [
+   "9 月初公佈 Q2：收入 $1.01 億（+21%）、ARR $4.1 億（+22%），上調全年收入指引至 $4.07–4.11 億，AI 原生客戶帶動 → 股價急升。",
+   "https://simplywall.st/stocks/us/software/nasdaq-ampl/amplitude/news/amplitude-ampl-is-up-268-after-raising-2026-revenue-outlook"
+  ],
+  "AMWL": [
+   "遠程醫療；六個月升約 157%，虧損收窄；分析員平均「持有」、目標 $7.5 遠低過現價。未見併購消息。（來源為報價聚合網站，質素一般）",
+   "https://upstox.com/us-stocks/amwl-share-price/"
+  ],
+  "DHX": [
+   "冇搵到近期個股催化劑；六個月升約 72%。（來源為報價聚合網站）",
+   "https://upstox.com/us-stocks/dhx-share-price/"
+  ],
+  "MGNI": [
+   "9 月中 Craig-Hallum 目標 $28→$32、StoneX $33→$43；CTV 業務增長 30%；CFO 09-30 退休。",
+   "https://simplywall.st/stocks/us/media/nasdaq-mgni/magnite/news/magnite-mgni-stock-may-be-11-undervalued-following-fresh-ai"
+  ],
+  "SABR": [
+   "09-14 發 $13.5 億有抵押債券再融資高息債；09-21 公佈約 80 個旅遊客戶試用佢嘅 MCP 伺服器，當日升 3.3%；美銀目標 $2.60。",
+   "https://markets.financialcontent.com/stocks/article/stockstory-2026-9-21-why-sabre-sabr-stock-is-trading-up-today"
+  ],
+  "VIR": [
+   "冇搵到 9 月個股催化劑；下次業績 10-29。（2 月 $8.50 增發早已完成，同今次回調無關）",
+   "https://www.investing.com/equities/vir-biotechnology-inc"
+  ],
+  "ANGX": [
+   "新片上映帶動；B. Riley 09-18 目標 $8→$9；資產負債表係負股東權益、流動性緊。",
+   "https://www.timothysykes.com/news/angelstudiosinc-angx-news-2026_09_20/"
+  ],
+  "DJCO": [
+   "軟件業務（Journal Technologies，法院案件管理）收入按年增 15–25%；市盈率約 7 倍。",
+   "https://simplywall.st/stocks/us/software/nasdaq-djco/daily-journal"
+  ],
+  "LPG": [
+   "超大型液化氣船運費高企：截至 09-30 季度 99% 營運日鎖定每日 $88,000 以上；訂三艘新船共 $3.45 億。",
+   "https://www.stocktitan.net/news/LPG/dorian-lpg-ltd-announces-vlgc-newbuilding-contracts-forward-9zhz9yb9avle.html"
+  ],
+  "IRD": [
+   "OPGx-BEST1 第一組數據（09 月第二個星期）後多間券商加目標價；10 月 1–4 日 EURETINA 大會再公佈。",
+   "https://www.stocktitan.net/news/IRD/opus-genetics-provides-best1-program-update-with-detailed-timeline-c1zyafhv8w60.html"
+  ]
+ },
+ "researched_n": 15,
+ "carried_n": 12,
+ "market": [
+  [
+   "09-18（五）",
+   "標普 +0.2% 至 7,650.50、道指 −0.2%、納指 +0.4%；大部分股票下跌，10 年期美債息升至 5.00%。（AP）"
+  ],
+  [
+   "09-21（一）",
+   "標普 +1.5%、納指 +2.3%；油價同債息回落（WTI 約 $96.8、Brent 約 $100.9、10 年期約 4.97%），科技同通訊帶動，能源股跌。（Quartz）"
+  ],
+  [
+   "09-22（二）",
+   "標普 7,764.64（持平，距 8 月歷史高位 0.4%）、道指 −0.4%、納指 +0.5% 創新高 27,244.28；Brent 收 $99.25。煉油股被 Jefferies 降級、柴油出口禁令提案拖累。（AP、Bloomberg）"
+  ],
+  [
+   "09-23（三）",
+   "標普 −0.75% 至 7,706.03、納指 −1.13% 至 26,936.04、道指 −0.68% 至 51,511.59；5 年期美債息 2007 年後首次見 5 厘，市場憂慮聯儲再加息；Oracle 因數據中心項目發不可抗力通知跌 3%，拖累納指。（TheStreet、CNBC）"
+  ],
+  [
+   "背景",
+   "聯儲 09-16 加息 25 點子至 3.75%–4.00%（2023 年 7 月以來首次），點陣圖顯示今年可能再加（R19 記錄）。"
+  ]
+ ],
+ "market_sources": [
+  "https://wtop.com/national/2026/09/how-major-us-stock-indexes-fared-friday-9-18-2026",
+  "https://qz.com/sp500-nasdaq-dow-oil-yields-market-update-092126",
+  "https://wtop.com/national/2026/09/how-major-us-stock-indexes-fared-tuesday-9-22-2026",
+  "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-sept-23-2026",
+  "https://www.cnbc.com/2026/09/23/stock-market-today-live-updates.html"
+ ],
+ "carried": [
+  "VEEV",
+  "NUTX",
+  "ESTC",
+  "NEO",
+  "NOW",
+  "HPQ",
+  "PLSE",
+  "SNOW",
+  "ZETA",
+  "SGP",
+  "REPX",
+  "CBLL"
+ ]
+}
