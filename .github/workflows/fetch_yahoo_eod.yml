@@ -14,6 +14,10 @@ on:
       end:
         description: Day after the last trading day wanted (YYYY-MM-DD, exclusive)
         required: true
+      interval:
+        description: Bar interval; an intraday one (60m) is rolled up to daily rows
+        required: false
+        default: "1d"
 
 permissions:
   contents: write
@@ -31,6 +35,7 @@ jobs:
         env:
           START: ${{ inputs.start }}
           END: ${{ inputs.end }}
+          INTERVAL: ${{ inputs.interval }}
         run: python3 scripts/fetch_yahoo.py
       - name: Commit bars
         env:

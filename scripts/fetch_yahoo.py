@@ -20,7 +20,15 @@ import yfinance as yf
 START = os.environ.get("START", "2025-12-26")
 END = os.environ.get("END", "2026-09-05")          # yfinance end is exclusive
 LIST = os.environ.get("LIST", "data/yahoo/tickers.txt")
-OUT = os.environ.get("OUT", f"data/yahoo/eod_{START}_{END}.csv.gz")
+INTERVAL = os.environ.get("INTERVAL", "") or "1d"
+# Yahoo publishes the last session's daily bar hours after the close (09-17,
+# 09-23, 09-28: a few hundred to 1,300 of ~3,850 names that evening), while
+# its intraday bars are there at once. An intraday interval is fetched and
+# rolled up to one open/high/low/close/volume row per symbol per day; the
+# screener takes the day's range from it and the official close and volume
+# from the post-close Nasdaq snapshot.
+OUT = os.environ.get("OUT", f"data/yahoo/eod_{START}_{END}.csv.gz" if INTERVAL == "1d"
+                     else f"data/yahoo/intraday_{START}_{END}_{INTERVAL}.csv.gz")
 BATCH = int(os.environ.get("BATCH", "150"))
 
 symbols = [s.strip() for s in open(LIST) if s.strip()]
@@ -34,8 +42,9 @@ for i in range(0, len(symbols), BATCH):
     batch = [ysym[s] for s in symbols[i:i + BATCH]]
     for attempt in range(3):
         try:
-            df = yf.download(batch, start=START, end=END, interval="1d", auto_adjust=False,
-                             actions=False, group_by="ticker", threads=True, progress=False)
+            df = yf.download(batch, start=START, end=END, interval=INTERVAL, auto_adjust=False,
+                             actions=False, group_by="ticker", threads=True, progress=False,
+                             prepost=False)
             break
         except Exception as e:                       # rate limit / transient
             print(f"batch {i // BATCH}: attempt {attempt + 1} failed: {e}")
@@ -52,6 +61,14 @@ for i in range(0, len(symbols), BATCH):
         if sub.empty:
             failed.append(y); continue
         sub = sub.reset_index().rename(columns=str.lower)
+        if INTERVAL != "1d":                         # roll intraday bars up to the session
+            ts = sub.columns[0]
+            sub["date"] = pd.to_datetime(sub[ts]).dt.tz_convert("America/New_York").dt.date
+            sub = (sub.groupby("date")
+                      .agg(open=("open", "first"), high=("high", "max"), low=("low", "min"),
+                           close=("close", "last"), volume=("volume", "sum"))
+                      .reset_index())
+            sub["adj close"] = sub["close"]
         sub["symbol"] = back[y]
         frames.append(sub[["symbol", "date", "open", "high", "low", "close", "adj close", "volume"]])
         got += 1
