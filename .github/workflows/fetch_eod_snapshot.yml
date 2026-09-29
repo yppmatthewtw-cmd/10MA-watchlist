@@ -41,6 +41,25 @@ jobs:
 
           rows = payload["data"]["rows"]
           print(f"rows: {len(rows)}")
+          # the API's own timestamp, if it sends one, for the log
+          print("payload data keys:", sorted(k for k in payload["data"] if k != "rows"),
+                {k: v for k, v in payload["data"].items() if k != "rows" and not isinstance(v, (list, dict))})
+
+          # In the evening the API can still serve the previous session: 2026-09-24.csv
+          # came back identical to the 09-23 close. Refuse a snapshot whose last sale and
+          # net change match the newest one already committed for nearly every symbol.
+          import glob
+          prev_files = sorted(p for p in glob.glob("data/snapshots/*.csv")
+                              if os.path.basename(p) < f"{date}.csv")
+          if prev_files:
+              with open(prev_files[-1], encoding="utf-8") as f:
+                  old = {r["symbol"]: (r["lastsale"], r["netchange"]) for r in csv.DictReader(f)}
+              both = [r for r in rows if r.get("symbol") in old]
+              same = sum(1 for r in both if (r.get("lastsale"), r.get("netchange")) == old[r["symbol"]])
+              print(f"identical to {os.path.basename(prev_files[-1])}: {same}/{len(both)}")
+              if both and same / len(both) > 0.95:
+                  raise SystemExit(f"snapshot has not rolled over from {os.path.basename(prev_files[-1])}; "
+                                   "re-run after the API updates")
           os.makedirs("data/snapshots", exist_ok=True)
           out = f"data/snapshots/{date}.csv"
           cols = ["symbol", "name", "lastsale", "netchange", "pctchange",

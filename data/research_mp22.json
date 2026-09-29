@@ -1,0 +1,160 @@
+{
+ "refiners": {
+  "syms": [
+   "CLMT",
+   "DINO",
+   "VLO",
+   "MPC",
+   "PSX"
+  ],
+  "text": "09-22 Jefferies 將 VLO、MPC 由買入降至持有（目標 $401／$413，理由係大升後估值偏高）；同日 Bloomberg 報道柴油出口禁令提案獲政治支持，煉油股升勢停頓。回調有明確評級同政策催化，唔係單純技術性回吐。",
+  "sources": [
+   "https://seekingalpha.com/news/4645636-valero-marathon-cut-at-jefferies-supporting-less-refining-exposure-after-big-gains",
+   "https://www.bloomberg.com/news/articles/2026-09-22/refining-stocks-rally-stalls-as-talk-of-diesel-export-ban-swirls"
+  ]
+ },
+ "flags": {
+  "IRD": [
+   [
+    "event",
+    "二元事件就喺今個星期：10 月 1–4 日 EURETINA 大會公佈 OPGx-BEST1 詳細數據；R21 已標記佢嘅升浪同回調都係臨床消息帶動"
+   ]
+  ],
+  "TTRX": [
+   [
+    "event",
+    "臨床期生物科技，升浪由試驗消息帶動（3 月 $3.22 → 9 月約 $14.8），唔係業績動能"
+   ]
+  ],
+  "PURR": [
+   [
+    "event",
+    "加密貨幣庫存公司，股價跟 HYPE 代幣走；09-25 監管負面消息"
+   ]
+  ],
+  "TITN": [
+   [
+    "event",
+    "升浪來自券商升級（08-31 Baird），同期收入 −9.2%、虧損擴大 —— 動能冇基本面支持"
+   ]
+  ]
+ },
+ "research": {
+  "CHPT": [
+   "09-03 公佈 FY27 Q2：收入 $1.161 億（+18%）超指引，經調整 EBITDA 虧損由 $2,210 萬收窄至 $480 萬 → 當日升 75%、翌日再升 8.9%，一個月升 61%；CEO 話「係動能嘅開始」。升浪主要由一日業績跳空造成。",
+   "https://www.cnbc.com/2026/09/03/chargepoint-ceo-50percent-stock-surge-is-the-beginning-of-the-momentum.html"
+  ],
+  "IRD": [
+   "OPGx-BEST1 第一組三個月數據（09 月第二個星期）後券商加目標價至 $13–$20；**10 月 1–4 日 EURETINA 大會公佈詳細數據 —— 二元事件就喺今個星期**。",
+   "https://www.stocktitan.net/news/IRD/opus-genetics-provides-best1-program-update-with-detailed-timeline-c1zyafhv8w60.html"
+  ],
+  "TTRX": [
+   "臨床期生物科技（PermaFusion 外用免疫調節劑）；GX-03 二期中期數據支持後擴大試驗；股價由 3 月 $3.22 升到 9 月下旬約 $14.8；下次業績 11-12。",
+   "https://www.investing.com/equities/turn-therapeutics"
+  ],
+  "DELL": [
+   "FY27 Q2 收入 $470 億（+58%）、AI 伺服器訂單創紀錄 $609 億、積壓訂單 $950 億，全年收入指引上調 $250 億至 $1,920 億；今年升超過 350%，高位 $595.51；多間券商目標 $600–650。",
+   "https://www.fool.com/coverage/stock-market-today/2026/09/02/stock-market-today-sept-2-dell-surges-16-on-soaring-ai-backlog/"
+  ],
+  "TITN": [
+   "FY27 Q2 收入 $4.96 億（−9.2%）、虧損擴大至每股 $0.40；升浪主要來自 08-31 Baird 升至跑贏大市 —— 基本面仲係轉差緊。",
+   "https://www.ad-hoc-news.de/boerse/news/nebenwerte/titan-machinery-stock-falls-3-06-percent-as-losses-deepen/70183602"
+  ],
+  "HOOD": [
+   "過去 30 日升超過 10%，事件合約同財富管理業務帶動；但 52 周高位 $153.86，現價仍低約兩成半。",
+   "https://blockchain.news/news/20260926-price-prediction-hood-bulls-are-running-out-of-road"
+  ],
+  "FIVN": [
+   "Q2 收入 $3.124 億（+10%）、AI 收入 +78%（年化 $1.5 億以上），上調全年收入指引至 $12.66 億；Truist 目標 $35→$40、RBC $25→$35；09-25 創 52 周新高 $39.55。",
+   "https://www.gurufocus.com/news/9092651/a-look-at-five9-inc-fivn-after-44-gain-gf-value-3205-vs-price-3865"
+  ],
+  "PURR": [
+   "持有 HYPE 代幣嘅加密貨幣庫存公司：財年純利 $3.06 億大部分係代幣未實現收益；Cantor 目標 $22.6→$34.2；09-25 因監管負面消息回落。股價基本上係 HYPE 代幣嘅槓桿。",
+   "https://www.gurufocus.com/news/9096248/hyperliquid-strategies-inc-purr-shows-mixed-signals-amid-rising-options-optimism"
+  ],
+  "KGEI": [
+   "小型油氣生產商：Q2 收入 +109%、產量 +46%；油價上升帶動；09-19 內部人士減持約 3.4 萬股。",
+   "https://www.investorideas.com/news/2026/energy/09151-kolibri-global-energy-kei-kgei-oil-prices-rise.asp"
+  ],
+  "IBTA": [
+   "今年升約 81%，Q2 收入重拾增長（+3% 至 $8,890 萬）；CEO 09-21／22 減持約 $63 萬、CTO 09-10 減持約 $66 萬。",
+   "https://za.investing.com/news/stock-market-news/ibotta-ceo-bryan-leach-sells-625981-in-company-shares-93CH-4479296"
+  ],
+  "ELMT": [
+   "精密鎢／鉬零件；09-14 創上市新高 $25.03；Needham 09-15 目標 $21→$25；09-23 宣布以 $1.25 億入股越南 Masan High-Tech Materials 4.99%（鎢供應鏈）。",
+   "https://www.globenewswire.com/news-release/2026/09/24/3367921/0/en/the-elmet-group-to-invest-approximately-125-million-in-masan-high-tech-materials-to-strengthen-tungsten-supply-chain.html"
+  ],
+  "DC": [
+   "南達科他州金礦勘探公司（未有生產），跟金價走；分析員目標 $10–16。",
+   "https://www.investing.com/equities/dakota-gold"
+  ],
+  "BBY": [
+   "Q2 同店銷售 +4.1%、EPS +15%，上調 FY27 指引；30 日升約 37.5%；分析員平均「持有」、目標 $86.7 低過現價；人事總監減持約 $1,070 萬。",
+   "https://simplywall.st/stocks/us/retail/nyse-bby/best-buy/future"
+  ],
+  "TH": [
+   "今年升約 159%；09-08 大股東 TDR Capital 以 $18.50 配售 1,400 萬股（公司同時回購 $3,000 萬），CEO 09-15 以 $18.69 增持；Morgan Stanley 目標 $25、Oppenheimer $27。配售價 $18.50 係而家下面嘅參考位。",
+   "https://www.stocktitan.net/news/TH/target-hospitality-announces-pricing-of-upsized-secondary-offering-hovo0l2urqqi.html"
+  ],
+  "DHX": [
+   "冇搵到近期個股催化劑；六個月升約 72%。（來源為報價聚合網站）",
+   "https://upstox.com/us-stocks/dhx-share-price/"
+  ],
+  "VLO": [
+   "煉油股；09-22 Jefferies 降至持有（目標 $401）；今年升幅超過 80%。",
+   "https://seekingalpha.com/news/4645636-valero-marathon-cut-at-jefferies-supporting-less-refining-exposure-after-big-gains"
+  ],
+  "MPC": [
+   "煉油股；09-22 Jefferies 降至持有（目標 $413）；今年升幅超過 80%。",
+   "https://seekingalpha.com/news/4645636-valero-marathon-cut-at-jefferies-supporting-less-refining-exposure-after-big-gains"
+  ],
+  "DINO": [
+   "煉油股（HF Sinclair）；柴油零售價破 $6.50，煉油毛利大升；09-22 行業被降級同柴油出口禁令消息拖累。",
+   "https://www.benzinga.com/markets/commodities/26/09/61881898/diesel-squeeze-oil-refiners-stocks-four-top-performing-six-weeks-of-gains"
+  ],
+  "PSX": [
+   "煉油股；柴油價格帶動季度每股盈利按年接近四倍；09-22 同組受柴油出口禁令提案拖累。",
+   "https://www.benzinga.com/markets/commodities/26/09/61881898/diesel-squeeze-oil-refiners-stocks-four-top-performing-six-weeks-of-gains"
+  ],
+  "LPG": [
+   "超大型液化氣船運費高企：截至 09-30 季度 99% 營運日鎖定每日 $88,000 以上；訂三艘新船共 $3.45 億。",
+   "https://www.stocktitan.net/news/LPG/dorian-lpg-ltd-announces-vlgc-newbuilding-contracts-forward-9zhz9yb9avle.html"
+  ]
+ },
+ "carried": [
+  "PD",
+  "PLSE",
+  "VSTM",
+  "ESTC",
+  "SNOW",
+  "XRX",
+  "DOCU"
+ ],
+ "market": [
+  [
+   "09-24（四）",
+   "標普 7,704.13（持平）、道指 −0.3%、納指持平；債息同油價上落，最後債息收高。（AP）"
+  ],
+  [
+   "09-25（五）",
+   "標普 +0.5% 至 7,743.41、道指 +0.9%、納指 +0.5%；Brent 一度跌穿 $98，油價降溫，美股三星期以來首個上升周。（AP）"
+  ],
+  [
+   "09-28（一）",
+   "標普 −0.8% 至 7,683.69、道指 −0.7% 至 51,481.51、納指 −0.9% 至 26,820.38、羅素 2000 −0.7%；10 年期美債息升至 5.23%，2007 年以來最高。特朗普周六拒絕伊朗經卡塔爾轉交嘅和平方案，荷姆茲海峽何時重開仍未明，油價升約 2%。（AP、TheStreet、Reuters via Yahoo）"
+  ],
+  [
+   "背景",
+   "聯儲 09-16 加息 25 點子至 3.75%–4.00%；09-23 5 年期債息 2007 年後首見 5 厘（R21 記錄）。"
+  ]
+ ],
+ "market_sources": [
+  "https://wtop.com/national/2026/09/how-major-us-stock-indexes-fared-thursday-9-24-2026",
+  "https://wtop.com/national/2026/09/how-major-us-stock-indexes-fared-friday-9-25-2026",
+  "https://krmg.com/2026/09/28/how-major-us-stock-indexes-fared-monday-9-28-2026/",
+  "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-sept-28-2026",
+  "https://finance.yahoo.com/energy/articles/oil-rebounds-trump-rejects-iran-221457073.html"
+ ],
+ "researched_n": 20,
+ "carried_n": 7
+}

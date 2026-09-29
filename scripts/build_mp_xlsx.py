@@ -20,11 +20,11 @@ from openpyxl.comments import Comment
 W = os.environ.get("WORK_DIR", "./data")
 SCREEN = os.environ.get("SCREEN_JSON", "screen_mp21.json")
 REVIEW = os.environ.get("REVIEW_JSON", "review_mp21.json")
-PREV_SCREEN = os.environ.get("PREV_SCREEN", "screen_results20.json")
+PREV_SCREEN = os.environ.get("PREV_SCREEN", "screen_mp21.json")
 NEWS = os.environ.get("NEWS_JSON", "news20.json")
 OUT = os.environ["OUT_XLSX"]
 REV = os.environ.get("REV", "R21.00")
-PREV_REV = os.environ.get("PREV_REV", "R20")
+PREV_REV = os.environ.get("PREV_REV", "R21")
 
 scr = json.load(open(f"{W}/{SCREEN}"))
 rev = json.load(open(f"{W}/{REVIEW}")) if os.path.exists(f"{W}/{REVIEW}") else {}
@@ -55,7 +55,10 @@ WRAP = Alignment(wrap_text=True, vertical="top")
 EXCH = {}
 for r in rows:
     EXCH[r["sym"]] = r.get("exch") or "—"
-for r in prev["page1"]:
+PREV_ROWS = prev.get("rows") or prev["page1"]
+PREV_RANK = {r["sym"]: r.get("rank", i) for i, r in enumerate(PREV_ROWS, 1)}
+PREV_DATE = (prev.get("meta") or {}).get("last_date", "")
+for r in PREV_ROWS:
     EXCH.setdefault(r["sym"], r.get("exch") or "—")
 for r in rev.get("exch_extra", {}).items():
     EXCH.setdefault(r[0], r[1])
@@ -102,7 +105,7 @@ def put(ws, r, c, v, fmt=None, font=None, fill=None, align=None):
 
 CAPZH = {"a": "大型", "b": "中型", "c": "小型", "x": "未分類"}
 PCT = "0.0%"; PCT2 = "0.00%"; PX = '$#,##0.00##'; SC = "0.0"
-prev_syms = {r["sym"] for r in prev["page1"]}
+prev_syms = set(PREV_RANK)
 flags_by = {}
 for r in rows:
     flags_by[r["sym"]] = list(r["flags"])
@@ -130,7 +133,7 @@ COLS = [  # (key, header, width)
     ("s_vol", "量縮", 7), ("s_near", "貼近MA20", 7), ("s_slope", "MA20斜率分", 7),
     ("s_depth", "回調深度分", 7), ("s_hold", "企穩", 7), ("s_contr", "波幅收窄", 7),
     ("mom", "動能分數", 8), ("pq", "回調質素", 8), ("combo", "綜合分數", 8), ("score", "爆發潛力分數", 9),
-    ("r20", f"{PREV_REV} 10MA名單", 8), ("surv", "門檻測試留低", 8), ("flag", "審視標記", 40), ("xchk", "兩源最大差%", 8),
+    ("prevr", f"{PREV_REV} 排名", 8), ("surv", "門檻測試留低", 8), ("flag", "審視標記", 40), ("xchk", "兩源最大差%", 8),
 ]
 C = {k: i for i, (k, _, _) in enumerate(COLS, 1)}
 L = {k: get_column_letter(i) for k, i in C.items()}
@@ -196,7 +199,9 @@ for i, r in enumerate(rows):
                          f"+0.15*{f('s_hold')}+0.1*{f('s_contr')})", SC)
     put(ws, rw, C["combo"], f"=0.5*{f('mom')}+0.5*{f('pq')}", SC, BOLD)
     put(ws, rw, C["score"], f"=0.4*{f('mom')}+0.4*{f('pq')}+0.2*({f('hits')}/4*100)", SC, BOLD)
-    put(ws, rw, C["r20"], "有" if s in prev_syms else "")
+    put(ws, rw, C["prevr"], PREV_RANK.get(s), "0")
+    if s not in prev_syms:
+        ws.cell(row=rw, column=C["sym"]).fill = NEW_FILL
     put(ws, rw, C["surv"], f"{rev['survive'][s]}/{rev['n_sens']}" if rev.get("survive") else "")
     fl = flags_by.get(s, [])
     put(ws, rw, C["flag"], "；".join(t for _, t in fl), align=WRAP)
@@ -207,7 +212,7 @@ for i, r in enumerate(rows):
     nw = news.get(s)
     if nw and nw.get("cat_line"):
         ws.cell(row=rw, column=C["name"]).comment = Comment(
-            f"（沿用 {PREV_REV} 或更早嘅研究，未按今次重新核實）{nw['cat_line']}", "watchlist")
+            f"（沿用舊版研究，未按今次重新核實）{nw['cat_line']}", "watchlist")
 ws.auto_filter.ref = f"A1:{get_column_letter(len(COLS))}{last_row}"
 
 # ================================================================ 動能時間框頁
@@ -245,7 +250,7 @@ wr.column_dimensions["C"].width = 14; wr.column_dimensions["D"].width = 14
 wr.cell(row=1, column=1, value=f"{REV} 篩選條件：高動能 ＋ 回到上升中嘅 20MA").font = TITLE
 fun = META["funnel"]
 lines = [
-    ("說明", f"由 {REV} 起取代 R1–R20 嘅「10MA 上升＋一底高於一底」規則。股票池規則不變；池之後嘅條件全部重寫。"
+    ("說明", f"由 R21 起取代 R1–R20 嘅「10MA 上升＋一底高於一底」規則。股票池規則不變；池之後嘅條件全部重寫。"
              f"價格改用 Yahoo 日線（開高低收量），因為「觸及 20MA」要用當日最低價，而舊序列只有收市價。"
              f"數據終點 {LAST}，共 {META['n_days']} 個交易日（{META['cal_first']} 起）。", None, None),
     ("", "", "門檻", "通過數目"),
@@ -254,7 +259,7 @@ lines = [
     ("S1 趨勢", f"MA20 高過 {P['ma20_slope_lag']} 日前；MA20 > MA50；MA50 高過 {P['ma50_slope_lag']} 日前；收市 > MA50",
      "", fun["S1"]),
     ("S2 近期高位", f"近 {P['hi_look']} 日最高收市喺 {P['hi_ago_min']}–{P['hi_ago_max']} 個交易日前出現，"
-                   f"而且唔低過數據期內（{META['cal_first']} 起、約九個月，唔係歷史新高）最高收市嘅 {P['near_record']:.0%}", "", fun["S2"]),
+                   f"而且唔低過數據期內（{META['cal_first']} 起、約一年即 52 周）最高收市嘅 {P['near_record']:.0%}", "", fun["S2"]),
     ("S3 回調深度", f"收市比嗰個高位低 {P['depth_min']:.0%}–{P['depth_max']:.0%}", "", fun["S3"]),
     ("S4 曾經拉開", f"近 {P['ext_look']} 日內，有一日收市高過當日 MA20 至少 {P['ext_min']:.0%}"
                    "（即係先離開咗條線，先至講得上「回到」）", "", fun["S4"]),
@@ -352,7 +357,7 @@ for i, x in enumerate(nm):
 
 # ================================================================ 同R20對照
 wso = wb.create_sheet(f"同{PREV_REV}對照")
-wso.cell(row=1, column=1, value=f"{PREV_REV}（10MA 上升＋底部遞升）名單 vs {REV}（高動能回到 20MA）名單").font = TITLE
+wso.cell(row=1, column=1, value=f"{PREV_REV}（{PREV_DATE} 收市）名單 vs {REV}（{LAST} 收市）名單 · 同一套規則").font = TITLE
 head = ["類別", "代號", f"{PREV_REV} 排名", f"{REV} 排名", "說明"]
 style_header(wso, head, [16, 8, 9, 9, 70], row=3, freeze_at="C4")
 cmp_rows = rev.get("vs_prev") or []
@@ -361,8 +366,37 @@ for i, x in enumerate(cmp_rows):
     put(wso, rw, 1, x["kind"]); link_ticker(wso, rw, 2, x["sym"])
     put(wso, rw, 3, x.get("prev_rank"), "0"); put(wso, rw, 4, x.get("rank"), "0")
     put(wso, rw, 5, x.get("why", ""), align=WRAP)
-    if x["kind"].startswith("兩份"):
+    if x["kind"] == "新上榜":
         wso.cell(row=rw, column=2).fill = NEW_FILL
+    elif x["kind"] == "跌出":
+        wso.cell(row=rw, column=2).fill = WARN_FILL
+
+# ================================================================ 上一版向前測試
+fw = rev.get("forward")
+if fw:
+    wsw = wb.create_sheet(f"{PREV_REV}向前測試")
+    wsw.cell(row=1, column=1, value=f"{PREV_REV} 名單（{fw['from']} 收市）之後 {fw['n_days']} 個交易日點行（至 {LAST} 收市）").font = TITLE
+    rw = 3
+    for a, b in fw["summary"]:
+        put(wsw, rw, 1, a, font=BOLD); wsw.merge_cells(start_row=rw, start_column=2, end_row=rw, end_column=9)
+        put(wsw, rw, 2, b, align=WRAP); wsw.row_dimensions[rw].height = 32
+        rw += 1
+    rw += 1
+    head = [f"{PREV_REV} 排名", "代號", f"{fw['from']} 收市", f"{LAST} 收市", "期間回報", "減大市中位數",
+            f"{LAST} 距 MA20%", "狀態", f"{REV} 排名", f"{PREV_REV} 標記"]
+    style_header(wsw, head, [8, 8, 11, 11, 9, 10, 10, 16, 8, 40], row=rw, freeze_at=f"C{rw + 1}")
+    hdr = rw
+    for x in fw["rows"]:
+        rw += 1
+        put(wsw, rw, 1, x["prev_rank"], "0"); link_ticker(wsw, rw, 2, x["sym"])
+        put(wsw, rw, 3, x["c0"], PX, INPUT); put(wsw, rw, 4, x["c1"], PX, INPUT)
+        put(wsw, rw, 5, f"=D{rw}/C{rw}-1", PCT2)
+        put(wsw, rw, 6, f"=E{rw}-({fw['mkt_med']})", PCT2)
+        put(wsw, rw, 7, x["d20"], PCT2, INPUT); put(wsw, rw, 8, x["state"])
+        put(wsw, rw, 9, x.get("rank"), "0"); put(wsw, rw, 10, x.get("flags", ""), align=WRAP)
+        if x.get("flags"):
+            wsw.cell(row=rw, column=2).fill = WARN_FILL
+    wsw.auto_filter.ref = f"A{hdr}:J{rw}"
 
 # ================================================================ 同上日對照
 pdd = rev.get("prevday_date", "上日")
@@ -387,7 +421,7 @@ head = ["代號", "總表排名", "類別", "說明", "處理"]
 style_header(wsf, head, [8, 8, 14, 80, 30], row=3, freeze_at="B4")
 KZH = {"spike": "單日急升主導", "gapdown": "急跌非有序回調", "pinned": "窄幅（要查併購）",
        "heavy_break": "放量跌穿", "halted": "停牌日", "xsrc": "兩源數據唔一致", "deal": "併購釘價",
-       "event": "事件驅動", "earn": "業績將至", "liq": "流動性低", "floor": "貼近價格下限"}
+       "event": "事件驅動", "earn": "業績將至", "liq": "流動性低", "floor": "貼近價格下限", "cluster": "同向群組"}
 rw = 4
 for r in rows:
     for k, t in flags_by.get(r["sym"], []):
@@ -479,7 +513,7 @@ for i, r in enumerate(rows):
         put(wsr, rw, 4, f"{REV} 快速核查"); put(wsr, rw, 5, q[0], align=WRAP)
         c = put(wsr, rw, 6, q[1]); c.hyperlink = q[1]; c.font = Font(name=FONT, size=9, color="0563C1", underline="single")
     elif nw.get("cat_line"):
-        put(wsr, rw, 4, f"沿用 {PREV_REV} 或更早（未重新核實）")
+        put(wsr, rw, 4, "沿用舊版研究（未重新核實）")
         put(wsr, rw, 5, nw["cat_line"] + ("；" + nw["recovery_short"] if nw.get("recovery_short") else ""), align=WRAP)
         src = (nw.get("sources") or [""])[0]
         c = put(wsr, rw, 6, src)

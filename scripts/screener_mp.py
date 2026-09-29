@@ -21,8 +21,9 @@ Setup — all of these, on the last close t:
   S1 trend      MA20 above its value 5 sessions earlier; MA20 > MA50; MA50 above
                 its value 10 sessions earlier; close > MA50.
   S2 high       the highest close of the last 63 sessions was set 2..25 sessions
-                ago, and is within 5% of the highest close in the data window
-                (from 2025-12-26, about nine months — not a true all-time high).
+                ago, and is within 5% of the highest close of the past year
+                (R22 on: Yahoo bars from 2025-09-26, a full 52 weeks; R21 had
+                only the nine months from 2025-12-26).
   S3 depth      close is 3%..30% below that high.
   S4 extended   some close in the last 25 sessions sat >= 8% above that day's
                 MA20 (the stock went away from the line before coming back).
@@ -184,10 +185,53 @@ with gzip.open(YAHOO, "rt") as f:
         if not (c > 0 and h > 0 and l > 0) or any(map(math.isnan, (o, h, l, c, v))):
             continue
         RAW.setdefault(r["symbol"], {})[r["date"]] = (o, h, l, c, v)
+# ---------------- which session does each snapshot hold? ----------------
+# The file name is the date the workflow was asked for, not proof of the data
+# inside: the Nasdaq screener API had not rolled over when 2026-09-24.csv
+# (still the 09-23 close) and 2026-09-28.csv (still the 09-25 close) were
+# fetched at ~21:30 ET. Each snapshot's last sale is matched against Yahoo's
+# daily closes; a file that matches another session is relabelled to it (or
+# dropped if that session already has a snapshot), one matching none is dropped.
+SNAP_AUDIT = {}
+_ydays = {}
+for sym, m in RAW.items():
+    for d, b in m.items():
+        _ydays.setdefault(d, {})[sym] = b[3]
+
+
+def _match(sm, d):
+    ys = _ydays.get(d, {})
+    k = [abs(sm[x]["last"] / ys[x] - 1) <= 0.005 for x in sm if x in ys and ys[x] > 0]
+    return (sum(k) / len(k), len(k)) if len(k) >= 500 else (0.0, len(k))
+
+
+_fixed = {}
+for fname in SNAP_DATES:
+    sm = SNAP[fname]
+    rate, n = _match(sm, fname)
+    if rate >= 0.9:
+        _fixed.setdefault(fname, sm); SNAP_AUDIT[fname] = {"holds": fname, "match": rate, "n": n}
+        continue
+    best = max(((_match(sm, d)[0], d) for d in _ydays if len(_ydays[d]) >= 500), default=(0.0, None))
+    if best[0] >= 0.9 and best[1] not in _fixed and best[1] not in SNAP_DATES:
+        _fixed[best[1]] = sm
+        SNAP_AUDIT[fname] = {"holds": best[1], "match": best[0], "n": n, "own_match": rate, "action": "relabelled"}
+    else:
+        SNAP_AUDIT[fname] = {"holds": best[1], "match": best[0], "n": n, "own_match": rate, "action": "dropped"}
+    print(f"snapshot {fname}: last sale matches Yahoo {fname} for {rate:.1%} only; it holds the "
+          f"{best[1]} close ({best[0]:.1%}) -> {SNAP_AUDIT[fname]['action']}")
+SNAP = _fixed
+SNAP_DATES = sorted(SNAP)
+LATEST_SNAP = SNAP[SNAP_DATES[-1]] if SNAP_DATES else {}
+
 # a later, narrower fetch can carry bars the main file lacks (Yahoo drops whole
-# days from its daily history and back-fills them later): take only the gaps
+# days from its daily history and back-fills them later; an intraday roll-up
+# stands in for a last session Yahoo has not yet published): take only the gaps
 SUPP_ADDED = {}
+SUPP_KEYS = set()
+VOL_SCALE = {}
 for path in [x for x in os.environ.get("SUPP", "").split(",") if x]:
+    rows_ = []
     with gzip.open(path, "rt") as f:
         for r in csv.DictReader(f):
             try:
@@ -196,12 +240,38 @@ for path in [x for x in os.environ.get("SUPP", "").split(",") if x]:
                 continue
             if not (b[3] > 0 and b[1] > 0 and b[2] > 0) or any(map(math.isnan, b)):
                 continue
-            m = RAW.setdefault(r["symbol"], {})
-            if r["date"] not in m:
-                m[r["date"]] = b
-                SUPP_ADDED[r["date"]] = SUPP_ADDED.get(r["date"], 0) + 1
+            rows_.append((r["symbol"], r["date"], b))
+    # An hourly roll-up misses the closing auction and other late prints (09-28:
+    # its volume was a median 0.79 of the daily bar's on the 1,262 names that had
+    # both), so its volume is scaled by that day's measured ratio.
+    if "intraday" in os.path.basename(path):
+        for d in {x[1] for x in rows_}:
+            rs = [RAW[sy][d][4] / b[4] for sy, dd, b in rows_ if dd == d and d in RAW.get(sy, {})
+                  and b[4] > 0 and RAW[sy][d][4] > 0]
+            if len(rs) >= 200:
+                VOL_SCALE[d] = {"ratio": float(np.median(rs)), "n": len(rs)}
+    for sym, d, b in rows_:
+        m = RAW.setdefault(sym, {})
+        if d not in m:
+            if d in VOL_SCALE:
+                b = b[:4] + (b[4] * VOL_SCALE[d]["ratio"],)
+            m[d] = b
+            SUPP_ADDED[d] = SUPP_ADDED.get(d, 0) + 1
+            SUPP_KEYS.add((sym, d))
 if SUPP_ADDED:
-    print("supplement filled:", dict(sorted(SUPP_ADDED.items())))
+    print("supplement filled:", dict(sorted(SUPP_ADDED.items())), "| volume scale:", VOL_SCALE)
+# On a day with a (verified) post-close snapshot, a supplement row takes the
+# official close and volume from it, its range widened to contain that close.
+OFFICIAL = 0
+for sym, d in SUPP_KEYS:
+    r = SNAP.get(d, {}).get(sym)
+    if r:
+        o, h, l, c, v = RAW[sym][d]
+        c = r["last"]
+        RAW[sym][d] = (o, max(h, c), min(l, c), c, r["vol"] or v)
+        OFFICIAL += 1
+if SUPP_KEYS:
+    print(f"supplement rows given a snapshot's official close and volume: {OFFICIAL} of {len(SUPP_KEYS)}")
 
 per_day = {}
 for m in RAW.values():
@@ -268,7 +338,7 @@ for s, m in RAW.items():
     if not ds or ds[-1] != LAST:
         continue
     start = NQ_START.get(s)
-    if start and ds[0] < start:
+    if start and start > SCAL[0] and ds[0] < start:   # listed after the series began
         LATE[s] = {"yahoo_from": ds[0], "nasdaq_from": start,
                    "yahoo_only_sessions": sum(1 for d in ds if d < start)}
     i0 = IDX[ds[0]]
@@ -323,6 +393,11 @@ for s in ELIG:
     m20, m50 = sma(c, 20), sma(c, 50)
     prevc = np.concatenate(([c[0]], c[:-1]))
     tr = np.maximum(h - l, np.maximum(abs(h - prevc), abs(l - prevc)))
+    # a close-only bar (a hole day filled from the snapshot) has no range of its
+    # own, so its true range shrinks to the close-to-close move; average true
+    # range counts real bars only (R22: 09-22 sat inside every ATR5 window)
+    co = {IDX[d] - (len(CAL) - n) for d in CLOSE_ONLY.get(s, []) if d in IDX}
+    tr = tr[[j for j in range(1, n) if j not in co]]
     atr14 = tr[-14:].mean()
     st = NQ_START.get(s, CAL[0])
     rets = {W: (c[-1] / c[-1 - W] - 1) if n > W and CAL[-1 - W] >= st else None for W in LOOKS}
@@ -605,6 +680,7 @@ for s, hw in LIST.items():
         "hits_w": hw, "hits": len(hw),
         "sub": sub, "mom": ms, "pq": pq, "combo": combo, "score": score,
         "flags": flags(s, m), "xchk": xcheck(s),
+        "last_intraday": (s, LAST) in SUPP_KEYS,
         "spark": {"dates": CAL[-60:], "close": [round(x, 4) for x in c[-60:]],
                   "ma20": [round(x, 4) for x in sma(c, 20)[-60:]]},
     })
@@ -623,6 +699,7 @@ GATES = {}
 for s, m in M.items():
     g = gates(m, P0)
     GATES[s] = {"fail": [k for k, ok in g.items() if not ok], "hits": len(mom_hits(s, P0)),
+                "close": m["close"], "below50": m["close"] < m["ma50"], "h_rec": round(m["H"] / m["rec"], 4),
                 "d20": round(m["close"] / m["ma20"] - 1, 4), "dd": round(m["close"] / m["H"] - 1, 4),
                 "ret63": None if m["rets"][63] is None else round(m["rets"][63], 4)}
 
@@ -630,7 +707,8 @@ out = {"meta": {"last_date": LAST, "cal_first": CAL[0], "n_days": len(CAL), "yah
                 "bars_last_day": per_day[LAST], "universe": counts, "eligible": len(M),
                 "funnel": fun, "momentum_any": fun_mom_only, "cutoffs": {str(W): CUT[W] for W in LOOKS},
                 "params": P0, "mom_w": {str(k): v for k, v in MOM_W.items()}, "pq_w": PQ_W,
-                "snap_dates": SNAP_DATES, "series": SERIES, "holes": HOLES, "supp_added": SUPP_ADDED,
+                "snap_dates": SNAP_DATES, "series": SERIES, "holes": HOLES, "supp_added": SUPP_ADDED, "supp_official": OFFICIAL, "snap_audit": SNAP_AUDIT, "vol_scale": VOL_SCALE,
+                "supp_keys_last": sum(1 for _s, _d in SUPP_KEYS if _d == LAST),
                 "close_only_symbols": len(CLOSE_ONLY), "late_nasdaq_start": LATE, "breadth": BREADTH},
        "rows": rows, "pages": pages, "near_miss": near, "sensitivity": SENS, "gates": GATES}
 json.dump(out, open(OUT_JSON if os.path.isabs(OUT_JSON) else f"{W_}/{OUT_JSON}", "w"), ensure_ascii=False)

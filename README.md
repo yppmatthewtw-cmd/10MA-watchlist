@@ -11,6 +11,7 @@
 
 | 版本 | 內容 |
 |------|------|
+| R22.00 | 數據更新至 **2026-09-28 收盤**（252 個交易日，2025-09-26 起），交付 Excel（`20MA_momentum_pullback_watchlistGit_R22.00_*.xlsx`，16 頁）。合資格 2,767 → 形態 23 → **上榜 21 隻**（1／2／3／6 個月頁 14／15／15／9），同 R21 兩版都有 10 隻。**R21 向前測試**（09-23→09-28，3 日）：中位數 −1.57%，大市 −0.68%；前 10 名 +1.42%、其餘 −2.16%；有審視標記嘅反而跌得少（+0.30% vs −2.63%），R21「放量跌穿就當失敗」嘅三隻煉油股全部仍然上榜。**批判性覆核修正**：兩個 Nasdaq 快照其實係舊一日（`2026-09-24.csv` = 09-23 收市、`2026-09-28.csv` = 09-25 收市）—— 篩選器而家逐個快照同 Yahoo 對照、重新標籤或棄用，快照 workflow 亦會拒收同上一個一樣嘅快照；Yahoo 09-28 日線當晚只出 1,311 隻 —— 其餘用每小時K線合成（`fetch_yahoo_eod.yml` 新增 interval 選項），成交量按實測比例 ×1.253 還原；S2 期內高位由九個月改為 **52 周**（補抓 2025-09-26 起日線），今日因此剔走 CHPT、PD、VSTM、HOOD、XRX、DOCU；Yahoo 補返 09-22 後重算 R21，名單不變；ATR 只計有真實高低位嘅日子；更正 R21 一句冇量度過嘅換手講法（實測：舊規則每日約 25%，新規則 39–55%）。獨立重寫篩選程式對 09-28 同 09-25 兩份名單 0 差異；555 項公式用 pycel 重算 0 差異 |
 | R21.00 | **篩選條件全面更新為「高動能 ＋ 回到上升中嘅 20MA」**，數據更新至 **2026-09-23 收盤**（186 個交易日），交付 Excel （`20MA_momentum_pullback_watchlistGit_R21.00_*.xlsx`，15 頁，全部代號連 TradingView、可推導欄位全部係公式）。價格改用 Yahoo 日線（觸及 20MA 要用日內最低價），Nasdaq 序列同收市後快照做核對（09-23 3,846 隻 100% 喺 0.5% 內）。合資格 2,766 → 形態 37 → **上榜 28 隻**（1／2／3／6 個月頁 15／19／22／13）。批判性覆核改咗四個問題：Yahoo 漏咗 09-22 成日（只得 270 隻，改用 Nasdaq 收市快照補收市價同成交量）；SPAC 空殼期扮動能（FRNM 原本排第 4，改為上市日數同回報起點按 Nasdaq 序列計）；一刀切截歷史會誤傷 03-19 鏡像斷檔嘅 24 隻大型股（ACN 會錯誤上榜）；兩源核對將鏡像照抄日當成差異。標記：煉油股五隻（21 日相關 +0.89，名單其餘 +0.08；09-22 Jefferies 降級＋柴油出口禁令提案，DINO／VLO／MPC 09-23 放量跌穿 MA20）、IRD 臨床數據事件、兩隻成交額只有 $1.3M。名單每日換手約一半（09-22 回算 33 隻，兩日都有 15 隻）；18 個單一門檻測試入面只有 10 隻次次留低。獨立重寫篩選程式 0 差異；659 項公式用 pycel 重算 0 差異 |
 | R20.00 | 數據更新至 **2026-09-17 收盤**；總表 89 隻；應要求改為交付 Excel（公式化、全部代號連 TradingView）。凍結測試五版回測、非包含關係；發現篩選器將收市價四捨五入至兩位小數，影響半仙報價股嘅衍生統計（留待下版修） |
 | R19.00 | 數據更新至 **2026-09-16 收盤**（周三，**議息日**，181 個交易日）：反推對賬 5,071 隻，中位同 p99 都係 0.000%（MPU 1 合 20 已重算）；Yahoo 連續第四版出齊同日日線（2,758 隻、100% 喺 0.5% 之內）。**聯儲 12 比 0 加息 25 點子至 3.75%–4.00%**（2023 年 7 月以來首次），點陣圖 2026 年中位數 3.8→4.1 厘、18 人有 16 人預期今年再加；決議後急轉直下，標普跌 0.45%、道指跌 1.21%，10 年期息重上 5 厘，而油價因沙特管道「以日計」修復而跌 3.2%。總表 88 → **79 隻**（13 新上榜、22 跌出）。**能源集中度故事三日走完**：R16 點名嘅 16 行，到今日只剩 4 隻喺榜，而一路留低嘅只有 3 隻（PBF 09-14 跌出、今日先返嚟；佢係煉油股，油價跌對佢反而利好，收 +1.62%）；本版能源 5 行（6%），連 AESI／FET／INSW 計係 8/79（10%）。**凍結測試四版回測**：R18 預測 7 行、7 行全中，但另有 15 行測試估唔到（當日中位 −3.80%）—— 四版低估 0／10／7／15 行，命中率 73%／89%／67%／100%。**批判性覆核發現一個規則與文件唔一致嘅問題（待你拍板）**：README 寫「MA 最後 3 日逐日上升」，實作其實只要求最後 3 個 MA 值遞升（兩次上升）。按字面收緊，本版 13 隻新上榜會即刻走 6 隻（TWLO、OOMA、PBF、TMO、GBTG、DAN），ITGR 亦會失去第 1 位。本版**冇改規則**，只把 README 措辭對齊實作。**另修正**：PESI 收市已跌穿底但標記仲係 09-15 嘅「一日之內返榜」；CYPH／NAKA 兩個 badge 同當日走勢相反；FEIM 同 NTSK 互相矛盾。根因係沿用標記會過期 —— 已改為**凡引用咗百分比／排名／VCP 而本版又重算唔到嘅沿用標記一律棄用**（本版棄用 10 個），由覆核重新量度後再補；跌穿底標記亦改為蓋過任何非併購標記 |
@@ -38,10 +39,12 @@
 ## 篩選規則（R21 起：高動能回到 20MA，`scripts/screener_mp.py`）
 
 1. **Universe**（同 R1–R20）：當日有成交、上市 ≥90 個交易日（按 Nasdaq 序列計，SPAC 空殼期唔計）、收市 ≥$2、普通股、20 日成交額中位數 ≥$1M。
-2. **價格**：Yahoo 日線（開高低收量）；某日 Yahoo 覆蓋唔夠鄰日一半，就用 Nasdaq 收市後快照補收市價同成交量（開高低當收市價）。
+2. **價格**：Yahoo 日線（開高低收量），2025-09-26 起；某日 Yahoo 覆蓋唔夠鄰日一半，就用 Nasdaq 收市後快照補收市價同成交量（開高低當收市價，
+   ATR 唔計嗰日）；最後一日 Yahoo 日線未出齊時，用每小時K線合成（`interval=60m`），成交量按同日兩樣都有嘅股票實測比例還原。
+   **每個 Nasdaq 快照先同 Yahoo 收市對照**：入面其實係另一日嘅就重新標籤或棄用（Nasdaq API 晚上可能未轉日）。
 3. **形態（全部要過）**：
    - S1 趨勢：MA20 高過 5 日前、MA20 > MA50、MA50 高過 10 日前、收市 > MA50
-   - S2 近期高位：近 63 日最高收市喺 2–25 日前，且唔低過數據期內最高收市 95%
+   - S2 近期高位：近 63 日最高收市喺 2–25 日前，且唔低過 52 周最高收市 95%（R22 起；R21 只有九個月數據）
    - S3 回調深度：收市比高位低 3%–30%
    - S4 曾經拉開：近 25 日有一日收市高過 MA20 ≥8%
    - S5 回到 20MA：收市喺 MA20 ±3% 內，且近 3 日有一日最低價 ≤ MA20×1.015
@@ -126,13 +129,27 @@ python3 scripts/merge_news7.py                           # 沿用 news6 + 新上
 SCREEN_JSON=screen_results7.json NEWS_JSON=news7.json REV=R7.00 \
   python3 scripts/build_report6_dark.py                  # -> data/10MA_uptrend_watchlistGit_R7.00_*.html
 
-# R21（最新交易日 2026-09-23；新規則：高動能回到 20MA；交付 Excel）
+# R22（最新交易日 2026-09-28；S2 改 52 周；R21 向前測試）
+#   fetch_yahoo_eod.yml：start=2025-12-26 end=2026-09-29；start=2026-09-28 end=2026-09-29 interval=60m；start=2025-09-26 end=2025-12-27
+#   fetch_eod_snapshot.yml：trade_date=2026-09-28（檔入面其實係 09-25 收市，篩選器會自動重新標籤）
+export YAHOO=data/yahoo/eod_2025-12-26_2026-09-29.csv.gz SERIES=series23.pkl BF=data/yahoo/eod_2025-09-26_2025-12-27.csv.gz \
+  INTRA=data/yahoo/intraday_2026-09-28_2026-09-29_60m.csv.gz SNAP_DATES=2026-09-23,2026-09-24,2026-09-28
+SUPP=$INTRA,$BF LAST_DATE=2026-09-28 OUT_JSON=screen_mp22.json python3 scripts/screener_mp.py
+SUPP=$BF LAST_DATE=2026-09-25 OUT_JSON=screen_mp22_prevday.json python3 scripts/screener_mp.py            # 上日回算
+SUPP=$INTRA LAST_DATE=2026-09-28 OUT_JSON=screen_mp22_9m.json python3 scripts/screener_mp.py             # 九個月窗口對照
+SUPP=$BF SNAP_DATES=2026-09-22,2026-09-23 LAST_DATE=2026-09-23 OUT_JSON=screen_mp21_52w.json python3 scripts/screener_mp.py  # R21 用 52 周
+SNAP_DATES=2026-09-22,2026-09-23 LAST_DATE=2026-09-23 OUT_JSON=screen_mp21_redo.json python3 scripts/screener_mp.py         # R21 用補返嘅 09-22
+SUPP=$INTRA python3 scripts/review_mp.py                                                                  # + findings_mp22.py -> review_mp22.json
+SCREEN_JSON=screen_mp22.json REVIEW_JSON=review_mp22.json PREV_SCREEN=screen_mp21.json RESEARCH_JSON=research_mp22.json \
+  REV=R22.00 PREV_REV=R21 OUT_XLSX=reports/20MA_momentum_pullback_watchlistGit_R22.00_<model>_<mm.dd_HHMM>.xlsx python3 scripts/build_mp_xlsx.py
+
+# R21（最新交易日 2026-09-23；新規則：高動能回到 20MA；交付 Excel；原樣輸出來自 commit 75dce35，覆核層用 scripts/review_mp21.py）
 #   跑 fetch_yahoo_eod.yml（start=2025-12-26, end=2026-09-24；data/yahoo/tickers.txt 已擴至全部 ≥$1 普通股）
 #   Nasdaq 收市後快照：data/snapshots/2026-09-22.csv、2026-09-23.csv（fetch_eod_snapshot.yml）
 export YAHOO=data/yahoo/eod_2025-12-26_2026-09-24.csv.gz SUPP=data/yahoo/eod_2026-09-21_2026-09-24.csv.gz SERIES=series23.pkl
 SNAP_DATES=2026-09-22,2026-09-23 OUT_JSON=screen_mp21.json python3 scripts/screener_mp.py
 SNAP_DATES=2026-09-22 LAST_DATE=2026-09-22 OUT_JSON=screen_mp21_prevday.json python3 scripts/screener_mp.py   # 上日回算
-SNAP_DATES=2026-09-22,2026-09-23 python3 scripts/review_mp.py                                                   # -> data/review_mp21.json
+SNAP_DATES=2026-09-22,2026-09-23 python3 scripts/review_mp21.py                                                 # -> data/review_mp21.json
 OUT_XLSX=reports/20MA_momentum_pullback_watchlistGit_R21.00_<model>_<mm.dd_HHMM>.xlsx python3 scripts/build_mp_xlsx.py
 
 # R20（最新交易日 2026-09-17，議息翌日）
