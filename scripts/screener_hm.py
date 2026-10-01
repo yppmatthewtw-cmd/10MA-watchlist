@@ -809,6 +809,31 @@ for s, m in M.items():
                 "ev_vol": None if not e else round(e[3], 2),
                 "why": {k: why(m, k, P0) for k in GK if not g[k]}}
 
+# every name that passes the hot-money + event-day test (C1a and C1b), whatever
+# its pull-back state: where the hot money is, by sector, right now
+HOT = []
+for s, m in M.items():
+    g = gates(m, P0)
+    if not (g["C1a"] and g["C1b"]):
+        continue
+    e = best_event(m, P0); q = best_ma10(m, P0)
+    n = m["n"]
+    sec, sec_zh, _src = sector(s)
+    mc = mcap(s)
+    HOT.append({"sym": s, "name": info(s)["name"], "sector_zh": sec_zh, "industry": info(s)["industry"],
+                "cap": cap_bucket(mc), "mcap_b": round(mc / 1e9, 3), "close": m["close"],
+                "ev_date": CAL[len(CAL) - n + e[0]], "ev_ret": e[1], "ev_gap": e[2], "ev_vol": e[3],
+                "leg_from": m["leg_from"], "leg": m["leg"], "hi_date": m["hi_date"], "ago": m["ago"],
+                "dd": m["close"] / m["H"] - 1, "d20": m["close"] / m["ma20"] - 1, "dv_ratio": m["dv_ratio"],
+                "ma10_ok": q is not None, "c20": m["c20"], "cleg": m["cleg"], "dv20": m["dv20"],
+                "fail": [k for k, ok in g.items() if not ok]})
+HOT.sort(key=lambda x: (x["sector_zh"], -x["dv_ratio"]))
+SEC_U = {}
+for s in M:
+    z = sector(s)[1]
+    SEC_U[z] = SEC_U.get(z, 0) + 1
+print(f"hot-money names (C1a and C1b): {len(HOT)}")
+
 out = {"meta": {"last_date": LAST, "cal_first": CAL[0], "n_days": len(CAL), "yahoo_file": os.path.basename(YAHOO),
                 "bars_last_day": per_day[LAST], "universe": counts, "eligible": len(M),
                 "funnel": fun, "each_gate": each, "params": P0, "params_loose": LOOSE, "params_tight": TIGHT,
@@ -819,7 +844,9 @@ out = {"meta": {"last_date": LAST, "cal_first": CAL[0], "n_days": len(CAL), "yah
                 "supp_keys_last": sum(1 for _s, _d in SUPP_KEYS if _d == LAST),
                 "close_only_symbols": len(CLOSE_ONLY), "late_nasdaq_start": LATE, "shell_detected": SHELL, "breadth": BREADTH,
                 "listing_source": "series" if SSER else "nasdaq_listing_dates.json",
-                "cap_counts": {b: sum(1 for s in M if cap_bucket(mcap(s)) == b) for b in ("a", "b", "c", "x")}},
-       "rows": rows, "pages": pages, "near_miss": near, "sensitivity": SENS, "gates": GATES}
+                "cap_counts": {b: sum(1 for s in M if cap_bucket(mcap(s)) == b) for b in ("a", "b", "c", "x")},
+                "recent_cut": CAL[-15]},
+       "rows": rows, "pages": pages, "near_miss": near, "sensitivity": SENS, "gates": GATES,
+       "hot": HOT, "sector_universe": SEC_U}
 json.dump(out, open(OUT_JSON if os.path.isabs(OUT_JSON) else f"{W_}/{OUT_JSON}", "w"), ensure_ascii=False)
 print("wrote", OUT_JSON, "| rows", len(rows), "| near misses", len(near))

@@ -324,6 +324,53 @@ for i, x in enumerate(rev.get("c3_pool") or []):
     elif x["tier"] == 2:
         wpl.cell(row=rw, column=2).fill = T2_FILL
 
+# ================================================================ 熱錢板塊
+wsh = wb.create_sheet("熱錢板塊")
+HOT = scr.get("hot") or []; SU = scr.get("sector_universe") or {}
+tot_u = sum(SU.values()) or 1
+wsh.cell(row=1, column=1, value=f"而家邊啲板塊有熱錢及消息驅動：通過 C1a（事件日）同 C1b（升浪熱錢）嘅全部 {len(HOT)} 隻，唔理有冇回落到 20MA").font = TITLE
+style_header(wsh, ["板塊", "熱錢股數目", "佔熱錢股比例", "佔股票池比例", "集中度（倍）", "近 15 日有事件日", "仍高於 MA20 >3%", "貼近 MA20 ±3%", "跌穿 MA20 >3%", "曾有 10MA 上升"],
+             [12, 9, 9, 9, 9, 10, 10, 10, 10, 10], row=3, freeze_at="B4")
+by = {}
+for h in HOT:
+    by.setdefault(h["sector_zh"], []).append(h)
+rw = 4
+cut15 = scr["meta"]["last_date"]
+for sec, xs in sorted(by.items(), key=lambda kv: -len(kv[1])):
+    put(wsh, rw, 1, sec, font=BOLD); put(wsh, rw, 2, len(xs), "0")
+    put(wsh, rw, 3, f"=B{rw}/{len(HOT)}", PCT); put(wsh, rw, 4, SU.get(sec, 0) / tot_u, PCT, INPUT)
+    put(wsh, rw, 5, f"=C{rw}/D{rw}", "0.00")
+    put(wsh, rw, 6, sum(1 for x in xs if x["ev_date"] >= scr["meta"]["recent_cut"]), "0")
+    put(wsh, rw, 7, sum(1 for x in xs if x["d20"] > 0.03), "0"); put(wsh, rw, 8, sum(1 for x in xs if -0.03 <= x["d20"] <= 0.03), "0")
+    put(wsh, rw, 9, sum(1 for x in xs if x["d20"] < -0.03), "0"); put(wsh, rw, 10, sum(1 for x in xs if x["ma10_ok"]), "0")
+    rw += 1
+rw += 1
+put(wsh, rw, 1, "集中度 = 板塊佔熱錢股比例 ÷ 板塊佔股票池比例；>1 即熱錢喺呢個板塊比例偏高。「近 15 日有事件日」= 事件日喺 " + scr["meta"]["recent_cut"] + " 或之後", font=BOLD)
+rw += 2
+head = ["板塊", "代號", "公司", "行業", "市值組", "收市價", "事件日", "事件日升幅", "事件日跳空", "事件日量比", "升浪起點", "升浪幅度%", "升浪成交額比",
+        "高位日期", "高位至今", "距高位%", "距MA20%", "狀態", "曾有10MA上升", "ATR5/ATR20", "ATR5/升浪ATR", "新條件唔過嘅"]
+for j, (h_, wd) in enumerate(zip(head, [10, 8, 24, 26, 6, 9, 10, 8, 8, 8, 10, 8, 8, 10, 7, 8, 8, 10, 8, 8, 8, 30]), 1):
+    c = wsh.cell(row=rw, column=j, value=h_); c.fill, c.font = HDR_FILL, HDR_FONT
+    c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True); c.border = BOX
+    wsh.column_dimensions[get_column_letter(j)].width = max(wsh.column_dimensions[get_column_letter(j)].width or 0, wd)
+wsh.row_dimensions[rw].height = 42
+hdr2 = rw
+for x in sorted(HOT, key=lambda x: (-len(by[x["sector_zh"]]), x["sector_zh"], x["ev_date"], x["sym"])):
+    rw += 1
+    put(wsh, rw, 1, x["sector_zh"]); link_ticker(wsh, rw, 2, x["sym"]); put(wsh, rw, 3, x["name"]); put(wsh, rw, 4, x["industry"])
+    put(wsh, rw, 5, CAPZH[x["cap"]]); put(wsh, rw, 6, x["close"], PX, INPUT); put(wsh, rw, 7, x["ev_date"])
+    put(wsh, rw, 8, x["ev_ret"], PCT, INPUT); put(wsh, rw, 9, x["ev_gap"], PCT, INPUT); put(wsh, rw, 10, x["ev_vol"], "0.0", INPUT)
+    put(wsh, rw, 11, x["leg_from"]); put(wsh, rw, 12, x["leg"], "0%", INPUT); put(wsh, rw, 13, x["dv_ratio"], "0.00", INPUT)
+    put(wsh, rw, 14, x["hi_date"]); put(wsh, rw, 15, x["ago"], "0", INPUT); put(wsh, rw, 16, x["dd"], PCT, INPUT); put(wsh, rw, 17, x["d20"], PCT2, INPUT)
+    put(wsh, rw, 18, "跌穿 MA20" if x["d20"] < -0.03 else ("仍高於 MA20" if x["d20"] > 0.03 else "貼近 MA20"))
+    put(wsh, rw, 19, "有" if x["ma10_ok"] else ""); put(wsh, rw, 20, x["c20"], "0.00", INPUT); put(wsh, rw, 21, x["cleg"], "0.00", INPUT)
+    put(wsh, rw, 22, "、".join(GZH[k] for k in x["fail"]) or "全部通過", align=WRAP)
+    if not x["fail"]:
+        wsh.cell(row=rw, column=2).fill = NEW_FILL
+    elif x["sym"] in ROW_OF:
+        wsh.cell(row=rw, column=2).fill = T2_FILL
+wsh.auto_filter.ref = f"A{hdr2}:V{rw}"
+
 # ================================================================ 同R22對照
 wso = wb.create_sheet(f"同{PREV_REV}對照")
 wso.cell(row=1, column=1, value=f"{PREV_REV}（{PREV_DATE} 收市，高動能回到 20MA）名單 vs {REV}（{LAST} 收市，新條件）").font = TITLE
