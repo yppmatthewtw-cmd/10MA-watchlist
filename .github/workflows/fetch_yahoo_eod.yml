@@ -15,9 +15,17 @@ on:
         description: Day after the last trading day wanted (YYYY-MM-DD, exclusive)
         required: true
       interval:
-        description: Bar interval; an intraday one (60m) is rolled up to daily rows
+        description: Bar interval; an intraday one (60m) is rolled up to daily rows, 1wk/1mo kept as is
         required: false
         default: "1d"
+      list:
+        description: Ticker list file (default the screener universe)
+        required: false
+        default: "data/yahoo/tickers.txt"
+      out:
+        description: Output file under data/yahoo (default derived from the dates and interval)
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -36,6 +44,8 @@ jobs:
           START: ${{ inputs.start }}
           END: ${{ inputs.end }}
           INTERVAL: ${{ inputs.interval }}
+          LIST: ${{ inputs.list }}
+          OUT: ${{ inputs.out }}
         run: python3 scripts/fetch_yahoo.py
       - name: Commit bars
         env:

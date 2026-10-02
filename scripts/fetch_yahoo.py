@@ -27,13 +27,21 @@ INTERVAL = os.environ.get("INTERVAL", "") or "1d"
 # rolled up to one open/high/low/close/volume row per symbol per day; the
 # screener takes the day's range from it and the official close and volume
 # from the post-close Nasdaq snapshot.
-OUT = os.environ.get("OUT", f"data/yahoo/eod_{START}_{END}.csv.gz" if INTERVAL == "1d"
-                     else f"data/yahoo/intraday_{START}_{END}_{INTERVAL}.csv.gz")
+# A weekly or monthly interval is kept as Yahoo gives it (one bar per period, the
+# adjusted close included) — used for the long-history macro set, see
+# data/yahoo/macro_tickers.txt.
+INTRADAY = INTERVAL not in ("1d", "1wk", "1mo", "3mo")
+OUT = os.environ.get("OUT") or (f"data/yahoo/eod_{START}_{END}.csv.gz" if INTERVAL == "1d"
+                                else f"data/yahoo/intraday_{START}_{END}_{INTERVAL}.csv.gz" if INTRADAY
+                                else f"data/yahoo/bars_{INTERVAL}_{START}_{END}.csv.gz")
 BATCH = int(os.environ.get("BATCH", "150"))
 
 symbols = [s.strip() for s in open(LIST) if s.strip()]
-# Nasdaq writes share classes as BRK.B / BF/B; Yahoo wants BRK-B
-ysym = {s: s.replace(".", "-").replace("/", "-") for s in symbols}
+# Nasdaq writes share classes as BRK.B / BF/B; Yahoo wants BRK-B. Only that
+# pattern is rewritten, so index (^GSPC), futures (CL=F) and DX-Y.NYB symbols
+# in a custom list pass through untouched.
+import re
+ysym = {s: (s.replace(".", "-").replace("/", "-") if re.fullmatch(r"[A-Z]+[./][A-Z]", s) else s) for s in symbols}
 back = {v: k for k, v in ysym.items()}
 print(f"{len(symbols)} symbols, {START} -> {END}, batches of {BATCH}")
 
@@ -61,7 +69,7 @@ for i in range(0, len(symbols), BATCH):
         if sub.empty:
             failed.append(y); continue
         sub = sub.reset_index().rename(columns=str.lower)
-        if INTERVAL != "1d":                         # roll intraday bars up to the session
+        if INTRADAY:                                 # roll intraday bars up to the session
             ts = sub.columns[0]
             sub["date"] = pd.to_datetime(sub[ts]).dt.tz_convert("America/New_York").dt.date
             sub = (sub.groupby("date")
