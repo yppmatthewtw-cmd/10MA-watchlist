@@ -26,6 +26,10 @@ on:
         description: Output file under data/yahoo (default derived from the dates and interval)
         required: false
         default: ""
+      resample:
+        description: Resample daily bars on the runner (pandas rule, e.g. ME for month-end rows); empty keeps them daily
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -46,6 +50,7 @@ jobs:
           INTERVAL: ${{ inputs.interval }}
           LIST: ${{ inputs.list }}
           OUT: ${{ inputs.out }}
+          RESAMPLE: ${{ inputs.resample }}
         run: python3 scripts/fetch_yahoo.py
       - name: Commit bars
         env:

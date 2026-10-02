@@ -35,6 +35,12 @@ OUT = os.environ.get("OUT") or (f"data/yahoo/eod_{START}_{END}.csv.gz" if INTERV
                                 else f"data/yahoo/intraday_{START}_{END}_{INTERVAL}.csv.gz" if INTRADAY
                                 else f"data/yahoo/bars_{INTERVAL}_{START}_{END}.csv.gz")
 BATCH = int(os.environ.get("BATCH", "150"))
+# Yahoo's own monthly candles only reach back to 1985 for most symbols while
+# its daily bars go back to 1962: RESAMPLE=ME turns daily bars into month-end
+# rows (last close / adjusted close, high, low, summed volume) on the runner,
+# which is how the long macro history is pulled without committing 60 years of
+# daily rows.
+RESAMPLE = os.environ.get("RESAMPLE", "")
 
 symbols = [s.strip() for s in open(LIST) if s.strip()]
 # Nasdaq writes share classes as BRK.B / BF/B; Yahoo wants BRK-B. Only that
@@ -77,6 +83,13 @@ for i in range(0, len(symbols), BATCH):
                            close=("close", "last"), volume=("volume", "sum"))
                       .reset_index())
             sub["adj close"] = sub["close"]
+        if RESAMPLE:
+            d = sub.columns[0]
+            sub = sub.set_index(pd.to_datetime(sub[d]))
+            sub = (sub.resample(RESAMPLE)
+                      .agg({"open": "first", "high": "max", "low": "min", "close": "last", "adj close": "last", "volume": "sum"})
+                      .dropna(subset=["close"]).reset_index().rename(columns={sub.index.name or "index": "date", d: "date"}))
+            sub.columns = ["date" if c in (d, "index", "Date", "Datetime") else c for c in sub.columns]
         sub["symbol"] = back[y]
         frames.append(sub[["symbol", "date", "open", "high", "low", "close", "adj close", "volume"]])
         got += 1
