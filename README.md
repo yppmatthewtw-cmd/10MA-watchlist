@@ -91,6 +91,25 @@ H = 近 63 日最高收市；升浪 = 由 H 前 63 日內最低收市升到 H。
 7. **排名（PAGE 2–5）= 綜合分數 = 0.5×VCP + 0.5×確定性**；**爆發潛力分數（PAGE 1）**
    = 0.4×VCP + 0.4×確定性 + 0.2×覆蓋度。
 
+## 宏觀對標研究（2026-10-02：油價高企＋加息預期，美國歷史上邊段最似？）
+
+一次性嘅宏觀研究，答「現時油價高、加息預期持續，歷史上邊個時期最似、嗰陣邊類股票回報高／低迷、四大力量（息口、政治、產業、黑天鵝）各自處於邊個階段」。
+輸出：`reports/Macro_cycle_analogues_R1.00_*.xlsx`（結論、現時數據、四大力量、對標時期、板塊回報、長壽股籃成分、相似度、月度數據、圖表、注釋）同 `reports/macro/01–04_*.png`。
+
+- `scripts/macro_events.py`：手工參考表 —— NBER 衰退、總統任期、聯儲加減息周期、科技／產業浪潮同爆破期、黑天鵝、1986 年前油價錨點（BP 年鑑）、十個候選對標時期。
+- `scripts/macro_data.py`：長歷史載入 —— Shiller（標普、CPI 至 2023-09）、WTI／Brent 現貨日線（1986–）、10 年期月均（1953–）、金價、VIX（四個 datahub 公開鏡像，read-only clone 到 scratchpad），加 Yahoo 月線（`data/yahoo/macro_monthly_1950-01-01_2026-10-03.csv.gz`：`fetch_yahoo_eod.yml` 用 `list=data/yahoo/macro_tickers.txt interval=1d resample=ME` 由日線重取樣 —— Yahoo 自己嘅月線只去到 1985）。2023-10 後嘅 CPI 用 BLS 公布嘅按年變化推算，最新月份補值全部列喺注釋頁。
+- `scripts/macro_regimes.py` → `data/macro_regimes.json`：九項特徵（油價 12 個月變化、CPI、3 個月息 3／12 個月變化、10 年期 12 個月變化、曲線斜率、實質短息、標普 12 個月回報、距高位）對 1962 年起每個月做加權 z 距離；十個對標時期錨點前後 12／24 個月路徑；每個時期窗口內同錨點後 12 個月嘅板塊超額回報（1998 年後 SPDR ETF／指數，之前用今日仍上市公司嘅等權籃 —— 有倖存者偏差，熱圖標 *）；四大力量每個周期嘅計算統計（加息周期首次／最後加息後 12 個月、中期年回撤同低位後 12 個月、科技浪同爆破、黑天鵝後 3 個月回撤同 12 個月回報、供應型油震油頂／股市低位時序）。
+- `scripts/macro_charts.py`：四大力量 1960–2026 五欄時序圖、對標時期小圖、板塊熱圖、相似度時序。
+- `scripts/build_macro_xlsx.py`：Excel（超額回報同中位數為公式，油震類中位數為陣列公式；ETF／成分股代號連 TradingView）。
+
+```bash
+# 數據鏡像（只讀）：datasets/{s-and-p-500,oil-prices,bond-yields-us-10y,gold-prices,finance-vix} clone 到 $MACRO_HIST
+# GitHub 觸發 fetch_yahoo_eod.yml：start=1950-01-01 end=2026-10-03 interval=1d list=data/yahoo/macro_tickers.txt resample=ME out=data/yahoo/macro_monthly_1950-01-01_2026-10-03.csv.gz
+python3 scripts/macro_regimes.py && python3 scripts/macro_charts.py && python3 scripts/build_macro_xlsx.py reports/Macro_cycle_analogues_R1.00_<model><effort>_<mm.dd_HHMM>.xlsx
+```
+
+結論摘要（詳見工作簿結論頁）：機械對標最近係 2018-09、1996-12、1999-10、2006-05、1987-04；1973／1979 距離最遠（當年 CPI 9–12%、短息 7–12%）。判斷係 2006（債息＋政治）、1999–2000（市場結構）、2018（政治劇本）嘅混合，1987 係債市主導調整嘅對照。窗口內能源／油服（油價升勢持續先得）、必需消費、醫療、黃金跑贏；房屋建築、銀行、運輸、長債、半導體跑輸；公用事業 1990 年後七次全勝但 1973／1979／1987 長債息急升時最差，而 2026 年 9 月 XLU −6% 已經係後者模式。
+
 ## 數據來源與重建
 
 環境內可達的數據源為 GitHub 每日鏡像，逐 git commit 重建每日收盤/成交量序列（171 個交易日，
